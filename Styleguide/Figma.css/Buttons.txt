@@ -1,0 +1,13168 @@
+/* Buttons */
+
+position: relative;
+width: 1552px;
+height: 10196px;
+
+/* Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* Large Button - Fill */
+
+position: absolute;
+width: 1285px;
+height: 306px;
+left: 100px;
+top: 449px;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1280px;
+height: 83px;
+left: 5px;
+top: 223px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* labels */
+
+position: absolute;
+width: 911.78px;
+height: 14px;
+left: 20px;
+top: 102px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 455px;
+top: 102px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 20px;
+top: 102px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 898.78px;
+top: 102px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Large - Fill - Light - Select */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 900px;
+top: 237px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 4px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Fill - Light - Hover */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 455px;
+top: 237px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 4px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Fill - Hover */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 454px;
+top: 136px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Large - Fill - Select */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 900px;
+top: 136px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 20px;
+top: 0px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 60.93%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Large - Fill */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 415px;
+height: 192px;
+left: 0px;
+top: 114px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 20px;
+top: 20px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 20px;
+top: 123px;
+
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 4px;
+
+
+/* Add to Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large Button — Stroke */
+
+position: absolute;
+width: 1286px;
+height: 422.84px;
+left: 102px;
+top: 1193.16px;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1280px;
+height: 83px;
+left: 108px;
+top: 1533px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 122px;
+top: 1321px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 53.55%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.86%;
+right: 11.28%;
+top: 11.7%;
+bottom: 88.3%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 1197 */
+
+position: absolute;
+width: 903px;
+height: 14px;
+left: 122px;
+top: 1423px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 557px;
+top: 1423px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 122px;
+top: 1423px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 992px;
+top: 1423px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Large - Stroke */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 557px;
+top: 1547px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Stroke */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 992px;
+top: 1547px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Stroke - Hover */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 557px;
+top: 1457px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Large - Stroke - Select */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 992px;
+top: 1457px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Large - Stroke */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 415px;
+height: 179px;
+left: 102px;
+top: 1437px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 20px;
+top: 20px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 375px;
+height: 55px;
+left: 21px;
+top: 110px;
+
+border-radius: 5px;
+
+
+/* Fill */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White BG - Global */
+border: 2px solid #FAFAFA;
+border-radius: 5px;
+
+
+/* View Cart */
+
+position: absolute;
+left: -0.53%;
+right: 0%;
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+
+/* Large Button — Icon */
+
+position: absolute;
+width: 1274px;
+height: 476.18px;
+left: 101px;
+top: 1559.82px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 1746px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 58.32%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 15.3%;
+bottom: 84.7%;
+
+
+
+/* BG */
+
+position: absolute;
+width: 948px;
+height: 83px;
+left: 105px;
+top: 1953px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555.03px;
+top: 1848px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120.03px;
+top: 1848px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Large Button - Icon - Light - Hover */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 555.03px;
+top: 1972px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Large Button - Icon - Light - Select */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 990.03px;
+top: 1972px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Large Button - Icon - Hover */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 555.07px;
+top: 1882px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* White */
+background: #FFFFFF;
+
+
+/* Large Button - Icon - Select */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 990.07px;
+top: 1882px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* White */
+background: #FFFFFF;
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990.03px;
+top: 1848px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Large Button - Icon */
+
+position: absolute;
+width: 90px;
+height: 174px;
+left: 101px;
+top: 1862px;
+
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 20px;
+top: 20px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* White */
+background: #FFFFFF;
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 20.03px;
+top: 110px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 5px;
+
+
+/* close - large */
+
+position: absolute;
+left: 5.88%;
+right: 7.84%;
+top: 5.88%;
+bottom: 7.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Vector */
+
+position: absolute;
+width: 18px;
+height: 18px;
+left: calc(50% - 18px/2 + 0.43px);
+top: calc(50% - 18px/2 + 0.43px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default Button — Stroke – Left Icon */
+
+position: absolute;
+width: 1275px;
+height: 294px;
+left: 100px;
+top: 3506px;
+
+
+
+/* Rectangle 1018 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 105.03px;
+top: 3724px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 3506px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 18.23%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 1200 */
+
+position: absolute;
+width: 903px;
+height: 14px;
+left: 120px;
+top: 3607.5px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 3607.5px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 3607.5px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 3607.5px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default - Stroke - Icon Left - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 988.03px;
+top: 3738px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Default - Stroke - Icon Left - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 555.03px;
+top: 3735px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Default - Stroke - Icon Left - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 988.03px;
+top: 3641.5px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Default - Stroke - Icon Left - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 555.03px;
+top: 3642px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Default - Stroke - Icon Left */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 203px;
+height: 179px;
+left: 100px;
+top: 3621px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Default */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 20px;
+top: 20px;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Property 1=Default - Stroke - Icon Left - Light */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 20px;
+top: 114px;
+
+/* Neutrals/Off-White BG - Global */
+border: 2px solid #FAFAFA;
+border-radius: 5px;
+
+
+/* dropdown - details */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 29.55%;
+right: 29.55%;
+top: 40.91%;
+bottom: 38.64%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* spacer */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Default Button - Stroke - Icon Right */
+
+position: absolute;
+width: 1273px;
+height: 305px;
+left: 102px;
+top: 2166px;
+
+
+
+/* labels */
+
+position: absolute;
+width: 903px;
+height: 14px;
+left: 120px;
+top: 2268px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 2268px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 2268px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 2268px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1231px;
+height: 83px;
+left: 105px;
+top: 2388px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Large - Fill - Icon Right - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 990px;
+top: 2406px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Large - Fill - Icon Right - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 555px;
+top: 2406px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Large - Stroke - Icon Right - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 555px;
+top: 2302px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Large - Stroke - Icon Right - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 990px;
+top: 2302px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 2166px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 27.5%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Large - Fill - Icon Right */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 377px;
+height: 189px;
+left: 102px;
+top: 2282px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 20px;
+top: 20px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 337px;
+height: 54px;
+left: 20px;
+top: 124px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 5px 10px 5px 25px;
+
+width: 337px;
+height: 54px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* text */
+
+width: 258px;
+height: 20px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* identical to box height, or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* ellipsis */
+
+position: absolute;
+width: 16px;
+height: 4px;
+left: calc(50% - 16px/2);
+top: calc(50% - 4px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default Button — Stroke – Right Icon */
+
+position: absolute;
+width: 1273px;
+height: 778.73px;
+left: 102px;
+top: 3440.58px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 3926px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 15.05%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 33.74%;
+bottom: 66.26%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Rectangle 1019 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 105.03px;
+top: 4147.31px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Group 1201 */
+
+position: absolute;
+width: 907px;
+height: 14px;
+left: 120px;
+top: 4028px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 4028px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 4028px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 994px;
+top: 4028px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default - Stroke - Icon Right - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 994.03px;
+top: 4158.31px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: center;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 555.03px;
+top: 4158.31px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: center;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 555px;
+top: 4062px;
+
+/* Off-Black Select */
+background: #45464D;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 994px;
+top: 4062px;
+
+/* Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 203px;
+height: 177px;
+left: 102px;
+top: 4042px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 20px;
+top: 20px;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Property 1=Light */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 3px 10px;
+gap: 4px;
+
+position: absolute;
+width: 164px;
+height: 50px;
+left: 20px;
+top: 116.31px;
+
+/* Neutrals/Off-White BG - Global */
+border: 2px solid #FAFAFA;
+border-radius: 5px;
+
+
+/* dropdown - field */
+
+width: 16px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* Explore All */
+
+width: 76px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+align-self: center;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+align-self: flex-start;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Mobile, Small Button — Stroke – Icon */
+
+position: absolute;
+width: 1275px;
+height: 1091.06px;
+left: 100px;
+top: 5480.94px;
+
+
+
+/* Rectangle 1021 */
+
+position: absolute;
+width: 941px;
+height: 72px;
+left: 105px;
+top: 6500px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 6291px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 11.87%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 53.76%;
+bottom: 46.24%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 6393px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 6393px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 6393px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Mobile Small - Stroke - Icon - Light - Hover
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 555px;
+top: 6514px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 + 0.03px);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Mobile Small - Stroke - Icon - Light - Select
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 981px;
+top: 6514px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 + 0.03px);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Mobile Small - Stroke - Icon - Hover
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 555px;
+top: 6425px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Off-Black Select */
+background: #45464D;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 + 0.03px);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Mobile Small - Stroke - Icon - Select
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 981px;
+top: 6425px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 + 0.03px);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Mobile Small - Stroke - Icon */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 84px;
+height: 167px;
+left: 100px;
+top: 6405px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark
+
+Mobile/Small Stroke Icon
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 20px;
+top: 109px;
+
+
+
+/* target */
+
+position: absolute;
+left: -5%;
+right: -5%;
+top: -5%;
+bottom: -5%;
+
+
+
+/* Rectangle 877 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 41px;
+height: 41px;
+left: 1.5px;
+top: 1.5px;
+
+/* Neutrals/Off-White BG - Global */
+border: 2px solid #FAFAFA;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* target */
+
+position: absolute;
+left: 7.59%;
+right: 89.29%;
+top: 53.31%;
+bottom: 46.21%;
+
+
+
+/* Default Button — Stroke – Icon */
+
+position: absolute;
+width: 1272.97px;
+height: 285px;
+left: 102px;
+top: 4349px;
+
+
+
+/* Rectangle 1021 */
+
+position: absolute;
+width: 951px;
+height: 72px;
+left: 105px;
+top: 4562px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 119.97px;
+top: 4349px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 27.79%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 4451px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 4451px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 4451px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default - Stroke - Icon - Select */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 990px;
+top: 4484.5px;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Default - Stroke - Icon - Hover */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 555px;
+top: 4484.5px;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Default - Stroke - Icon - Light - Select */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 990px;
+top: 4573.5px;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default - Stroke - Icon - Light - Hover */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 555px;
+top: 4573.5px;
+
+
+
+/* Rectangle 877 */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default - Stroke - Icon */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 90px;
+height: 169px;
+left: 102px;
+top: 4465px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 20px;
+top: 20px;
+
+
+
+/* Rectangle 877 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 19.5px;
+top: 108.5px;
+
+
+
+/* Rectangle 877 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 50px;
+height: 50px;
+left: 0px;
+top: 0px;
+
+/* Gray-Light */
+border: 2px solid #EBEBEB;
+border-radius: 5px;
+
+
+/* close */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2);
+top: calc(50% - 44px/2);
+
+
+
+/* close */
+
+position: absolute;
+width: 14px;
+height: 14px;
+left: calc(50% - 14px/2);
+top: calc(50% - 14px/2);
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* Rectangle 1019 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 109px;
+top: 8186px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default Button  — Ghost – Icon */
+
+position: absolute;
+width: 1275px;
+height: 991.55px;
+left: 100px;
+top: 4434.45px;
+
+
+
+/* Rectangle 1021 */
+
+position: absolute;
+width: 951px;
+height: 72px;
+left: 105px;
+top: 5274px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 5078px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 27.79%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 43.49%;
+bottom: 56.51%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 5180px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 5180px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Default - Ghost - Icon
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 555px;
+top: 5288px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* Default - Ghost - Icon
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 990px;
+top: 5288px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+
+
+/* Default - Ghost - Icon
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 555px;
+top: 5214px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+
+
+/* Default - Ghost - Icon
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 990px;
+top: 5214px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 5180px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default - Ghost - Icon */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 84px;
+height: 232px;
+left: 100px;
+top: 5194px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Property 1=Light
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 20px;
+top: 94px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Property 1=Variant3
+
+Used to add elements.
+*/
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 20px;
+top: 168px;
+
+
+
+/* account */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* account */
+
+position: absolute;
+left: 31.82%;
+right: 31.82%;
+top: 31.82%;
+bottom: 31.82%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Default Text Link  — UI */
+
+position: absolute;
+width: 1275px;
+height: 960.18px;
+left: 100px;
+top: 4777.82px;
+
+
+
+/* Rectangle 1022 */
+
+position: absolute;
+width: 1044px;
+height: 72px;
+left: 105px;
+top: 5661px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 5476px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 46.6%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 46.86%;
+bottom: 53.14%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 5578px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 5578px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 5578px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default Text Link - UI */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 553px;
+top: 5675px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Neutrals/Off-White-Select */
+color: #F6F6F6;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default Text Link - UI */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 990px;
+top: 5675px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Neutrals/Gray-Light */
+color: #EBEBEB;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default Text Link - UI - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 553px;
+top: 5612px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Off-Black Select */
+color: #45464D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default Text Link - UI - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 990px;
+top: 5612px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Gray - Dark */
+color: #616161;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default Text Link - UI */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 164px;
+height: 146px;
+left: 100px;
+top: 5592px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 20px;
+top: 20px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 124px;
+height: 43px;
+left: 20px;
+top: 83px;
+
+
+
+/* Move to Favorites */
+
+width: 124px;
+height: 19px;
+
+/* UI/Desktop/Default - Link */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile, Small Button  — Stroke – Icon Left */
+
+position: absolute;
+width: 1273px;
+height: 1049.31px;
+left: 102px;
+top: 5111.69px;
+
+
+
+/* Rectangle 1022 */
+
+position: absolute;
+width: 1066px;
+height: 72px;
+left: 109px;
+top: 6089px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 5863px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 1.01%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 50.13%;
+bottom: 49.87%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 5965px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 5965px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 5965px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Mobile Small - Stroke - Icon Left - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 553px;
+top: 6103px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 169px;
+height: 41px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Small - Stroke - Icon Left - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 992px;
+top: 6103px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 169px;
+height: 41px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Small - Stroke - Icon Left - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 553px;
+top: 5999px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px;
+gap: 5px;
+
+width: 169px;
+height: 42px;
+
+/* Off-Black Select */
+background: #45464D;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Small - Stroke - Icon Left - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 992px;
+top: 5999px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px;
+gap: 5px;
+
+width: 169px;
+height: 42px;
+
+/* Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Small - Stroke - Icon Left */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 209px;
+height: 185px;
+left: 102px;
+top: 5976px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+
+
+/* button */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px;
+gap: 5px;
+
+width: 169px;
+height: 42px;
+
+/* Neutrals/Black */
+border: 1.5px solid #1B1B1B;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 169px;
+height: 44px;
+left: 19.97px;
+top: 127px;
+
+
+
+/* button */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 169px;
+height: 41px;
+
+/* Neutrals/Off-White BG - Global */
+border: 1.5px solid #FAFAFA;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19764 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 0px 0px 4px;
+gap: 10px;
+
+width: 16px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down - small */
+
+width: 12px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* arrow down */
+
+position: absolute;
+width: 12px;
+height: 12px;
+left: calc(50% - 12px/2);
+top: calc(50% - 12px/2 + 0.5px);
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 128px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Jump to All Products */
+
+width: 120px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Button  — Stroke */
+
+position: absolute;
+width: 1274px;
+height: 281px;
+left: 101px;
+top: 7164px;
+
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 7164px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 49.64%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2304 */
+
+position: absolute;
+width: 977.03px;
+height: 179px;
+left: 101px;
+top: 7266px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 7266px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 7266px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 7266px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Mobile - Stroke - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 990.03px;
+top: 7303px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Stroke - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 555px;
+top: 7303px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Stroke */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 128px;
+height: 162px;
+left: 101px;
+top: 7283px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+
+
+/* button */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-Black */
+border: 1.5px solid #252525;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 19.03px;
+top: 104px;
+
+
+
+/* button */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/White */
+border: 1.5px solid #FFFFFF;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 1017 */
+
+position: absolute;
+width: 992px;
+height: 72px;
+left: 105.03px;
+top: 7373px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Mobile - Stroke - Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 120.03px;
+top: 7387px;
+
+
+
+/* button */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-White BG - Global */
+border: 1.5px solid #FAFAFA;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Stroke - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 555.03px;
+top: 7387px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Stroke - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 990.03px;
+top: 7387px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile Button — Stroke – Right Icon */
+
+position: absolute;
+width: 1272.97px;
+height: 1277.31px;
+left: 102px;
+top: 6588.69px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 119.97px;
+top: 7575px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 15.63%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.41%;
+top: 64.62%;
+bottom: 35.38%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Rectangle 1019 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 105px;
+top: 7794px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Group 1201 */
+
+position: absolute;
+width: 907px;
+height: 14px;
+left: 119.97px;
+top: 7677px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 554.97px;
+top: 7677px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 119.97px;
+top: 7677px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 993.97px;
+top: 7677px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Mobile - Stroke - Icon Right - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 555px;
+top: 7711px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Mobile - Stroke - Icon Right - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 994px;
+top: 7711px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 555px;
+top: 7807.31px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Default - Stroke - Icon Right - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 994px;
+top: 7807px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Mobile - Stroke - Icon Right */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 178px;
+height: 175px;
+left: 102px;
+top: 7691px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Property 1=Light */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 0px 15px;
+gap: 4px;
+
+position: absolute;
+width: 127px;
+height: 44px;
+left: 19.97px;
+top: 116.31px;
+
+/* Neutrals/Off-White BG - Global */
+border: 2px solid #FAFAFA;
+border-radius: 5px;
+
+
+/* Explore All */
+
+width: 64px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+display: flex;
+align-items: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* dropdown - field */
+
+width: 44px;
+height: 44px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* dropdown */
+
+position: absolute;
+left: 34.09%;
+right: 34.09%;
+top: 43.18%;
+bottom: 40.91%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 1px;
+transform: rotate(180deg);
+
+
+/* Mobile Button  — Fill */
+
+position: absolute;
+width: 1273.03px;
+height: 351px;
+left: 102px;
+top: 6702px;
+
+
+
+/* Rectangle 1015 */
+
+position: absolute;
+width: 993px;
+height: 72px;
+left: 105.03px;
+top: 6981px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120.03px;
+top: 6702px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 57.02%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555.03px;
+top: 6803px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120.03px;
+top: 6803px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990.03px;
+top: 6803px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Mobile - Fill - Red - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 992.07px;
+top: 6834px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Brand/Red - Brand - Darker */
+background: #601B15;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Red - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 553.07px;
+top: 6834px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Brand/Red - Brand - Dark */
+background: #A81910;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 553.03px;
+top: 6910px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 990.03px;
+top: 6995px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 553.03px;
+top: 6995px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 553px;
+top: 6995px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 992.03px;
+top: 6908px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Mobile - Fill */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 128px;
+height: 232px;
+left: 102px;
+top: 6821px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 20px;
+top: 26px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Red */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 20.07px;
+top: 100px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Brand/Red - Brand */
+background: #E22D00;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 9px 0px;
+
+position: absolute;
+width: 88px;
+height: 44px;
+left: 20px;
+top: 174px;
+
+
+
+/* button */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 13px 10px 12px;
+gap: 5px;
+
+width: 88px;
+height: 41px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 19763 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px 4px;
+
+width: 68px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 60px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group 2346 */
+
+position: absolute;
+width: 1275px;
+height: 264px;
+left: 109px;
+top: 7996px;
+
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 129px;
+top: 7996px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 50.36%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2302 */
+
+position: absolute;
+width: 1011px;
+height: 162px;
+left: 109px;
+top: 8098px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 564px;
+top: 8098px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Grey-Dark */
+color: #45465D;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 129px;
+top: 8098px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 999px;
+top: 8098px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Grey-Dark */
+color: #45465D;
+
+
+
+/* Small Text Link - UI - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 564px;
+top: 8202px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White-Select */
+color: #F6F6F6;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Small Text Link - UI - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 999px;
+top: 8202px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Light */
+color: #EBEBEB;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Small Text Link - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 564px;
+top: 8132px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Off-Black Select */
+color: #45464D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Small Text Link - Hover - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 999px;
+top: 8132px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Gray - Dark */
+color: #616161;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Small Text Link - UI */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 161px;
+height: 148px;
+left: 109px;
+top: 8112px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 20px;
+top: 20px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 12px 0px;
+
+position: absolute;
+width: 121px;
+height: 40px;
+left: 20px;
+top: 90px;
+
+
+
+/* Move to Favorites */
+
+width: 121px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group 2347 */
+
+position: absolute;
+width: 1275px;
+height: 283px;
+left: 100px;
+top: 8388px;
+
+
+
+/* Rectangle 1020 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 104px;
+top: 8599px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 8388px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 25.33%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2301 */
+
+position: absolute;
+width: 1042px;
+height: 181px;
+left: 100px;
+top: 8490px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 8490px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Grey-Dark */
+color: #45465D;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 8490px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 8490px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Grey-Dark */
+color: #45465D;
+
+
+
+/* Small Text Link - UI - Icon Left - Light - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 555px;
+top: 8613px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White-Select */
+color: #F6F6F6;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Small Text Link - UI - Icon Left - Light - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 990px;
+top: 8613px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Light */
+color: #EBEBEB;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Small - Text Link - Icon Left - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 555px;
+top: 8524px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Off-Black Select */
+color: #45464D;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Small Text Link - Icon Left - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 990px;
+top: 8524px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Gray - Dark */
+color: #616161;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Small Text Link - UI - Icon Left */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 192px;
+height: 167px;
+left: 100px;
+top: 8504px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 20px;
+top: 20px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 15px 0px 0px;
+gap: 8px;
+
+position: absolute;
+width: 152px;
+height: 44px;
+left: 20px;
+top: 109px;
+
+
+
+/* trash */
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* trash */
+
+position: absolute;
+width: 14px;
+height: 18px;
+left: calc(50% - 14px/2);
+top: calc(50% - 18px/2);
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* text */
+
+width: 85px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: right;
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Group 2348 */
+
+position: absolute;
+width: 1286px;
+height: 260px;
+left: 89px;
+top: 8801px;
+
+
+
+/* Rectangle 1019 */
+
+position: absolute;
+width: 1064px;
+height: 72px;
+left: 89px;
+top: 8984px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 8801px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 20.41%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2300 */
+
+position: absolute;
+width: 1022px;
+height: 158px;
+left: 100px;
+top: 8903px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 8903px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 8903px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 8903px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Text Link - UI - Uppercase - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 555px;
+top: 8999px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White-Select */
+color: #F6F6F6;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Text Link - UI - Uppercase */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 990px;
+top: 8999px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Light */
+color: #EBEBEB;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Text Link - UI - Uppercase - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 555px;
+top: 8937px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-Black Select */
+color: #333333;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Text Link - UI - Uppercase - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 990px;
+top: 8937px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Gray - Dark */
+color: #616161;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Text Link - UI - Uppercase */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 172px;
+height: 144px;
+left: 100px;
+top: 8917px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 20px;
+top: 20px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 13px 0px;
+
+position: absolute;
+width: 132px;
+height: 42px;
+left: 20px;
+top: 82px;
+
+
+
+/* promo */
+
+width: 132px;
+height: 16px;
+
+/* UI/Desktop/Small - Link Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+text-decoration-line: underline;
+text-transform: uppercase;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Group 2349 */
+
+position: absolute;
+width: 1275px;
+height: 233px;
+left: 100px;
+top: 9186px;
+
+
+
+/* Rectangle 1019 */
+
+position: absolute;
+width: 91px;
+height: 59px;
+left: 100px;
+top: 9360px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 9186px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 43.27%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2299 */
+
+position: absolute;
+width: 923px;
+height: 121.76px;
+left: 100px;
+top: 9294px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 13.14px;
+left: 555px;
+top: 9294px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 13.14px;
+left: 120px;
+top: 9294px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 13.14px;
+left: 990px;
+top: 9294px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Badge */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 89px;
+height: 110.76px;
+left: 100px;
+top: 9305px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 10px;
+
+position: absolute;
+width: 49px;
+height: 29px;
+left: 20px;
+top: 20px;
+
+
+
+/* Frame 1167 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 8px 13px;
+gap: 15px;
+
+width: 49px;
+height: 29px;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1684 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+width: 23px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1685 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 23px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* NEW */
+
+width: 23px;
+height: 13px;
+
+/* Default/Mobile/UI/Small - Bold Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 11.11px;
+line-height: 120%;
+/* or 13px */
+text-align: center;
+letter-spacing: 0.01em;
+text-transform: uppercase;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* help */
+
+display: none;
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* icon */
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: 3px;
+top: 2px;
+
+
+
+/* ? */
+
+position: absolute;
+width: 4.77px;
+height: 6.81px;
+left: calc(50% - 4.77px/2 + 0.39px);
+top: calc(50% - 6.81px/2 - 0.59px);
+
+/* Off-Black */
+background: #242222;
+
+
+/* Ellipse 18 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: calc(50% - 15px/2 + 0.5px);
+top: calc(50% - 15px/2 - 0.5px);
+
+/* Off-Black */
+border: 1px solid #242222;
+
+
+/* Property 1=Light */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 10px;
+
+position: absolute;
+width: 49px;
+height: 28.57px;
+left: 20px;
+top: 72.59px;
+
+
+
+/* Frame 1167 */
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 8px 13px;
+gap: 15px;
+
+width: 49px;
+height: 29px;
+
+/* Pin-Line/Light */
+border: 1px solid rgba(255, 255, 255, 0.2);
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1684 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+width: 23px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1685 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 23px;
+height: 13px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* NEW */
+
+width: 23px;
+height: 13px;
+
+/* Default/Mobile/UI/Small - Bold Uppercase */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 11.11px;
+line-height: 120%;
+/* or 13px */
+text-align: center;
+letter-spacing: 0.01em;
+text-transform: uppercase;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* help */
+
+display: none;
+width: 20px;
+height: 20px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* icon */
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: 3px;
+top: 2px;
+
+
+
+/* ? */
+
+position: absolute;
+width: 4.77px;
+height: 6.81px;
+left: calc(50% - 4.77px/2 + 0.39px);
+top: calc(50% - 6.81px/2 - 0.59px);
+
+/* Off-Black */
+background: #242222;
+
+
+/* Ellipse 18 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: calc(50% - 15px/2 + 0.5px);
+top: calc(50% - 15px/2 - 0.5px);
+
+/* Off-Black */
+border: 1px solid #242222;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 9549px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 56.15%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2319 */
+
+position: absolute;
+width: 466px;
+height: 14px;
+left: 120px;
+top: 9651px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 9651px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 9651px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+visibility: hidden;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 9651px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Group 2351 */
+
+position: absolute;
+width: 1255px;
+height: 116px;
+left: 120px;
+top: 9850px;
+
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 9850px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 52.68%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 2319 */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 9952px;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 9952px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+color: #777573;
+
+
+
+/* Select */
+
+position: absolute;
+visibility: hidden;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 9952px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Buttons — Global */
+
+position: absolute;
+width: 837px;
+height: 131px;
+left: 108px;
+top: 200px;
+
+/* Default/Desktop/Header/Display */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 118.88px;
+line-height: 110%;
+/* identical to box height, or 131px */
+letter-spacing: -0.03em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Shop by Room  — Blur – Icon */
+
+position: absolute;
+width: 1258px;
+height: 184px;
+left: 117px;
+top: 4764px;
+
+
+
+/* Shop by Room - Open */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px 0px 0px;
+
+position: absolute;
+width: 138px;
+height: 44px;
+left: 552.8px;
+top: 4904px;
+
+/* Overlay/Off-Black */
+background: rgba(37, 37, 37, 0.7);
+mix-blend-mode: normal;
+/* Blur - Default */
+backdrop-filter: blur(2.5px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 5px;
+
+
+/* Frame 19716 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 6px;
+gap: 10px;
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* shopping bag - shop by room */
+
+width: 32px;
+height: 32px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 29.54%;
+right: 29.55%;
+top: 22.73%;
+bottom: 31.82%;
+
+/* White */
+background: #FFFFFF;
+
+
+/* Group 2275 */
+
+width: 84px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* View Products */
+
+position: absolute;
+width: 84px;
+height: 16px;
+left: 44px;
+top: 14px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+
+/* Shop by Room - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 10px 0px 0px;
+
+position: absolute;
+width: 138px;
+height: 44px;
+left: 990px;
+top: 4904px;
+
+/* Overlay/Off-Black */
+background: rgba(37, 37, 37, 0.7);
+mix-blend-mode: normal;
+/* Blur - Default */
+backdrop-filter: blur(2.5px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 5px;
+
+
+/* Frame 19716 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 6px;
+gap: 10px;
+
+width: 44px;
+height: 44px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* shopping bag - shop by room */
+
+width: 32px;
+height: 32px;
+
+border-radius: 8px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+left: 29.54%;
+right: 29.55%;
+top: 22.73%;
+bottom: 31.82%;
+
+/* White */
+background: #FFFFFF;
+
+
+/* Group 2275 */
+
+width: 84px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* View Products */
+
+position: absolute;
+width: 84px;
+height: 16px;
+left: 44px;
+top: 14px;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 4764px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 32.13%;
+top: 0%;
+bottom: 0%;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 39.81px;
+line-height: 120%;
+/* identical to box height, or 48px */
+letter-spacing: -0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 1204 */
+
+position: absolute;
+width: 903px;
+height: 14px;
+left: 120px;
+top: 4866px;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 4866px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 4866px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 990px;
+top: 4866px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Shop the Room - Closed */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 117px;
+top: 4898px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 0.08%;
+right: -0.08%;
+top: 0%;
+bottom: 0%;
+
+
+
+/* Rectangle 873 */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: 0.03px;
+top: 0px;
+
+/* Overlay/Off-Black */
+background: rgba(37, 37, 37, 0.7);
+mix-blend-mode: normal;
+/* Blur - Default */
+backdrop-filter: blur(2.5px);
+/* Note: backdrop-filter has minimal browser support */
+border-radius: 5px;
+
+
+/* shopping bag - shop by room */
+
+position: absolute;
+width: 32px;
+height: 32px;
+left: 5.8px;
+top: 6px;
+
+border-radius: 8px;
+
+
+/* Vector */
+
+position: absolute;
+left: 29.54%;
+right: 29.55%;
+top: 22.73%;
+bottom: 31.82%;
+
+/* White */
+background: #FFFFFF;
+
+
+/* Default Button — Fill */
+
+position: absolute;
+width: 1273px;
+height: 364.2px;
+left: 102px;
+top: 2601px;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1008.37px;
+height: 83.2px;
+left: 105px;
+top: 2882px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* headers */
+
+position: absolute;
+width: 1255px;
+height: 62px;
+left: 120px;
+top: 2601px;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 57.45%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 100%;
+bottom: 0%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 524.41px;
+top: 2703.24px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 119.97px;
+top: 2703.24px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 956.97px;
+top: 2703.24px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray - Dark */
+color: #616161;
+
+
+
+/* Default - Fill - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 520px;
+top: 2729.74px;
+
+
+
+/* Default - Fill - Dark
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 953px;
+top: 2729.74px;
+
+
+
+/* Default - Fill - Dark
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill - Hover
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 520.47px;
+top: 2812.74px;
+
+/* Brand/Red - Brand - Dark */
+background: #A81910;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill - Select
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 953.47px;
+top: 2812.74px;
+
+/* Brand/Red - Brand - Darker */
+background: #601B15;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill/Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 520px;
+top: 2897px;
+
+
+
+/* Default - Fill - Dark
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill/Dark */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 953.47px;
+top: 2896.5px;
+
+
+
+/* Default - Fill - Dark
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Fill */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 172px;
+height: 249px;
+left: 102px;
+top: 2714px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+left: 11.63%;
+right: 11.63%;
+top: 7.23%;
+bottom: 70.68%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Red
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+left: 11.63%;
+right: 11.63%;
+top: 38.96%;
+bottom: 38.96%;
+
+/* Brand/Red - Brand */
+background: #E22D00;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+left: 11.63%;
+right: 11.63%;
+top: 72.69%;
+bottom: 5.22%;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default Button — Stroke */
+
+position: absolute;
+width: 1011.03px;
+height: 281px;
+left: 102px;
+top: 3095px;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1007px;
+height: 83px;
+left: 106.03px;
+top: 3293px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Default - Stroke - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 523px;
+top: 3212px;
+
+
+
+/* Default - Stroke - Dark - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 959.5px;
+top: 3212px;
+
+
+
+/* Default - Stroke - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Dark - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 121px;
+top: 3183px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Hover */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 521.5px;
+top: 3183px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Select */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 958px;
+top: 3183px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 126.5px;
+top: 3095px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 50.07%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Default - Stroke */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 182px;
+height: 184px;
+left: 102px;
+top: 3192px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark
+
+Primary button used to route users
+*/
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+left: 10.99%;
+right: 16.48%;
+top: 10.87%;
+bottom: 59.24%;
+
+/* Neutrals/Off-Black */
+border: 2px solid #252525;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Property 1=Light
+
+Primary button used to route users
+*/
+
+box-sizing: border-box;
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+position: absolute;
+left: 10.99%;
+right: 16.48%;
+top: 61.96%;
+bottom: 8.15%;
+
+/* Neutrals/White */
+border: 2px solid #FFFFFF;
+border-radius: 5px;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/White */
+color: #FFFFFF;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Light- Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 522px;
+top: 3307px;
+
+
+
+/* Default - Stroke - Light- Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Dark - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Light- Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+position: absolute;
+width: 132px;
+height: 55px;
+left: 959.5px;
+top: 3307px;
+
+
+
+/* Default - Stroke - Light- Select */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Light- Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke - Dark - Hover */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+width: 132px;
+height: 55px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Default - Stroke
+
+Primary button used to route users
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 18px 30px;
+gap: 10px;
+
+width: 132px;
+height: 55px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Shop Now */
+
+width: 72px;
+height: 19px;
+
+/* Default/Desktop/UI/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Tool Tip
+
+Tool Tip
+*/
+
+position: absolute;
+width: 104px;
+height: 40px;
+left: 120px;
+top: 9986px;
+
+
+
+/* Group 19184 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 1.5%;
+
+
+
+/* Rectangle 1031 */
+
+position: absolute;
+visibility: hidden;
+left: 4.74%;
+right: 4.75%;
+top: 1.5%;
+bottom: 0%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+opacity: 0.2;
+border-radius: 5px;
+
+
+/* Rectangle 1030 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 1.5%;
+
+background: #252525;
+border-radius: 5px;
+
+
+/* Out of stock */
+
+position: absolute;
+left: 16.35%;
+right: 14.42%;
+top: 30%;
+bottom: 30%;
+
+/* Default/Desktop/UI/Small - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-White BG - Global */
+color: #FAFAFA;
+
+
+
+/* Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 0px;
+gap: 10px;
+
+position: absolute;
+left: 7.67%;
+right: 79.83%;
+top: 95%;
+bottom: 4.52%;
+
+
+
+/* Frame 1167 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 6px 12px;
+gap: 10px;
+
+width: 194px;
+height: 33px;
+
+/* Experience/Pink-10 */
+background: #FBE8E7;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1684 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+width: 170px;
+height: 21px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1685 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 143px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Free Shipping + 25% off */
+
+width: 143px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Medium */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 500;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* help - small */
+
+width: 22px;
+height: 21px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: calc(50% - 15px/2 - 0.5px);
+top: calc(50% - 15px/2 + 1px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Badge */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 8px 0px;
+gap: 10px;
+
+position: absolute;
+left: 35.7%;
+right: 51.8%;
+top: 95%;
+bottom: 4.52%;
+
+
+
+/* Frame 1167 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 6px 12px;
+gap: 10px;
+
+width: 194px;
+height: 33px;
+
+/* Experience/Pink-15 */
+background: #F6DAD9;
+border-radius: 5px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1684 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+gap: 5px;
+
+width: 170px;
+height: 21px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Frame 1685 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px;
+
+width: 143px;
+height: 16px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Free Shipping + 25% off */
+
+width: 143px;
+height: 16px;
+
+/* Default/Desktop/UI/Small - Medium */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 500;
+font-size: 13.33px;
+line-height: 120%;
+/* identical to box height, or 16px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* help - small */
+
+width: 22px;
+height: 21px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Vector */
+
+position: absolute;
+width: 15px;
+height: 15px;
+left: calc(50% - 15px/2 - 0.5px);
+top: calc(50% - 15px/2 + 1px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Comment Bubble
+
+Comment directly in context. Use hide and unhide controls to react with emojis
+*/
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 6px;
+
+position: absolute;
+width: 477px;
+height: 107.15px;
+left: -238px;
+top: 91px;
+
+
+
+/* Designer Avatar
+
+Please add your avatar if yours is not shown!
+*/
+
+width: 52.04px;
+height: 52.04px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* mask */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #C4C4C4;
+
+
+/* edgar */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: url(cheesin pic of me copy);
+
+
+/* background */
+
+box-sizing: border-box;
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Icon/Subdued* */
+border: 1.44545px solid #656567;
+
+
+/* Guts / Bubble Left + Emoji  */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 7.22727px 0px;
+gap: 5.78px;
+
+width: 416.29px;
+height: 107.15px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Guts / Bubble Left */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 17.3455px 28.9091px;
+gap: 11.56px;
+
+width: 416.29px;
+height: 92.69px;
+
+/* Experience/Yellow-15 */
+background: #F1E7B5;
+box-shadow: 0px 0px 1.44545px rgba(0, 0, 0, 0.24), 0px 2.89091px 5.78182px rgba(0, 0, 0, 0.16), 0px -1.44545px 1.44545px rgba(0, 0, 0, 0.08);
+border-radius: 0px 34.6909px 34.6909px 34.6909px;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Note */
+
+width: 354.14px;
+height: 58px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 400;
+font-size: 20.2364px;
+line-height: 29px;
+/* or 143% */
+
+/* Experience/Orange-70 */
+color: #752804;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Guts / Emoji: Un-hide me! */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2.89091px 8.67273px;
+gap: 5.78px;
+
+display: none;
+width: 50.59px;
+height: 34.69px;
+
+/* Text/Subdued* */
+background: #656567;
+border-radius: 34.6909px;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Guts / Emoji: Un-hide me! */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2.89091px 8.67273px;
+gap: 5.78px;
+
+display: none;
+width: 50.59px;
+height: 34.69px;
+
+/* Text/Subdued* */
+background: #656567;
+border-radius: 34.6909px;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Guts / Emoji: Un-hide me! */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 2.89091px 8.67273px;
+gap: 5.78px;
+
+display: none;
+width: 28.91px;
+height: 28.91px;
+
+/* Text/Subdued* */
+background: #656567;
+border-radius: 34.6909px;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Large Button — Fill – Icon Left  */
+
+position: absolute;
+width: 1285px;
+height: 373.99px;
+left: 100px;
+top: 817.01px;
+
+
+
+/* BG */
+
+position: absolute;
+width: 1280px;
+height: 83px;
+left: 105px;
+top: 1108px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 120px;
+top: 885px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 38.21%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 7.73%;
+right: 11.4%;
+top: 8.01%;
+bottom: 91.99%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 1186 */
+
+position: absolute;
+width: 913px;
+height: 14px;
+left: 120px;
+top: 987px;
+
+
+
+/* RESTING */
+
+position: absolute;
+width: 39px;
+height: 14px;
+left: 120px;
+top: 987px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* HOVER */
+
+position: absolute;
+width: 31px;
+height: 14px;
+left: 555px;
+top: 987px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* SELECT */
+
+position: absolute;
+width: 33px;
+height: 14px;
+left: 1000px;
+top: 987px;
+
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 10px;
+line-height: 14px;
+/* identical to box height, or 140% */
+letter-spacing: 0.02em;
+text-transform: uppercase;
+
+/* Neutrals/Gray-Mid */
+color: #ACACAC;
+
+
+
+/* Large - Fill - Icon Left - Light - Select */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 1002px;
+top: 1123px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+border-radius: 4px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Fill - Icon Left - Light - Hover */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 555px;
+top: 1123px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White-Select */
+background: #F6F6F6;
+border-radius: 4px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Large - Fill - Icon Left - Hover */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 555px;
+top: 1021px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+border-radius: 5px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Large - Fill - Icon Left - Select */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 1000.78px;
+top: 1021px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+border-radius: 5px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Large - Fill - Icon Left */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 400px;
+height: 190px;
+left: 100px;
+top: 1001px;
+
+border: 1px dashed #7B61FF;
+border-radius: 5px;
+
+
+/* Property 1=Dark */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 20px;
+top: 20px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-Black */
+background: #252525;
+border-radius: 4px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/White */
+background: #FFFFFF;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* White */
+color: #FFFFFF;
+
+
+
+/* Property 1=Light */
+
+position: absolute;
+width: 360px;
+height: 55px;
+left: 21px;
+top: 122px;
+
+
+
+/* fill */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+border-radius: 4px;
+
+
+/* lock */
+
+position: absolute;
+width: 44px;
+height: 44px;
+left: calc(50% - 44px/2 - 143px);
+top: calc(50% - 44px/2 + 0.12px);
+
+
+
+/* lock */
+
+position: absolute;
+width: 16px;
+height: 21px;
+left: calc(50% - 16px/2);
+top: calc(50% - 21px/2 - 0.5px);
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+
+/* Checkout */
+
+position: absolute;
+width: 283px;
+left: calc(50% - 283px/2 + 0.5px);
+top: 31%;
+bottom: 31%;
+
+/* UI/Desktop/Default - Bold */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 120%;
+/* or 19px */
+text-align: center;
+letter-spacing: 0.01em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+

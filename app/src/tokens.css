@@ -1,0 +1,185 @@
+/* ============================================================
+   EOS Cloud 2.0 — Design Tokens
+   Source of truth: EOS Cloud Component Library (Figma)
+   Font: Untitled Sans by Klim Type Foundry
+   ============================================================ */
+
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('./assets/fonts/UNTITLEDSANS-LIGHT.OTF') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('./assets/fonts/UNTITLEDSANS-REGULAR.OTF') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('./assets/fonts/UNTITLEDSANS-MEDIUM.OTF') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Untitled Sans';
+  src: url('./assets/fonts/UNTITLEDSANS-BOLD.OTF') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* --- Brand --- */
+  --brand:         #E22D00;
+  --brand-dark:    #A81910;
+  --brand-darker:  #601B15;
+  --brand-soft:    #FFF6F4;  /* Pink-5 */
+
+  /* --- Neutrals --- */
+  --ink:           #252525;  /* Off-Black — primary text */
+  --ink-select:    #333333;  /* Off-Black Select — hover text */
+  --ink-2:         #616161;  /* Gray Dark — secondary text */
+  --ink-3:         #ACACAC;  /* Gray Mid — placeholder / inactive */
+  --line:          #EBEBEB;  /* Gray Light — borders, hover bg */
+  --bg:            #FFFFFF;
+  --bg-soft:       #FAFAFA;  /* Off-White — global background */
+  --black:         #1B1B1B;
+  --ink-deep:      #090909;  /* Off-Black — nav border */
+
+  /* --- Pin lines --- */
+  --pin:           rgba(9, 9, 9, 0.15);
+  --pin-light:     rgba(255, 255, 255, 0.2);
+
+  /* --- Status / Utility --- */
+  --green:         #00816C;  /* Green-50 */
+  --green-soft:    #E7EDEE;  /* Blue-10 (as per Figma) */
+  --blue:          #28628E;  /* Blue-50 */
+  --blue-soft:     #DCE7EF;
+  --amber:         #CE973D;  /* Yellow-50 */
+  --amber-soft:    #F6F4EA;  /* Yellow-5 */
+  --red:           #CD4557;  /* Pink-50 */
+  --red-soft:      #FFF6F4;  /* Pink-5 */
+  --yellow:        #F8DE84;  /* Yellow-20 — avatar bg */
+
+  /* --- Shadows --- */
+  --shadow-pop:    8px 8px 32px rgba(0, 0, 0, 0.15);
+  --shadow-sm:     1px 1px 16px rgba(0, 0, 0, 0.1);
+
+  /* --- Radius --- */
+  --radius:        4px;
+
+  /* --- Experience palette — Blue --- */
+  --blue-5:   #F3F5F5;  --blue-10:  #E7EDEE;  --blue-15:  #D0DCDE;
+  --blue-20:  #B0CED8;  --blue-30:  #86BBD2;  --blue-40:  #568EB8;
+  --blue-50:  #28628E;  --blue-60:  #2F5179;  --blue-70:  #2E4168;
+  --blue-80:  #1B2A46;  --blue-90:  #1F2532;
+
+  /* --- Experience palette — Green --- */
+  --green-5:  #ECF1EE;  --green-10: #E4EFE9;  --green-15: #CADFD4;
+  --green-20: #B6D3C2;  --green-30: #83C09B;  --green-40: #589F7D;
+  --green-50: #00816C;  --green-60: #216958;  --green-70: #25503B;
+  --green-80: #2A4132;  --green-90: #1D271D;
+
+  /* --- Experience palette — Pink --- */
+  --pink-5:   #FFF6F4;  --pink-10:  #FBE8E7;  --pink-15:  #F6DAD9;
+  --pink-20:  #EFC9C6;  --pink-30:  #E7A4AD;  --pink-40:  #DB717F;
+  --pink-50:  #CD4557;  --pink-60:  #8A223B;  --pink-70:  #5B1828;
+  --pink-80:  #380914;  --pink-90:  #23050C;
+
+  /* --- Experience palette — Yellow --- */
+  --yellow-5:  #F6F4EA;  --yellow-10: #F1ECDC;  --yellow-15: #F1E7B5;
+  --yellow-20: #F8DE84;  --yellow-30: #EBBF6B;  --yellow-40: #DFAA52;
+  --yellow-50: #CE973D;  --yellow-60: #926D53;  --yellow-70: #725C51;
+  --yellow-80: #4B413B;  --yellow-90: #29231F;
+
+  /* --- Experience palette — Teal --- */
+  --teal-5:   #EFF6F9;  --teal-10:  #E0F1F6;  --teal-15:  #D0EAF1;
+  --teal-20:  #BFE3ED;  --teal-30:  #9ED5E1;  --teal-40:  #41A9B7;
+  --teal-50:  #007E94;  --teal-60:  #006B7D;  --teal-70:  #17515D;
+  --teal-80:  #16383F;  --teal-90:  #0A1F26;
+
+  /* --- Experience palette — Lavender --- */
+  --lavender-5:  #F0EDEE;  --lavender-10: #EFE7EA;  --lavender-15: #EBDFE4;
+  --lavender-20: #E0CFD6;  --lavender-30: #CDB9C2;  --lavender-40: #B49EAF;
+  --lavender-50: #876B8B;  --lavender-60: #6E5A6B;  --lavender-70: #504552;
+  --lavender-80: #372D35;  --lavender-90: #201620;
+
+  /* --- Experience palette — Orange --- */
+  --orange-5:  #F8F1EE;  --orange-10: #F9EBE2;  --orange-15: #F3D9C7;
+  --orange-20: #FECAA5;  --orange-30: #FBA262;  --orange-40: #DF6621;
+  --orange-50: #BE572A;  --orange-60: #96431F;  --orange-70: #752804;
+  --orange-80: #4A1D09;  --orange-90: #341202;
+}
+
+/* ============================================================
+   Global resets
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Untitled Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--bg-soft);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.01em;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--ink);
+  color: #fff;
+}
+
+/* Scrollbar */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb { background: #D6D6D6; border-radius: 6px; border: 2px solid var(--bg-soft); }
+*::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* Focus ring */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes menuPop {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

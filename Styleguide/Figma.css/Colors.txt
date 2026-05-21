@@ -1,0 +1,1795 @@
+/* Colors */
+
+position: relative;
+width: 2500px;
+height: 3909px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+
+
+/* header */
+
+position: absolute;
+visibility: hidden;
+left: 4.81%;
+right: 89.47%;
+top: 11.77%;
+bottom: 87.41%;
+
+font-family: 'Meta Offc';
+font-size: 24px;
+line-height: 32px;
+/* identical to box height, or 133% */
+
+/* Off-Black */
+color: #090909;
+
+
+
+/* Colors — Global */
+
+position: absolute;
+left: 4.81%;
+right: 64.83%;
+top: 5.12%;
+bottom: 91.53%;
+
+/* Default/Desktop/Header/Display */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 118.88px;
+line-height: 110%;
+/* identical to box height, or 131px */
+letter-spacing: -0.03em;
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Frame 19717 */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 150px;
+
+position: absolute;
+width: 1947px;
+height: 3206.67px;
+left: 120px;
+top: 458px;
+
+
+
+/* Group 19516 */
+
+width: 1942px;
+height: 408px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse 126 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 286px;
+
+/* Utility/Red - Error */
+background: #CD4557;
+
+
+/* Ellipse 121 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 286px;
+
+/* Utility/Green - Success */
+background: #00816C;
+
+
+/* Ellipse 170 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 286px;
+
+/* Utility/Yellow - Error */
+background: #CE973D;
+
+
+/* Frame 19706 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 60px;
+
+position: absolute;
+width: 1942px;
+height: 122px;
+left: 0px;
+top: 114px;
+
+
+
+/* Ellipse 118 */
+
+width: 122px;
+height: 122px;
+
+/* Brand/Red - Brand */
+background: #E22D00;
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse 205 */
+
+width: 122px;
+height: 122px;
+
+/* Brand/Red - Brand - Dark */
+background: #A81910;
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Ellipse 206 */
+
+width: 122px;
+height: 122px;
+
+/* Brand/Red - Brand - Darker */
+background: #601B15;
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Ellipse 169 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Black */
+background: #1B1B1B;
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Ellipse 204 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Off-Black */
+background: #252525;
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* Ellipse 207 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Off-Black Select */
+background: #333333;
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+flex-grow: 0;
+
+
+/* Ellipse 171 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Gray - Dark */
+background: #616161;
+
+/* Inside auto layout */
+flex: none;
+order: 6;
+flex-grow: 0;
+
+
+/* Ellipse 172 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Gray-Mid */
+background: #ACACAC;
+
+/* Inside auto layout */
+flex: none;
+order: 7;
+flex-grow: 0;
+
+
+/* Ellipse 173 */
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Gray-Light */
+background: #EBEBEB;
+
+/* Inside auto layout */
+flex: none;
+order: 8;
+flex-grow: 0;
+
+
+/* Ellipse 119 */
+
+box-sizing: border-box;
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/Off-White BG - Global */
+background: #FAFAFA;
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+/* Inside auto layout */
+flex: none;
+order: 9;
+flex-grow: 0;
+
+
+/* Ellipse 116 */
+
+box-sizing: border-box;
+
+width: 122px;
+height: 122px;
+
+/* Neutrals/White */
+background: #FFFFFF;
+border: 1px solid #D8D7D7;
+
+/* Inside auto layout */
+flex: none;
+order: 10;
+flex-grow: 0;
+
+
+/* Group 2326 */
+
+position: absolute;
+width: 1942px;
+height: 64px;
+left: 0px;
+top: 0px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 0.26%;
+top: 2%;
+bottom: 98%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 84.03%;
+top: 0%;
+bottom: 98.75%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Frame 19766 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 125px;
+
+width: 1507px;
+height: 267px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Group 19515 */
+
+width: 691px;
+height: 267px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Ellipse 113 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 131px;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Group 1551 */
+
+position: absolute;
+width: 147px;
+height: 149px;
+left: 170px;
+top: 118px;
+
+
+
+/* Rectangle 684 */
+
+position: absolute;
+width: 147px;
+height: 149px;
+left: 170px;
+top: 118px;
+
+/* Off-Black */
+background: #090909;
+
+
+/* Ellipse 126 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 131px;
+
+/* Pin-Line/Light */
+border: 5px solid rgba(255, 255, 255, 0.2);
+
+
+/* Group 2327 */
+
+position: absolute;
+width: 691px;
+height: 64px;
+left: 0px;
+top: 0px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 54.15%;
+top: 23.97%;
+bottom: 76.03%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 61.79%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Group 19518 */
+
+width: 691px;
+height: 253px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Ellipse 113 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 816px;
+top: 131px;
+
+/* Text/Off-Black - Subtle */
+background: rgba(37, 37, 37, 0.7);
+
+
+/* Group 1551 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 998px;
+top: 131px;
+
+
+
+/* Ellipse 126 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 998px;
+top: 131px;
+
+/* Text/Off-White Subtle */
+border: 5px solid rgba(250, 250, 250, 0.7);
+
+
+/* Group 2327 */
+
+position: absolute;
+width: 691px;
+height: 64px;
+left: 816px;
+top: 0px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 54.15%;
+right: 0%;
+top: 23.97%;
+bottom: 76.03%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 816px;
+top: 0px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 58.61%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Group 19514 */
+
+width: 1680px;
+height: 234px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Frame 19690 */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-start;
+padding: 0px;
+gap: 52px;
+
+position: absolute;
+width: 458px;
+height: 122px;
+left: 0px;
+top: 1087px;
+
+
+
+/* Rectangle 683 */
+
+width: 118px;
+height: 122px;
+
+/* Overlay/Off-Black */
+background: rgba(37, 37, 37, 0.7);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* Rectangle 684 */
+
+width: 118px;
+height: 122px;
+
+background: rgba(37, 37, 37, 0.6);
+mix-blend-mode: normal;
+/* Blur - Default */
+backdrop-filter: blur(2.5px);
+/* Note: backdrop-filter has minimal browser support */
+
+/* Inside auto layout */
+flex: none;
+order: 1;
+flex-grow: 0;
+
+
+/* Rectangle 686 */
+
+width: 118px;
+height: 122px;
+
+/* Overlay/Blur - Light */
+background: rgba(255, 255, 255, 0.8);
+mix-blend-mode: normal;
+/* Blur - Default */
+backdrop-filter: blur(2.5px);
+/* Note: backdrop-filter has minimal browser support */
+
+/* Inside auto layout */
+flex: none;
+order: 2;
+flex-grow: 0;
+
+
+/* Group 2328 */
+
+position: absolute;
+width: 1680px;
+height: 64px;
+left: 0px;
+top: 975px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 13.71%;
+top: 32.4%;
+bottom: 67.6%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 975px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 62.52%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Frame 19767 */
+
+width: 1px;
+height: 2px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 3;
+flex-grow: 0;
+
+
+/* Group 19513 */
+
+width: 1680px;
+height: 212.17px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 4;
+flex-grow: 0;
+
+
+/* Rectangle 682 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 1601.17px;
+
+/* Shadow/Off-White */
+background: #F8F7F8;
+/* Shadow - Default - HM */
+box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.15);
+
+
+/* Rectangle 685 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 170px;
+top: 1601.17px;
+
+/* Shadow/Blur */
+background: #F8F7F8;
+/* Shadow - Small - HM */
+box-shadow: 1px 1px 16px rgba(0, 0, 0, 0.1);
+
+
+/* Group 2329 */
+
+position: absolute;
+width: 1680px;
+height: 64px;
+left: 0px;
+top: 1511px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 13.71%;
+top: 49.12%;
+bottom: 50.88%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 1511px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: 61.79%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Colors */
+
+width: 1947px;
+height: 1333.5px;
+
+
+/* Inside auto layout */
+flex: none;
+order: 5;
+flex-grow: 0;
+
+
+/* Group 2330 */
+
+position: absolute;
+width: 1680px;
+height: 64px;
+left: 0px;
+top: 1873.17px;
+
+
+
+/* stroke */
+
+position: absolute;
+left: 0%;
+right: 13.71%;
+top: 60.41%;
+bottom: 39.59%;
+
+/* Pin-Line/Dark */
+border: 1px solid rgba(9, 9, 9, 0.15);
+
+
+/* Split Type H4 */
+
+position: absolute;
+width: 691px;
+height: 48px;
+left: 0px;
+top: 1873.17px;
+
+
+
+/* header */
+
+position: absolute;
+left: 0%;
+right: -97.54%;
+top: 0%;
+bottom: 16.67%;
+
+/* Default/Desktop/Header/h4 */
+font-family: 'Meta Offc';
+font-style: normal;
+font-weight: 700;
+font-size: 33.18px;
+line-height: 120%;
+/* identical to box height, or 40px */
+
+/* Neutrals/Off-Black */
+color: #252525;
+
+
+
+/* Blue-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 1992.67px;
+
+/* Experience/Blue-5 */
+background: #F3F5F5;
+
+
+/* Green-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 2174.67px;
+
+/* Experience/Green-5 */
+background: #ECF1EE;
+
+
+/* Lavendar-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 2356.67px;
+
+/* Experience/Lavender-5 */
+background: #F0EDEE;
+
+
+/* Orange-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 2538.67px;
+
+/* Experience/Orange-5 */
+background: #F8F1EE;
+
+
+/* Pink-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 2720.67px;
+
+/* Experience/Pink-5 */
+background: #FFF6F4;
+
+
+/* Teal-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 2902.67px;
+
+/* Experience/Teal-5 */
+background: #EFF6F9;
+
+
+/* Yellow-5 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 0px;
+top: 3084.67px;
+
+/* Experience/Yellow-5 */
+background: #F6F4EA;
+
+
+/* Blue-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 1992.67px;
+
+/* Experience/Blue-10 */
+background: #E7EDEE;
+
+
+/* Green-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 2174.67px;
+
+/* Experience/Green-10 */
+background: #E4EFE9;
+
+
+/* Lavender-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 2356.67px;
+
+/* Experience/Lavender-10 */
+background: #EFE7EA;
+
+
+/* Orange-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 2538.67px;
+
+/* Experience/Orange-10 */
+background: #F9EBE2;
+
+
+/* Pink-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 2720.67px;
+
+/* Experience/Pink-10 */
+background: #FBE8E7;
+
+
+/* Teal-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 2902.67px;
+
+/* Experience/Teal-10 */
+background: #E0F1F6;
+
+
+/* Yellow-10 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 182px;
+top: 3084.67px;
+
+/* Experience/Yellow-10 */
+background: #F1ECDC;
+
+
+/* Blue-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 1992.67px;
+
+/* Experience/Blue-15 */
+background: #D0DCDE;
+
+
+/* Green-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 2174.67px;
+
+/* Experience/Green-15 */
+background: #CADFD4;
+
+
+/* Lavender-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 2356.67px;
+
+/* Experience/Lavender-15 */
+background: #EBDFE4;
+
+
+/* Orange-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 2538.67px;
+
+/* Experience/Orange-15 */
+background: #F3D9C7;
+
+
+/* Pink-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 2720.67px;
+
+/* Experience/Pink-15 */
+background: #F6DAD9;
+
+
+/* Teal-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 2902.67px;
+
+/* Experience/Teal-15 */
+background: #D0EAF1;
+
+
+/* Yellow-15 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 364px;
+top: 3084.67px;
+
+/* Experience/Yellow-15 */
+background: #F1E7B5;
+
+
+/* Blue-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 1992.67px;
+
+/* Experience/Blue-30 */
+background: #86BBD2;
+
+
+/* Green-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 2174.67px;
+
+/* Experience/Green-30 */
+background: #83C09B;
+
+
+/* Lavender-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 2356.67px;
+
+/* Experience/Lavender-30 */
+background: #CDB9C2;
+
+
+/* Orange-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 2538.67px;
+
+/* Experience/Orange-30 */
+background: #FBA262;
+
+
+/* Pink-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 2720.67px;
+
+/* Experience/Pink-30 */
+background: #E7A4AD;
+
+
+/* Teal-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 2902.67px;
+
+/* Experience/Teal-30 */
+background: #9ED5E1;
+
+
+/* Yellow-30 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 728px;
+top: 3084.67px;
+
+/* Experience/Yellow-30 */
+background: #EBBF6B;
+
+
+/* Blue-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 1992.67px;
+
+/* Experience/Blue-40 */
+background: #568EB8;
+
+
+/* Green-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 2174.67px;
+
+/* Experience/Green-40 */
+background: #589F7D;
+
+
+/* Lavender-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 2356.67px;
+
+/* Experience/Lavender-40 */
+background: #B49EAF;
+
+
+/* Orange-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 2538.67px;
+
+/* Experience/Orange-40 */
+background: #DF6621;
+
+
+/* Pink-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 2720.67px;
+
+/* Experience/Pink-40 */
+background: #DB717F;
+
+
+/* Teal-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 2902.67px;
+
+/* Experience/Teal-40 */
+background: #41A9B7;
+
+
+/* Yellow-40 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 910px;
+top: 3084.67px;
+
+/* Experience/Yellow-40 */
+background: #DFAA52;
+
+
+/* Blue-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 1992.67px;
+
+/* Experience/Blue-50 */
+background: #28628E;
+
+
+/* Green-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 2174.67px;
+
+/* Experience/Green-50 */
+background: #00816C;
+
+
+/* Lavender-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 2356.67px;
+
+/* Experience/Lavender-50 */
+background: #876B8B;
+
+
+/* Orange-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 2538.67px;
+
+/* Experience/Orange-50 */
+background: #BE572A;
+
+
+/* Pink-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 2720.67px;
+
+/* Experience/Pink-50 */
+background: #CD4557;
+
+
+/* Teal-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 2902.67px;
+
+/* Experience/Teal-50 */
+background: #007E94;
+
+
+/* Yellow-50 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1092px;
+top: 3084.67px;
+
+/* Experience/Yellow-50 */
+background: #CE973D;
+
+
+/* Blue-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 1992.67px;
+
+/* Experience/Blue-60 */
+background: #2F5179;
+
+
+/* Green-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 2174.67px;
+
+/* Experience/Green-60 */
+background: #216958;
+
+
+/* Lavender-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 2356.67px;
+
+/* Experience/Lavender-60 */
+background: #6E5A6B;
+
+
+/* Orange-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 2538.67px;
+
+/* Experience/Orange-60 */
+background: #96431F;
+
+
+/* Pink-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 2720.67px;
+
+/* Experience/Pink-60 */
+background: #8A223B;
+
+
+/* Teal-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 2902.67px;
+
+/* Experience/Teal-60 */
+background: #006B7D;
+
+
+/* Yellow-60 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1274px;
+top: 3084.67px;
+
+/* Experience/Yellow-60 */
+background: #926D53;
+
+
+/* Blue-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 1992.67px;
+
+/* Experience/Blue-70 */
+background: #2E4168;
+
+
+/* Green-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 2174.67px;
+
+/* Experience/Green-70 */
+background: #25503B;
+
+
+/* Lavender-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 2356.67px;
+
+/* Experience/Lavender-70 */
+background: #504552;
+
+
+/* Orange-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 2538.67px;
+
+/* Experience/Orange-70 */
+background: #752804;
+
+
+/* Pink-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 2720.67px;
+
+/* Experience/Pink-70 */
+background: #5B1828;
+
+
+/* Teal-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 2902.67px;
+
+/* Experience/Teal-70 */
+background: #17515D;
+
+
+/* Yellow-70 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1456px;
+top: 3084.67px;
+
+/* Experience/Yellow-70 */
+background: #725C51;
+
+
+/* Blue-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 1992.67px;
+
+/* Experience/Blue-80 */
+background: #1B2A46;
+
+
+/* Green-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 2174.67px;
+
+/* Experience/Green-80 */
+background: #2A4132;
+
+
+/* Lavender-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 2356.67px;
+
+/* Experience/Lavender-80 */
+background: #372D35;
+
+
+/* Orange-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 2538.67px;
+
+/* Experience/Orange-80 */
+background: #4A1D09;
+
+
+/* Pink-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 2720.67px;
+
+/* Experience/Pink-80 */
+background: #380914;
+
+
+/* Teal-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 2902.67px;
+
+/* Experience/Teal-80 */
+background: #16383F;
+
+
+/* Yellow-80 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1638px;
+top: 3084.67px;
+
+/* Experience/Yellow-80 */
+background: #4B413B;
+
+
+/* Blue-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 1992.67px;
+
+/* Experience/Blue-90 */
+background: #1F2532;
+
+
+/* Green-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 2174.67px;
+
+/* Experience/Green-90 */
+background: #1D271D;
+
+
+/* Lavender-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 2356.67px;
+
+/* Experience/Lavender-90 */
+background: #201620;
+
+
+/* Orange-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 2538.67px;
+
+/* Experience/Orange-90 */
+background: #341202;
+
+
+/* Pink-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 2720.67px;
+
+/* Experience/Pink-90 */
+background: #23050C;
+
+
+/* Teal-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 2902.67px;
+
+/* Experience/Teal-90 */
+background: #0A1F26;
+
+
+/* Yellow-90 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 1825px;
+top: 3084.67px;
+
+/* Experience/Yellow-90 */
+background: #29231F;
+
+
+/* Blue-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 1992.67px;
+
+/* Experience/Blue-20 */
+background: #B0CED8;
+
+
+/* Green-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 2174.67px;
+
+/* Experience/Green-20 */
+background: #B6D3C2;
+
+
+/* Lavender-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 2356.67px;
+
+/* Experience/Lavender-20 */
+background: #E0CFD6;
+
+
+/* Orange-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 2538.67px;
+
+/* Experience/Orange-20 */
+background: #FECAA5;
+
+
+/* Pink-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 2720.67px;
+
+/* Experience/Pink-20 */
+background: #EFC9C6;
+
+
+/* Teal-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 2902.67px;
+
+/* Experience/Teal-20 */
+background: #BFE3ED;
+
+
+/* Yellow-20 */
+
+position: absolute;
+width: 122px;
+height: 122px;
+left: 546px;
+top: 3084.67px;
+
+/* Experience/Yellow-20 */
+background: #F8DE84;

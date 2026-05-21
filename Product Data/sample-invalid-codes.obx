@@ -1,0 +1,91 @@
+<?xml version='1.0'?>
+<cutBuffer>
+  <state sessionId='test-invalid-mix'/>
+  <versionInfo vendorKey='EasternGraphics' appKey='EAI-Server' appVersion='4.18.3' bskXmlVersion='1.8.10'/>
+  <items>
+    <bskArticle basketId='invalid-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='FAKE'><name>Fake</name></series>
+      <artNr type='base'>PHM9X99</artNr>
+      <artNr type='final' default='1'>PHM9X99</artNr>
+      <description type='short' default='0'><text lang='en'>Phantom Chair</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1B23</artNr>
+      <artNr type='final' default='1'>AER1B23DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron Chair - VALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-002' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='FAKE'><name>Fake</name></series>
+      <artNr type='base'>XXXX0000</artNr>
+      <artNr type='final' default='1'>XXXX0000</artNr>
+      <description type='short' default='0'><text lang='en'>Fake Item</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-002' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2B33</artNr>
+      <artNr type='final' default='1'>MIR2B33DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Chair - VALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='INVALID'><name>Invalid</name></series>
+      <artNr type='base'>FAKE001</artNr>
+      <artNr type='final' default='1'>FAKE001 BAD CODE</artNr>
+      <description type='short' default='0'><text lang='en'>Not Real</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1A11</artNr>
+      <artNr type='final' default='1'>CEL1A11DW ALP G1</artNr>
+      <description type='short' default='0'><text lang='en'>Celle Chair - VALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-004' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='BOGUS'><name>Bogus</name></series>
+      <artNr type='base'>ZZZZZ111</artNr>
+      <artNr type='final' default='1'>ZZZZZ111</artNr>
+      <description type='short' default='0'><text lang='en'>Bogus Item</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-004' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1C30</artNr>
+      <artNr type='final' default='1'>AER1C30DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron C - VALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-005' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='UNKNOWN'><name lang='en'>Mystery</name></manufacturer>
+      <series id='TEST'><name>Test</name></series>
+      <artNr type='base'>TST1A01</artNr>
+      <artNr type='final' default='1'>TST1A01</artNr>
+      <description type='short' default='0'><text lang='en'>Test Product</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-005' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2A25</artNr>
+      <artNr type='final' default='1'>MIR2A25</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Base - VALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-006' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='INVALID'><name>Invalid</name></series>
+      <artNr type='base'>NOT1B22</artNr>
+      <artNr type='final' default='1'>NOT1B22</artNr>
+      <description type='short' default='0'><text lang='en'>Not a Product</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-006' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1B22</artNr>
+      <artNr type='final' default='1'>CEL1B22DW</artNr>
+      <description type='short' default='0'><text lang='en'>Celle B - VALID</text></description>
+    </bskArticle>
+  </items>
+</cutBuffer>

@@ -1,0 +1,105 @@
+<?xml version='1.0'?>
+<cutBuffer>
+  <state sessionId='test-valid-mix'/>
+  <versionInfo vendorKey='EasternGraphics' appKey='EAI-Server' appVersion='4.18.3' bskXmlVersion='1.8.10'/>
+  <items>
+    <bskArticle basketId='valid-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1B23</artNr>
+      <artNr type='final' default='1'>AER1B23DW ALP G1 G1 G1 BB BK 23103</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron Chair Size B</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='FAKE'><name>Fake</name></series>
+      <artNr type='base'>PHM9X99</artNr>
+      <artNr type='final' default='1'>PHM9X99</artNr>
+      <description type='short' default='0'><text lang='en'>Phantom Chair - NOT REAL</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-002' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1C30</artNr>
+      <artNr type='final' default='1'>AER1C30DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron Chair Size C</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2B33</artNr>
+      <artNr type='final' default='1'>MIR2B33DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Chair 2 Size B</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-002' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='FAKE'><name lang='en'>Unknown</name></manufacturer>
+      <series id='INVALID'><name>Invalid</name></series>
+      <artNr type='base'>FAKE001</artNr>
+      <artNr type='final' default='1'>FAKE001 NOT REAL</artNr>
+      <description type='short' default='0'><text lang='en'>Fake Product</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-004' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2C40</artNr>
+      <artNr type='final' default='1'>MIR2C40</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Chair 2 Size C</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-005' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1A11</artNr>
+      <artNr type='final' default='1'>CEL1A11DW ALP G1</artNr>
+      <description type='short' default='0'><text lang='en'>Celle Chair Standard</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-006' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1B22</artNr>
+      <artNr type='final' default='1'>CEL1B22DW</artNr>
+      <description type='short' default='0'><text lang='en'>Celle Chair Premium</text></description>
+    </bskArticle>
+    <bskArticle basketId='invalid-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='GHOST'><name lang='en'>Ghost</name></manufacturer>
+      <series id='PHANTOM'><name>Phantom</name></series>
+      <artNr type='base'>GHO1Z99</artNr>
+      <artNr type='final' default='1'>GHO1Z99</artNr>
+      <description type='short' default='0'><text lang='en'>Ghost Chair - INVALID</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-007' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1A18</artNr>
+      <artNr type='final' default='1'>AER1A18</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron Base Model</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-008' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2A25</artNr>
+      <artNr type='final' default='1'>MIR2A25</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Base Model</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-009' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1C33</artNr>
+      <artNr type='final' default='1'>CEL1C33DW ALP G1 BB</artNr>
+      <description type='short' default='0'><text lang='en'>Celle Full Config</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-010' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1B25</artNr>
+      <artNr type='final' default='1'>AER1B25DW ALP</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron PostureFit SL</text></description>
+    </bskArticle>
+    <bskArticle basketId='valid-011' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2B35</artNr>
+      <artNr type='final' default='1'>MIR2B35DW G1</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Graphite</text></description>
+    </bskArticle>
+  </items>
+</cutBuffer>

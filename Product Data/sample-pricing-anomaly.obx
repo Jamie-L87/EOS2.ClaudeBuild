@@ -1,0 +1,90 @@
+<?xml version='1.0'?>
+<cutBuffer>
+  <state sessionId='test-pricing-bulk'/>
+  <versionInfo vendorKey='EasternGraphics' appKey='EAI-Server' appVersion='4.18.3' bskXmlVersion='1.8.10'/>
+  <items>
+    <bskArticle basketId='price-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1B23</artNr>
+      <artNr type='final' default='1'>AER1B23DW ALP G1 G1 G1 BB BK 23103</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron - PRICE MISMATCH</text></description>
+      <unitPrice>999.99</unitPrice>
+    </bskArticle>
+    <bskArticle basketId='valid-001' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2B33</artNr>
+      <artNr type='final' default='1'>MIR2B33DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra - CORRECT PRICE</text></description>
+    </bskArticle>
+    <bskArticle basketId='price-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1A11</artNr>
+      <artNr type='final' default='1'>CEL1A11DW ALP G1</artNr>
+      <description type='short' default='0'><text lang='en'>Celle - PRICE MISMATCH</text></description>
+      <unitPrice>49.99</unitPrice>
+    </bskArticle>
+    <bskArticle basketId='valid-002' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1C30</artNr>
+      <artNr type='final' default='1'>AER1C30DW ALP G1 G1 G1 BB BK</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron C - CORRECT PRICE</text></description>
+    </bskArticle>
+    <bskArticle basketId='price-005' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2C40</artNr>
+      <artNr type='final' default='1'>MIR2C40</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra C - PRICE MISMATCH</text></description>
+      <unitPrice>1050.00</unitPrice>
+    </bskArticle>
+    <bskArticle basketId='valid-003' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1B22</artNr>
+      <artNr type='final' default='1'>CEL1B22DW</artNr>
+      <description type='short' default='0'><text lang='en'>Celle B - CORRECT PRICE</text></description>
+    </bskArticle>
+    <bskArticle basketId='price-007' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1A18</artNr>
+      <artNr type='final' default='1'>AER1A18</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron Base - PRICE MISMATCH</text></description>
+      <unitPrice>750.00</unitPrice>
+    </bskArticle>
+    <bskArticle basketId='valid-004' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2A25</artNr>
+      <artNr type='final' default='1'>MIR2A25</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Base - CORRECT PRICE</text></description>
+    </bskArticle>
+    <bskArticle basketId='price-009' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='CELLE'><name>Celle</name></series>
+      <artNr type='base'>CEL1C33</artNr>
+      <artNr type='final' default='1'>CEL1C33DW ALP G1 BB</artNr>
+      <description type='short' default='0'><text lang='en'>Celle Config - PRICE MISMATCH</text></description>
+      <unitPrice>350.00</unitPrice>
+    </bskArticle>
+    <bskArticle basketId='valid-005' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='AERON'><name>Aeron</name></series>
+      <artNr type='base'>AER1B25</artNr>
+      <artNr type='final' default='1'>AER1B25DW ALP</artNr>
+      <description type='short' default='0'><text lang='en'>Aeron PostureFit - CORRECT PRICE</text></description>
+    </bskArticle>
+    <bskArticle basketId='price-011' itemType='BasketAggregate' updateState='UpToDate'>
+      <manufacturer id='HM'><name lang='en'>Herman Miller</name></manufacturer>
+      <series id='MIRRA'><name>Mirra</name></series>
+      <artNr type='base'>MIR2B35</artNr>
+      <artNr type='final' default='1'>MIR2B35DW G1</artNr>
+      <description type='short' default='0'><text lang='en'>Mirra Graphite - PRICE MISMATCH</text></description>
+      <unitPrice>500.00</unitPrice>
+    </bskArticle>
+  </items>
+</cutBuffer>
