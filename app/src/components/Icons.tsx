@@ -1,9 +1,11 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, CSSProperties } from 'react';
 
 interface IconProps {
   size?: number;
   stroke?: number;
   children?: ReactNode;
+  style?: CSSProperties;
+  className?: string;
 }
 
 function Icon({ children, size = 18, stroke = 1.6, ...rest }: IconProps) {
