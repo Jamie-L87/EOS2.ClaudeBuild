@@ -1,7 +1,8 @@
+import { useNavigate, useLocation } from 'react-router-dom';
 import { t, size } from '../tokens';
 import {
   IconMenu, IconChevronDown,
-  IconMail, IconHelp,
+  IconMail, IconHelp, IconBasket,
 } from './Icons';
 
 interface TopNavProps {
@@ -11,13 +12,33 @@ interface TopNavProps {
 const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 
+function readBasketCount(): number {
+  try {
+    const saved = sessionStorage.getItem('eos-basket');
+    if (!saved) return 0;
+    const items = JSON.parse(saved) as unknown[];
+    return Array.isArray(items) ? items.length : 0;
+  } catch {
+    return 0;
+  }
+}
+
 export default function TopNav({ onMenu }: TopNavProps) {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const basketCount = readBasketCount();
   return (
     <header style={styles.bar}>
       <div style={styles.menuGroup}>
         <button className="om-iconplus" style={styles.menuBtn} onClick={onMenu} aria-label="Open menu">
           <span style={styles.iconBox}><IconMenu size={20} stroke={1.6} /></span>
           <span style={{ ...sLargeM, color: '#000' }}>Menu</span>
+        </button>
+        <button className="om-iconplus" style={styles.iconBtn} aria-label={basketCount > 0 ? `Basket — ${basketCount} item${basketCount !== 1 ? 's' : ''}` : 'Basket'} onClick={() => { if (pathname !== '/') navigate('/'); }}>
+          <IconBasket size={20} stroke={1.6} />
+          {basketCount > 0 && (
+            <span style={styles.badge}>{basketCount > 99 ? '99+' : basketCount}</span>
+          )}
         </button>
       </div>
 

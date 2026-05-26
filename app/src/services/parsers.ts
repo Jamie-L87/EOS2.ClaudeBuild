@@ -230,6 +230,20 @@ export function autoDetectColumns(
   return null;
 }
 
+/* ========================== OBX export ========================== */
+export function exportOBX(items: BasketItem[]): string {
+  const lines: string[] = ['<?xml version="1.0" encoding="utf-8"?>', '<cutBuffer>', '  <items>'];
+  for (const item of items) {
+    const artNr = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
+    lines.push('    <bskArticle>');
+    lines.push(`      <artNr type="final">${artNr}</artNr>`);
+    lines.push(`      <quantity>${item.qty}</quantity>`);
+    lines.push('    </bskArticle>');
+  }
+  lines.push('  </items>', '</cutBuffer>');
+  return lines.join('\n');
+}
+
 /* ========================== Basket validation ========================== */
 export async function validateBasketItems(
   items: BasketItem[],

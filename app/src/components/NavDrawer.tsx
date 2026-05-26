@@ -11,7 +11,7 @@ interface NavDrawerProps {
   current: NavId;
 }
 
-interface IconProps extends SVGProps<SVGSVGElement> {
+interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'stroke'> {
   size?: number;
   stroke?: number;
 }

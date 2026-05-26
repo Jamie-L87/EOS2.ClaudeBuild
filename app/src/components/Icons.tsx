@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react';
 
-interface IconProps extends SVGProps<SVGSVGElement> {
+interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'stroke'> {
   size?: number;
   stroke?: number;
 }
@@ -127,6 +127,13 @@ export const IconCalendar = (p: IconProps) => (
 export const IconFilter = (p: IconProps) => (
   <Icon {...p}>
     <path d="M4 5h16l-6 8v6l-4-2v-4z" />
+  </Icon>
+);
+export const IconBasket = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M7 8l-3 13h16L17 8z" />
+    <path d="M9 8l2-5M15 8l-2-5" />
+    <path d="M10 13v4M14 13v4" />
   </Icon>
 );
 export const IconEdit = (p: IconProps) => (

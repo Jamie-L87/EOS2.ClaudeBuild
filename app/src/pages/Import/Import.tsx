@@ -9,7 +9,7 @@ import {
 import { t } from '../../tokens';
 import {
   parseOBX, parseSIF, parseTextInput, parseXLSX,
-  applyColumnMapping, autoDetectColumns, validateBasketItems,
+  applyColumnMapping, autoDetectColumns, validateBasketItems, exportOBX,
 } from '../../services/parsers';
 import type { ParsedItem, SheetData, BasketItem } from '../../services/parsers';
 import type { SuperChild } from '../../data/superProducts';
@@ -430,8 +430,25 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
 /* ------------------------------------------------------------------ */
 /*  BASKET HOOK                                                         */
 /* ------------------------------------------------------------------ */
+const BASKET_KEY = 'eos-basket';
+
 function useBasket() {
-  const [items, setItems] = useState<BasketItem[]>([]);
+  const [items, setItems] = useState<BasketItem[]>(() => {
+    try {
+      const saved = sessionStorage.getItem(BASKET_KEY);
+      return saved ? (JSON.parse(saved) as BasketItem[]) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    if (items.length > 0) {
+      sessionStorage.setItem(BASKET_KEY, JSON.stringify(items));
+    } else {
+      sessionStorage.removeItem(BASKET_KEY);
+    }
+  }, [items]);
 
   const addItems = useCallback((incoming: ParsedItem[]) => {
     const newItems: BasketItem[] = incoming
@@ -466,7 +483,11 @@ function useBasket() {
     });
   }, []);
 
-  const removeItem = useCallback((id: string) => setItems(p => p.filter(i => i.id !== id)), []);
+  const removeItem = useCallback((id: string) => setItems(p => {
+    const next = p.filter(i => i.id !== id);
+    if (next.length === 0) sessionStorage.removeItem(BASKET_KEY);
+    return next;
+  }), []);
 
   const updateQty = useCallback((id: string, qty: number | string) => {
     const v = Math.max(1, parseInt(String(qty), 10) || 1);
@@ -479,7 +500,10 @@ function useBasket() {
     const next = [...p]; next.splice(idx + 1, 0, dup); return next;
   }), []);
 
-  const clear = useCallback(() => setItems([]), []);
+  const clear = useCallback(() => {
+    sessionStorage.removeItem(BASKET_KEY);
+    setItems([]);
+  }, []);
 
   const updateArticleCode = useCallback((id: string, newCode: string) => {
     const combined = newCode.trim(); if (!combined) return;
@@ -755,7 +779,7 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
 /* ------------------------------------------------------------------ */
 /*  BASKET TABLE                                                        */
 /* ------------------------------------------------------------------ */
-function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder }: {
+function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExportOBX }: {
   items: BasketItem[];
   onRemove: (id: string) => void;
   onQtyChange: (id: string, q: number | string) => void;
@@ -764,6 +788,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
+  onExportOBX: () => void;
 }) {
   if (!items.length) return null;
 
@@ -845,6 +870,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <button onClick={onClear} className="om-stroke-btn" style={btnBase}>Cancel</button>
+          <button onClick={onExportOBX} className="om-stroke-btn" style={btnBase}>Save basket</button>
           <button disabled={!canCreate} onClick={onCreateOrder} className="om-primary-btn"
             style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${canCreate ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: canCreate ? 'var(--brand)' : 'var(--line)', color: canCreate ? '#fff' : 'var(--ink-3)', cursor: canCreate ? 'pointer' : 'not-allowed', transition: 'background .15s ease', fontFamily: 'inherit' }}>
             Create order
@@ -933,9 +959,40 @@ export default function ImportPage() {
     };
     const stored: StoredOrder = { id: draftOrderNo, ...order, lines: order.lines as unknown[] };
     upsert(stored);
+    basket.clear();
     setToast(`Creating order ${draftOrderNo}…`);
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
+
+  const onExportOBX = useCallback(async () => {
+    const xml = exportOBX(basket.items);
+    const blob = new Blob([xml], { type: 'application/xml' });
+    const now = new Date();
+    const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
+    const fileName = `basket-${ts}.obx`;
+    if ('showSaveFilePicker' in window) {
+      try {
+        const handle = await (window as any).showSaveFilePicker({
+          suggestedName: fileName,
+          types: [{ description: 'OBX file', accept: { 'application/xml': ['.obx'] } }],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+        basket.clear();
+      } catch (e: any) {
+        if (e?.name !== 'AbortError') throw e;
+      }
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(url);
+      basket.clear();
+    }
+  }, [basket]);
 
   const inputPanelGrid: React.CSSProperties = {
     display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 24, alignItems: 'stretch',
@@ -1001,6 +1058,7 @@ export default function ImportPage() {
             onUpdateArticleCode={basket.updateArticleCode}
             onExplode={basket.explodeItem}
             onCreateOrder={onCreateOrder}
+            onExportOBX={onExportOBX}
           />
 
           {basket.items.length === 0 && !pendingSheet && (
