@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconClose, IconChevronRight, IconUpload } from './Icons';
-import type { SVGProps } from 'react';
-
 type NavId = 'import' | 'orders';
 
 interface NavDrawerProps {
@@ -11,7 +9,7 @@ interface NavDrawerProps {
   current: NavId;
 }
 
-interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'stroke'> {
+interface IconProps {
   size?: number;
   stroke?: number;
 }
