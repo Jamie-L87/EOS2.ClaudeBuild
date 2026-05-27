@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+cd import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -681,12 +681,13 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice }: {
+function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount }: {
   item: BasketItem; index: number;
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
   onExplode: () => void;
   contractUnitPrice: number | null;
+  contractDiscount: number | null;
 }) {
   const [editing, setEditing] = useState(false);
   const [editVal, setEditVal] = useState('');
@@ -765,14 +766,19 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
         <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
           {item.listPrice > 0 ? <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(item.listPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
-        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
-          {item.listPrice > 0
-            ? <span style={{ ...sBody, color: contractUnitPrice !== null ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice ?? item.listPrice, item.currency)}</span>
+        <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
+          {contractDiscount !== null
+            ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{contractDiscount}%</span>
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
           {item.listPrice > 0
-            ? <span style={{ ...sBodyB, color: contractUnitPrice !== null ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice((contractUnitPrice ?? item.listPrice) * item.qty, item.currency)}</span>
+            ? <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice ?? item.listPrice, item.currency)}</span>
+            : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+        </td>
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+          {item.listPrice > 0
+            ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice((contractUnitPrice ?? item.listPrice) * item.qty, item.currency)}</span>
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
@@ -789,7 +795,7 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
       </tr>
       {isSuper && expanded && (
         <tr>
-          <td colSpan={8} style={{ padding: 0, background: 'var(--blue-soft)' }}>
+          <td colSpan={9} style={{ padding: 0, background: 'var(--blue-soft)' }}>
             <SuperChildrenTable parent={item} />
           </td>
         </tr>
@@ -847,6 +853,13 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const contractPrices = hasContract
     ? items.map(i => itemContractPrice(i, selectedContract!))
     : items.map(() => null as number | null);
+  const contractDiscounts = hasContract
+    ? items.map(i => {
+        if (!i.productLine || i.listPrice <= 0) return null;
+        const plc = PRODUCT_LINE_PLCS[i.productLine]?.plc;
+        return plc ? getContractDiscount(selectedContract!, plc) : null;
+      })
+    : items.map(() => null as number | null);
   const buyingTotal = items.reduce((s, i, idx) => s + (contractPrices[idx] ?? i.listPrice) * i.qty, 0);
 
   return (
@@ -893,6 +906,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Product Name</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
+              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Discount</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Unit Buying Price</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total Buying Price</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }} aria-label="Actions" />
@@ -907,6 +921,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 onUpdateArticleCode={(c) => onUpdateArticleCode(item.id, c)}
                 onExplode={() => onExplode(item.id)}
                 contractUnitPrice={contractPrices[i]}
+                contractDiscount={contractDiscounts[i]}
               />
             ))}
           </tbody>
