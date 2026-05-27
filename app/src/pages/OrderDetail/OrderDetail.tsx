@@ -60,6 +60,7 @@ interface OrderData {
   contactName?: string | null;
   contactEmail?: string | null;
   contactTelephone?: string | null;
+  pricingDate?: string | null;
 }
 
 /* ------------------------------------------------------------------ */
@@ -68,6 +69,9 @@ interface OrderData {
 const sBody  = { ...t.body  };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
+
+const CONTRACT_OPTIONS = ['Standard Terms', 'Framework 2024', 'NHS Framework', 'Government Framework', 'Education Framework'];
+const HM_SALES_PERSONS = ['Alex Thompson', 'Sarah Williams', 'James Mitchell', 'Emma Clarke', 'David Hughes'];
 
 const CCY: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
 function fmt(n: number, c = 'EUR') {
@@ -184,6 +188,70 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
 }
 
 /* ------------------------------------------------------------------ */
+/*  HEADER SELECT FIELD                                                 */
+/* ------------------------------------------------------------------ */
+function HeaderSelectField({ label, value, options, onChange }: {
+  label: string; value: string | null; options: string[];
+  onChange?: (v: string | null) => void;
+}) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>{label}</div>
+      <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+        <select
+          value={value ?? ''}
+          onChange={(e) => onChange?.(e.target.value || null)}
+          className="om-header-select"
+          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', border: 'none', background: 'transparent', padding: 0, paddingRight: 20, cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none', fontFamily: 'inherit', outline: 'none' }}
+        >
+          <option value="">Not set</option>
+          {options.map(o => <option key={o} value={o}>{o}</option>)}
+        </select>
+        <span style={{ position: 'absolute', right: 0, pointerEvents: 'none', color: 'var(--ink-3)', display: 'flex', alignItems: 'center' }}>
+          <IconChevronDown size={12} stroke={2} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  HEADER DATE FIELD                                                   */
+/* ------------------------------------------------------------------ */
+function HeaderDateField({ label, value, onChange }: {
+  label: string; value: string | null; onChange?: (v: string | null) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const display = value
+    ? new Date(value + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '—';
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>{label}</div>
+      {editing ? (
+        <input
+          type="date"
+          autoFocus
+          value={value ?? ''}
+          onChange={(e) => onChange?.(e.target.value || null)}
+          onBlur={() => setEditing(false)}
+          style={{ ...sBodyB, color: 'var(--ink)', border: '2px solid var(--brand)', borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: '#fff', fontFamily: 'inherit' }}
+        />
+      ) : (
+        <button
+          onClick={() => setEditing(true)}
+          className="om-header-edit"
+          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', border: 'none', background: 'transparent', padding: 0, textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+          <span>{display}</span>
+          <IconEdit size={12} stroke={1.7} style={{ opacity: 0.5 }} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  GOOGLE MAPS LOADER                                                  */
 /* ------------------------------------------------------------------ */
 const GMAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
@@ -275,7 +343,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div style={{ borderBottom: '1px solid var(--line)', paddingBottom: expanded ? 24 : 8 }}>
+    <div style={{ borderBottom: '1px solid var(--line)', paddingBottom: expanded ? 24 : 0 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, padding: '20px 0 16px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px 32px' }}>
           <HeaderField label="Reference"      value={order.reference}     placeholder="Required" required onChange={(v) => onUpdateMeta('reference', v)} />
@@ -296,18 +364,17 @@ function OrderHeader({ order, total, onUpdateMeta }: {
       <button
         onClick={() => setExpanded(e => !e)}
         className="om-expand-toggle"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 0', ...sBody, color: 'var(--ink-2)', fontFamily: 'inherit', transition: 'color .15s ease' }}
+        style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', cursor: 'pointer', padding: '0 4px', height: 44, ...sLargeB, color: 'var(--brand)', fontFamily: 'inherit', transition: 'background .15s ease' }}
       >
-        <span>{expanded ? 'Hide details' : 'More details'}</span>
+        <span>Order Details</span>
         <span style={{ display: 'inline-flex', alignItems: 'center', transition: 'transform .2s ease', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-          <IconChevronDown size={14} stroke={2} />
+          <IconChevronDown size={16} stroke={2} />
         </span>
       </button>
 
       {expanded && (
-        <div style={{ paddingTop: 20, marginTop: 12, borderTop: '1px solid var(--line)', animation: 'slideDown .2s ease' }}>
-          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, marginBottom: 16 }}>Delivery Address</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 64px' }}>
+        <div style={{ paddingTop: 20, animation: 'slideDown .2s ease' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px 64px' }}>
             <div style={{ gridColumn: '1 / -1' }}>
               <DeliveryAddressLookup onFill={(addr) => {
                 onUpdateMeta('companyName',      addr.companyName || null);
@@ -321,6 +388,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
               }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Delivery Address</div>
               <HeaderField label="Company Name"   value={order.companyName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('companyName', v)} />
               <HeaderField label="Address Line 1" value={order.deliveryLine1 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine1', v)} />
               <HeaderField label="Address Line 2" value={order.deliveryLine2 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine2', v)} />
@@ -331,9 +399,18 @@ function OrderHeader({ order, total, onUpdateMeta }: {
               <HeaderField label="Postcode"       value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Contact</div>
               <HeaderField label="Contact Name"      value={order.contactName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('contactName', v)} />
               <HeaderField label="Contact Email"     value={order.contactEmail ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('contactEmail', v)} />
               <HeaderField label="Contact Telephone" value={order.contactTelephone ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('contactTelephone', v)} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Order Details</div>
+              <HeaderField       label="Purchase Order"  value={order.purchaseOrder ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('purchaseOrder', v)} />
+              <HeaderSelectField label="Contract"        value={order.contract ?? null}      options={CONTRACT_OPTIONS} onChange={(v) => onUpdateMeta('contract', v)} />
+              <HeaderSelectField label="HM Sales Person" value={order.hmSalesPerson ?? null} options={HM_SALES_PERSONS} onChange={(v) => onUpdateMeta('hmSalesPerson', v)} />
+              <HeaderField       label="Sales Person"    value={order.salesPerson ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('salesPerson', v)} />
+              <HeaderDateField   label="Pricing Date"    value={order.pricingDate ?? null}   onChange={(v) => onUpdateMeta('pricingDate', v)} />
             </div>
           </div>
         </div>
@@ -345,10 +422,9 @@ function OrderHeader({ order, total, onUpdateMeta }: {
 /* ------------------------------------------------------------------ */
 /*  TAB STRIP                                                           */
 /* ------------------------------------------------------------------ */
-type DetailTab = 'details' | 'lines' | 'documents' | 'history' | 'margins';
+type DetailTab = 'lines' | 'documents' | 'history' | 'margins';
 
 const DETAIL_TABS: Array<{ id: DetailTab; label: string }> = [
-  { id: 'details',   label: 'Order Details' },
   { id: 'lines',     label: 'Order Lines' },
   { id: 'documents', label: 'Documents' },
   { id: 'history',   label: 'History' },
@@ -375,7 +451,7 @@ function TabStrip({ active, onChange }: { active: DetailTab; onChange: (t: Detai
 /*  COMING SOON PLACEHOLDER                                             */
 /* ------------------------------------------------------------------ */
 function ComingSoon({ tab }: { tab: string }) {
-  const titles: Record<string, string> = { details: 'Order Details', documents: 'Documents', history: 'History', margins: 'Margins' };
+  const titles: Record<string, string> = { documents: 'Documents', history: 'History', margins: 'Margins' };
   return (
     <div style={{ padding: '80px 24px', textAlign: 'center', border: '1px dashed var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg-soft)' }}>
       <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 6 }}>{titles[tab] ?? tab} — coming soon</div>
@@ -867,7 +943,7 @@ const CSS = `
   .om-tab-strip:hover[data-active="false"] { color: var(--ink); }
   .om-header-edit:hover { color: var(--brand) !important; }
   .om-header-select:hover { color: var(--brand) !important; }
-  .om-expand-toggle:hover { color: var(--brand) !important; }
+  .om-expand-toggle:hover { background: var(--line) !important; }
   .om-stroke-btn:hover { background: var(--ink); color: #fff; }
   .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
   .om-line-row:hover { background: var(--bg-soft); }
@@ -906,6 +982,7 @@ function toStored(o: OrderData): StoredOrder {
     deliveryLine3: o.deliveryLine3, deliveryLine4: o.deliveryLine4,
     deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode,
     contactName: o.contactName, contactEmail: o.contactEmail, contactTelephone: o.contactTelephone,
+    pricingDate: o.pricingDate,
   };
 }
 

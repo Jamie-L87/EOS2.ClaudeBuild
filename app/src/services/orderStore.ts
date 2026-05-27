@@ -27,6 +27,7 @@ export interface StoredOrder {
   contactName?: string | null;
   contactEmail?: string | null;
   contactTelephone?: string | null;
+  pricingDate?: string | null;
 }
 
 function statusToTab(status: string): OrderTab {
