@@ -681,12 +681,11 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, showContractCol, contractUnitPrice }: {
+function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice }: {
   item: BasketItem; index: number;
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
   onExplode: () => void;
-  showContractCol: boolean;
   contractUnitPrice: number | null;
 }) {
   const [editing, setEditing] = useState(false);
@@ -767,15 +766,15 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
           {item.listPrice > 0 ? <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(item.listPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
-          {item.listPrice > 0 ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(item.listPrice * item.qty, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+          {item.listPrice > 0
+            ? <span style={{ ...sBody, color: contractUnitPrice !== null ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice ?? item.listPrice, item.currency)}</span>
+            : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
-        {showContractCol && (
-          <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
-            {contractUnitPrice !== null
-              ? <span style={{ ...sBodyB, color: 'var(--brand)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice * item.qty, item.currency)}</span>
-              : <span style={{ color: 'var(--ink-3)' }}>—</span>}
-          </td>
-        )}
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+          {item.listPrice > 0
+            ? <span style={{ ...sBodyB, color: contractUnitPrice !== null ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice((contractUnitPrice ?? item.listPrice) * item.qty, item.currency)}</span>
+            : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+        </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
             {isSuper && (
@@ -790,7 +789,7 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
       </tr>
       {isSuper && expanded && (
         <tr>
-          <td colSpan={7 + (showContractCol ? 1 : 0)} style={{ padding: 0, background: 'var(--blue-soft)' }}>
+          <td colSpan={8} style={{ padding: 0, background: 'var(--blue-soft)' }}>
             <SuperChildrenTable parent={item} />
           </td>
         </tr>
@@ -844,16 +843,11 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const canCreate   = passedCount > 0;
   const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
-  const showContractCol = selectedContract !== null;
-  const contractPrices = showContractCol
+  const hasContract = selectedContract !== null;
+  const contractPrices = hasContract
     ? items.map(i => itemContractPrice(i, selectedContract!))
-    : items.map(() => null);
-  const contractGrand = showContractCol
-    ? items.reduce((s, i, idx) => {
-        const cp = contractPrices[idx];
-        return s + (cp !== null ? cp : i.listPrice) * i.qty;
-      }, 0)
-    : 0;
+    : items.map(() => null as number | null);
+  const buyingTotal = items.reduce((s, i, idx) => s + (contractPrices[idx] ?? i.listPrice) * i.qty, 0);
 
   return (
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', overflow: 'hidden', marginTop: 24 }}>
@@ -899,10 +893,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Product Name</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total</th>
-              {showContractCol && (
-                <th style={{ background: 'var(--brand)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Contract Total</th>
-              )}
+              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Unit Buying Price</th>
+              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total Buying Price</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }} aria-label="Actions" />
             </tr>
           </thead>
@@ -914,7 +906,6 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 onCopy={() => onCopy(item.id)}
                 onUpdateArticleCode={(c) => onUpdateArticleCode(item.id, c)}
                 onExplode={() => onExplode(item.id)}
-                showContractCol={showContractCol}
                 contractUnitPrice={contractPrices[i]}
               />
             ))}
@@ -925,11 +916,11 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-            <span style={{ ...sBody, color: 'var(--ink-2)' }}>{showContractCol ? 'Contract Total' : 'Subtotal'}</span>
-            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: showContractCol ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
-              {formatPrice(showContractCol ? contractGrand : grand, items[0]?.currency || 'EUR')}
+            <span style={{ ...sBody, color: 'var(--ink-2)' }}>{hasContract ? 'Contract Total' : 'Subtotal'}</span>
+            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: hasContract ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
+              {formatPrice(buyingTotal, items[0]?.currency || 'EUR')}
             </span>
-            {showContractCol && (
+            {hasContract && (
               <span style={{ ...sBody, color: 'var(--ink-3)', fontSize: 13 }}>List: {formatPrice(grand, items[0]?.currency || 'EUR')}</span>
             )}
           </div>
