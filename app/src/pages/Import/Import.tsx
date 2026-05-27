@@ -12,6 +12,8 @@ import {
   applyColumnMapping, autoDetectColumns, validateBasketItems,
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
 } from '../../services/parsers';
+import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
+import type { Contract } from '../../data/contracts';
 
 type ExportFormat = 'obx' | 'csv' | 'xlsx' | 'json';
 import type { ParsedItem, SheetData, BasketItem } from '../../services/parsers';
@@ -29,6 +31,15 @@ const sLargeB = { ...t.largeB };
 const CURRENCY_SYMBOLS: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
 function formatPrice(n: number, ccy = 'EUR') {
   return (CURRENCY_SYMBOLS[ccy] ?? ccy + ' ') + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function itemContractPrice(item: BasketItem, contract: Contract): number | null {
+  if (!item.productLine || item.listPrice <= 0) return null;
+  const plc = PRODUCT_LINE_PLCS[item.productLine]?.plc;
+  if (!plc) return null;
+  const disc = getContractDiscount(contract, plc);
+  if (disc === null) return null;
+  return item.listPrice * (1 - disc / 100);
 }
 
 /* ------------------------------------------------------------------ */
@@ -670,11 +681,13 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode }: {
+function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, showContractCol, contractUnitPrice }: {
   item: BasketItem; index: number;
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
   onExplode: () => void;
+  showContractCol: boolean;
+  contractUnitPrice: number | null;
 }) {
   const [editing, setEditing] = useState(false);
   const [editVal, setEditVal] = useState('');
@@ -756,6 +769,13 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
         <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
           {item.listPrice > 0 ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(item.listPrice * item.qty, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
+        {showContractCol && (
+          <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+            {contractUnitPrice !== null
+              ? <span style={{ ...sBodyB, color: 'var(--brand)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice * item.qty, item.currency)}</span>
+              : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+          </td>
+        )}
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           <div style={{ display: 'flex', gap: 4, justifyContent: 'center' }}>
             {isSuper && (
@@ -770,7 +790,7 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
       </tr>
       {isSuper && expanded && (
         <tr>
-          <td colSpan={7} style={{ padding: 0, background: 'var(--blue-soft)' }}>
+          <td colSpan={7 + (showContractCol ? 1 : 0)} style={{ padding: 0, background: 'var(--blue-soft)' }}>
             <SuperChildrenTable parent={item} />
           </td>
         </tr>
@@ -789,7 +809,7 @@ const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: stri
   { id: 'json', label: 'JSON',  desc: 'Structured data / API',  ext: '.json' },
 ];
 
-function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExport }: {
+function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExport, selectedContract, onContractChange }: {
   items: BasketItem[];
   onRemove: (id: string) => void;
   onQtyChange: (id: string, q: number | string) => void;
@@ -799,6 +819,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
   onExport: (format: ExportFormat) => void;
+  selectedContract: Contract | null;
+  onContractChange: (id: string) => void;
 }) {
   const [saveMenuOpen, setSaveMenuOpen] = useState(false);
   const saveMenuRef = useRef<HTMLDivElement>(null);
@@ -822,6 +844,17 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const canCreate   = passedCount > 0;
   const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
+  const showContractCol = selectedContract !== null;
+  const contractPrices = showContractCol
+    ? items.map(i => itemContractPrice(i, selectedContract!))
+    : items.map(() => null);
+  const contractGrand = showContractCol
+    ? items.reduce((s, i, idx) => {
+        const cp = contractPrices[idx];
+        return s + (cp !== null ? cp : i.listPrice) * i.qty;
+      }, 0)
+    : 0;
+
   return (
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', overflow: 'hidden', marginTop: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--line)', flexWrap: 'wrap', gap: 12 }}>
@@ -842,6 +875,21 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         </button>
       </div>
 
+      <div style={{ padding: '12px 24px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: 12 }}>
+        <label htmlFor="basket-contract" style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, whiteSpace: 'nowrap' as const }}>
+          Contract
+        </label>
+        <select
+          id="basket-contract"
+          value={selectedContract?.id ?? ''}
+          onChange={e => onContractChange(e.target.value)}
+          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: '#fff', minWidth: 260, fontFamily: 'inherit' }}
+        >
+          <option value="">No contract — list prices only</option>
+          {CONTRACTS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
+      </div>
+
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -852,6 +900,9 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total</th>
+              {showContractCol && (
+                <th style={{ background: 'var(--brand)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Contract Total</th>
+              )}
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }} aria-label="Actions" />
             </tr>
           </thead>
@@ -863,6 +914,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 onCopy={() => onCopy(item.id)}
                 onUpdateArticleCode={(c) => onUpdateArticleCode(item.id, c)}
                 onExplode={() => onExplode(item.id)}
+                showContractCol={showContractCol}
+                contractUnitPrice={contractPrices[i]}
               />
             ))}
           </tbody>
@@ -872,10 +925,13 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-            <span style={{ ...sBody, color: 'var(--ink-2)' }}>Subtotal</span>
-            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
-              {formatPrice(grand, items[0]?.currency || 'EUR')}
+            <span style={{ ...sBody, color: 'var(--ink-2)' }}>{showContractCol ? 'Contract Total' : 'Subtotal'}</span>
+            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: showContractCol ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
+              {formatPrice(showContractCol ? contractGrand : grand, items[0]?.currency || 'EUR')}
             </span>
+            {showContractCol && (
+              <span style={{ ...sBody, color: 'var(--ink-3)', fontSize: 13 }}>List: {formatPrice(grand, items[0]?.currency || 'EUR')}</span>
+            )}
           </div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>
             {passedCount === 0 && pendingCount > 0
@@ -967,6 +1023,8 @@ export default function ImportPage() {
   const [pendingSheet, setPendingSheet] = useState<SheetData[] | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [navOpen, setNavOpen] = useState(false);
+  const [selectedContractId, setSelectedContractId] = useState('');
+  const selectedContract = useMemo(() => CONTRACTS.find(c => c.id === selectedContractId) ?? null, [selectedContractId]);
 
   const onParsed = useCallback(({ items, error, needsMapping, sheetData }: FileParseEvent) => {
     if (needsMapping && sheetData) { setFileError(null); setPendingSheet(sheetData); return; }
@@ -986,7 +1044,7 @@ export default function ImportPage() {
       status: 'Draft',
       currency: basket.items[0]?.currency || 'EUR',
       orderPlaced: new Date().toISOString().slice(0, 10),
-      reference: null, customer: null, purchaseOrder: null,
+      reference: null, customer: null, purchaseOrder: null, contract: selectedContractId || null,
       lines: basket.items.map((it, idx) => ({
         id: it.id, lineNo: idx + 1,
         articleCode: it.articleCode, featureString: it.featureString,
@@ -1090,6 +1148,8 @@ export default function ImportPage() {
             onExplode={basket.explodeItem}
             onCreateOrder={onCreateOrder}
             onExport={onExport}
+            selectedContract={selectedContract}
+            onContractChange={setSelectedContractId}
           />
 
           {basket.items.length === 0 && !pendingSheet && (
