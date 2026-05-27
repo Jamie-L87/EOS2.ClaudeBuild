@@ -10,6 +10,7 @@ import { validateItem } from '../../services/validation';
 import type { SuperChild } from '../../data/superProducts';
 import { loadDetail, upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
+import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import { t, size } from '../../tokens';
 
 /* ------------------------------------------------------------------ */
@@ -70,7 +71,7 @@ const sBody  = { ...t.body  };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
 
-const CONTRACT_OPTIONS = ['Standard Terms', 'Framework 2024', 'NHS Framework', 'Government Framework', 'Education Framework'];
+const CONTRACT_OPTIONS = CONTRACTS.map(c => c.name);
 const HM_SALES_PERSONS = ['Alex Thompson', 'Sarah Williams', 'James Mitchell', 'Emma Clarke', 'David Hughes'];
 
 const CCY: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
@@ -83,7 +84,7 @@ function fmt(n: number, c = 'EUR') {
 /* ------------------------------------------------------------------ */
 const LEAD_TIMES: Record<string, { min: number; max: number }> = {
   AERON: { min: 30, max: 40 }, COSM: { min: 20, max: 30 }, SAYL: { min: 15, max: 25 },
-  EM: { min: 40, max: 50 },    LINO: { min: 20, max: 30 }, ZEPH: { min: 25, max: 35 },
+  EMBODY: { min: 40, max: 50 }, LINO: { min: 20, max: 30 }, ZEPH: { min: 25, max: 35 },
   CAPER: { min: 20, max: 30 }, PRONTA: { min: 10, max: 20 }, CIVIC_TABLES: { min: 30, max: 40 },
   DEFAULT: { min: 20, max: 40 },
 };
@@ -1045,7 +1046,26 @@ export default function OrderDetailPage() {
     setOrder(buildDemoOrder(draftNo));
   }, [id, location.state]);
 
-  const updateMeta  = useCallback((key: keyof OrderData, value: string | null) => setOrder(o => o ? { ...o, [key]: value } : o), []);
+  const updateMeta = useCallback((key: keyof OrderData, value: string | null) => {
+    setOrder(o => {
+      if (!o) return o;
+      const updated = { ...o, [key]: value };
+      if (key === 'contract' && value) {
+        const contract = CONTRACTS.find(c => c.name === value);
+        if (contract) {
+          updated.lines = updated.lines.map(line => {
+            if (!line.productLine) return line;
+            const plcMeta = PRODUCT_LINE_PLCS[line.productLine];
+            if (!plcMeta) return line;
+            const discount = getContractDiscount(contract, plcMeta.plc);
+            if (discount === null) return line;
+            return { ...line, discount };
+          });
+        }
+      }
+      return updated;
+    });
+  }, []);
   const updateLine  = useCallback((id: string, patch: Partial<OrderLine>) => setOrder(o => o ? { ...o, lines: o.lines.map(l => l.id === id ? { ...l, ...patch } : l) } : o), []);
   const updateChild = useCallback((lineId: string, childId: string, patch: Partial<SuperChild>) => {
     setOrder(o => o ? { ...o, lines: o.lines.map(l => {

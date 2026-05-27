@@ -25,7 +25,7 @@ export const PRODUCT_CATALOG: CatalogItem[] = [
   { articleCode: 'FLC143SFJ',        productLine: 'COSM',         productName: 'COSM',         featureString: 'G1 G1 G1 BKS 84501',          price: 1805,  currency: 'EUR' },
   { articleCode: 'FLC745SFJ',        productLine: 'COSM',         productName: 'COSM',         featureString: 'G1 G1 G1 BKS 84501',          price: 2159,  currency: 'EUR' },
   { articleCode: 'FLC755SFJ',        productLine: 'COSM',         productName: 'COSM',         featureString: 'G1 G1 G1 BKS 84501',          price: 2227,  currency: 'EUR' },
-  { articleCode: 'CN132AWAA',        productLine: 'EM',           productName: 'EM',           featureString: 'G1 G1 BB 3005',               price: 2366,  currency: 'EUR' },
+  { articleCode: 'CN132AWAA',        productLine: 'EMBODY',       productName: 'Embody',       featureString: 'G1 G1 BB 3005',               price: 2366,  currency: 'EUR' },
   { articleCode: 'MI1E325AA',        productLine: 'LINO',         productName: 'LINO',         featureString: 'AJ 68 BB 4RM01 1FD01',        price: 1016,  currency: 'EUR' },
   { articleCode: 'MI2E325AA',        productLine: 'LINO',         productName: 'LINO',         featureString: 'AJ 68 BB 4RM01 1FD01',        price: 1016,  currency: 'EUR' },
   { articleCode: 'MI7E315AF',        productLine: 'LINO',         productName: 'LINO',         featureString: 'AJ 68 BB 4RM01 1FD01',        price: 1254,  currency: 'EUR' },
