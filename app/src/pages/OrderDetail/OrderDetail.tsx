@@ -913,9 +913,9 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
         <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{fmt(total, currency)}</div>
       </div>
       <div style={{ flex: 1, paddingLeft: 32, ...sBody, color: missingMeta.length ? 'var(--amber)' : 'var(--ink-2)' }}>
-        {missingMeta.length === 0
-          ? (canSubmit ? 'Ready to submit.' : 'Resolve invalid lines before submitting.')
-          : `Missing for submission: ${missingMeta.join(', ')}. Complete on Order Details.`}
+        {missingMeta.length > 0
+          ? `Missing for submission: ${missingMeta.join(', ')}. Complete in Order Details.`
+          : (!canSubmit ? 'Resolve invalid lines before submitting.' : null)}
       </div>
       <div style={{ display: 'flex', gap: 12 }}>
         <button onClick={onCancel}    className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Cancel</button>
@@ -1124,8 +1124,8 @@ export default function OrderDetailPage() {
     if (!order) return [];
     const out: string[] = [];
     if (!order.reference)     out.push('Reference');
-    if (!order.customer)      out.push('Customer');
     if (!order.purchaseOrder) out.push('Purchase Order');
+    if (!order.deliveryLine1) out.push('Delivery Address');
     return out;
   }, [order]);
 
