@@ -9,8 +9,11 @@ import {
 import { t } from '../../tokens';
 import {
   parseOBX, parseSIF, parseTextInput, parseXLSX,
-  applyColumnMapping, autoDetectColumns, validateBasketItems, exportOBX,
+  applyColumnMapping, autoDetectColumns, validateBasketItems,
+  exportOBX, exportCSV, exportJSON, exportXLSXBlob,
 } from '../../services/parsers';
+
+type ExportFormat = 'obx' | 'csv' | 'xlsx' | 'json';
 import type { ParsedItem, SheetData, BasketItem } from '../../services/parsers';
 import type { SuperChild } from '../../data/superProducts';
 import { upsert } from '../../services/orderStore';
@@ -779,7 +782,14 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
 /* ------------------------------------------------------------------ */
 /*  BASKET TABLE                                                        */
 /* ------------------------------------------------------------------ */
-function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExportOBX }: {
+const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: string }[] = [
+  { id: 'obx',  label: 'OBX',   desc: 'pCon / EOS 2 import',  ext: '.obx'  },
+  { id: 'xlsx', label: 'Excel', desc: 'Re-importable workbook', ext: '.xlsx' },
+  { id: 'csv',  label: 'CSV',   desc: 'Universal spreadsheet',  ext: '.csv'  },
+  { id: 'json', label: 'JSON',  desc: 'Structured data / API',  ext: '.json' },
+];
+
+function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExport }: {
   items: BasketItem[];
   onRemove: (id: string) => void;
   onQtyChange: (id: string, q: number | string) => void;
@@ -788,8 +798,19 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
-  onExportOBX: () => void;
+  onExport: (format: ExportFormat) => void;
 }) {
+  const [saveMenuOpen, setSaveMenuOpen] = useState(false);
+  const saveMenuRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!saveMenuOpen) return;
+    const handler = (e: MouseEvent) => {
+      if (saveMenuRef.current && !saveMenuRef.current.contains(e.target as Node)) setSaveMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [saveMenuOpen]);
+
   if (!items.length) return null;
 
   const totalQty    = items.reduce((s, i) => s + i.qty, 0);
@@ -870,7 +891,25 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <button onClick={onClear} className="om-stroke-btn" style={btnBase}>Cancel</button>
-          <button onClick={onExportOBX} className="om-stroke-btn" style={btnBase}>Save basket</button>
+          <div ref={saveMenuRef} style={{ position: 'relative' }}>
+            {saveMenuOpen && (
+              <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
+                {EXPORT_FORMATS.map(f => (
+                  <button key={f.id} onClick={() => { setSaveMenuOpen(false); onExport(f.id); }}
+                    className="om-export-option"
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left', gap: 16, fontFamily: 'inherit' }}>
+                    <span style={{ ...sBodyB, color: 'var(--ink)' }}>{f.label}</span>
+                    <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{f.desc}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            <button onClick={() => setSaveMenuOpen(v => !v)} className="om-stroke-btn"
+              style={{ ...btnBase, display: 'flex', alignItems: 'center', gap: 8 }}>
+              Save basket
+              <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform .15s ease', transform: saveMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+          </div>
           <button disabled={!canCreate} onClick={onCreateOrder} className="om-primary-btn"
             style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${canCreate ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: canCreate ? 'var(--brand)' : 'var(--line)', color: canCreate ? '#fff' : 'var(--ink-3)', cursor: canCreate ? 'pointer' : 'not-allowed', transition: 'background .15s ease', fontFamily: 'inherit' }}>
             Create order
@@ -964,34 +1003,24 @@ export default function ImportPage() {
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
 
-  const onExportOBX = useCallback(async () => {
-    const xml = exportOBX(basket.items);
-    const blob = new Blob([xml], { type: 'application/xml' });
+  const onExport = useCallback(async (format: ExportFormat) => {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-    const fileName = `basket-${ts}.obx`;
-    if ('showSaveFilePicker' in window) {
-      try {
-        const handle = await (window as any).showSaveFilePicker({
-          suggestedName: fileName,
-          types: [{ description: 'OBX file', accept: { 'application/xml': ['.obx'] } }],
-        });
-        const writable = await handle.createWritable();
-        await writable.write(blob);
-        await writable.close();
-        basket.clear();
-      } catch (e: any) {
-        if (e?.name !== 'AbortError') throw e;
-      }
-    } else {
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(url);
-      basket.clear();
-    }
+
+    const configs: Record<ExportFormat, { blob: Blob; ext: string }> = {
+      obx:  { blob: new Blob([exportOBX(basket.items)],  { type: 'application/xml'   }), ext: 'obx'  },
+      csv:  { blob: new Blob([exportCSV(basket.items)],  { type: 'text/csv'          }), ext: 'csv'  },
+      json: { blob: new Blob([exportJSON(basket.items)], { type: 'application/json'  }), ext: 'json' },
+      xlsx: { blob: exportXLSXBlob(basket.items),                                        ext: 'xlsx' },
+    };
+    const { blob, ext } = configs[format];
+    const fileName = `basket-${ts}.${ext}`;
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = fileName; a.click();
+    URL.revokeObjectURL(url);
+    basket.clear();
   }, [basket]);
 
   const inputPanelGrid: React.CSSProperties = {
@@ -1008,6 +1037,8 @@ export default function ImportPage() {
         .om-dropzone[data-state="idle"]:hover { border-color: var(--brand) !important; background: var(--brand-soft) !important; }
         .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
         .om-stroke-btn:hover { background: var(--ink) !important; color: #fff !important; }
+        .om-export-option:hover { background: var(--bg-soft) !important; }
+        @keyframes menuPop { from { opacity: 0; transform: scale(.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
@@ -1058,7 +1089,7 @@ export default function ImportPage() {
             onUpdateArticleCode={basket.updateArticleCode}
             onExplode={basket.explodeItem}
             onCreateOrder={onCreateOrder}
-            onExportOBX={onExportOBX}
+            onExport={onExport}
           />
 
           {basket.items.length === 0 && !pendingSheet && (
