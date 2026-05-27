@@ -16,11 +16,18 @@ export interface StoredOrder {
   salesPerson?: string | null;
   hmSalesPerson?: string | null;
   contract?: string | null;
+  companyName?: string | null;
   deliveryLine1?: string | null;
   deliveryLine2?: string | null;
+  deliveryLine3?: string | null;
+  deliveryLine4?: string | null;
   deliveryCity?: string | null;
   deliveryCounty?: string | null;
   deliveryPostcode?: string | null;
+  contactName?: string | null;
+  contactEmail?: string | null;
+  contactTelephone?: string | null;
+  pricingDate?: string | null;
 }
 
 function statusToTab(status: string): OrderTab {

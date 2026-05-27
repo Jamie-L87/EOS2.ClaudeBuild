@@ -137,6 +137,25 @@ function parseLineItemsSheet(sheet: XLSX.WorkSheet): ParseResult {
   return { items };
 }
 
+// EOS 1 upload template: Line_Details sheet
+// Columns: A=Line, B=Item (article code), C=Feature String, D=Quantity
+// Row 1 is empty, row 2 is headers, data starts row 3 (index 2)
+function parseLineDetailsSheet(sheet: XLSX.WorkSheet): ParseResult {
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }) as unknown[][];
+  const items: ParsedItem[] = [];
+  for (let i = 2; i < rows.length; i++) {
+    const row = rows[i] as unknown[];
+    const articleCode = String(row[1] ?? '').trim();
+    if (!articleCode) continue;
+    const featureString = String(row[2] ?? '').trim();
+    const rawQty = row[3];
+    const parsedQty = typeof rawQty === 'number' ? Math.round(rawQty) : parseInt(String(rawQty), 10);
+    const qty = !isNaN(parsedQty) && parsedQty > 0 ? parsedQty : 1;
+    items.push({ articleCode, featureString, qty });
+  }
+  return { items };
+}
+
 export function parseXLSX(arrayBuffer: ArrayBuffer): ParseResult {
   let workbook: XLSX.WorkBook;
   try { workbook = XLSX.read(arrayBuffer, { type: 'array' }); }
@@ -144,6 +163,9 @@ export function parseXLSX(arrayBuffer: ArrayBuffer): ParseResult {
 
   const lineSheet = workbook.Sheets['LineItems'];
   if (lineSheet) return parseLineItemsSheet(lineSheet);
+
+  const lineDetailsSheet = workbook.Sheets['Line_Details'];
+  if (lineDetailsSheet) return parseLineDetailsSheet(lineDetailsSheet);
 
   if (workbook.Sheets['Customer Details']) {
     return { items: [], error: 'This is a Customer import template. To import customers, use the Customers page.' };
@@ -230,7 +252,7 @@ export function autoDetectColumns(
   return null;
 }
 
-/* ========================== OBX export ========================== */
+/* ========================== Exports ========================== */
 export function exportOBX(items: BasketItem[]): string {
   const lines: string[] = ['<?xml version="1.0" encoding="utf-8"?>', '<cutBuffer>', '  <items>'];
   for (const item of items) {
@@ -242,6 +264,41 @@ export function exportOBX(items: BasketItem[]): string {
   }
   lines.push('  </items>', '</cutBuffer>');
   return lines.join('\n');
+}
+
+function csvCell(val: string | number): string {
+  const s = String(val);
+  return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+export function exportCSV(items: BasketItem[]): string {
+  const header = ['Article Code', 'Feature String', 'Qty'];
+  const rows = items.map(i => [i.articleCode, i.featureString, i.qty]);
+  return [header, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
+}
+
+export function exportJSON(items: BasketItem[]): string {
+  return JSON.stringify(
+    items.map(i => ({ articleCode: i.articleCode, featureString: i.featureString, qty: i.qty })),
+    null, 2,
+  );
+}
+
+// Produces a Line_Details sheet matching the EOS 1 template structure for round-trip import
+export function exportXLSXBlob(items: BasketItem[]): Blob {
+  const rows: (string | number)[][] = [
+    [],
+    ['Line', 'Item', 'Feature String', 'Quantity'],
+    ...items.map((item, i) => [i + 1, item.articleCode, item.featureString, item.qty]),
+  ];
+  const ws = XLSX.utils.aoa_to_sheet(rows);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Line_Details');
+  const binaryStr: string = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  const buf = new ArrayBuffer(binaryStr.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < binaryStr.length; i++) view[i] = binaryStr.charCodeAt(i) & 0xff;
+  return new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
 /* ========================== Basket validation ========================== */
