@@ -906,7 +906,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
             )}
             <button onClick={() => setSaveMenuOpen(v => !v)} className="om-stroke-btn"
               style={{ ...btnBase, display: 'flex', alignItems: 'center', gap: 8 }}>
-              Save basket
+              Export as…
               <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform .15s ease', transform: saveMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)', flexShrink: 0 }}><path d="M6 9l6 6 6-6"/></svg>
             </button>
           </div>
