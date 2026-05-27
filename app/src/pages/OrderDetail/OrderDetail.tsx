@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -10,6 +10,7 @@ import { validateItem } from '../../services/validation';
 import type { SuperChild } from '../../data/superProducts';
 import { loadDetail, upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
+import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import { t, size } from '../../tokens';
 
 /* ------------------------------------------------------------------ */
@@ -32,7 +33,7 @@ interface OrderLine {
   isSuper?: boolean;
   superChildren?: SuperChild[] | null;
   lineStatus?: string;
-  leadTime?: { min: number; max: number; label: string; weeks: number };
+  leadTime?: { min: number; max: number; label: string; days: number };
   _explodedSuper?: Record<string, unknown>;
 }
 
@@ -49,11 +50,18 @@ interface OrderData {
   salesPerson?: string | null;
   hmSalesPerson?: string | null;
   contract?: string | null;
+  companyName?: string | null;
   deliveryLine1?: string | null;
   deliveryLine2?: string | null;
+  deliveryLine3?: string | null;
+  deliveryLine4?: string | null;
   deliveryCity?: string | null;
   deliveryCounty?: string | null;
   deliveryPostcode?: string | null;
+  contactName?: string | null;
+  contactEmail?: string | null;
+  contactTelephone?: string | null;
+  pricingDate?: string | null;
 }
 
 /* ------------------------------------------------------------------ */
@@ -62,6 +70,9 @@ interface OrderData {
 const sBody  = { ...t.body  };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
+
+const CONTRACT_OPTIONS = CONTRACTS.map(c => c.name);
+const HM_SALES_PERSONS = ['Alex Thompson', 'Sarah Williams', 'James Mitchell', 'Emma Clarke', 'David Hughes'];
 
 const CCY: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
 function fmt(n: number, c = 'EUR') {
@@ -72,21 +83,25 @@ function fmt(n: number, c = 'EUR') {
 /*  Lead time helpers                                                   */
 /* ------------------------------------------------------------------ */
 const LEAD_TIMES: Record<string, { min: number; max: number }> = {
-  AERON: { min: 6, max: 8 }, COSM: { min: 4, max: 6 }, SAYL: { min: 3, max: 5 },
-  EM: { min: 8, max: 10 },   LINO: { min: 4, max: 6 }, ZEPH: { min: 5, max: 7 },
-  CAPER: { min: 4, max: 6 }, PRONTA: { min: 2, max: 4 }, CIVIC_TABLES: { min: 6, max: 8 },
-  DEFAULT: { min: 4, max: 8 },
+  AERON: { min: 30, max: 40 }, COSM: { min: 20, max: 30 }, SAYL: { min: 15, max: 25 },
+  EMBODY: { min: 40, max: 50 }, LINO: { min: 20, max: 30 }, ZEPH: { min: 25, max: 35 },
+  CAPER: { min: 20, max: 30 }, PRONTA: { min: 10, max: 20 }, CIVIC_TABLES: { min: 30, max: 40 },
+  DEFAULT: { min: 20, max: 40 },
 };
 
 function mockLeadTime(productLine: string | null) {
   const spec = (productLine && LEAD_TIMES[productLine]) || LEAD_TIMES.DEFAULT;
-  return { min: spec.min, max: spec.max, label: `${spec.min}–${spec.max} wks`, weeks: spec.max };
+  return { min: spec.min, max: spec.max, label: `${spec.min}–${spec.max} days`, days: spec.max };
 }
 
-function computeDeliveryDate(fromDate: string, lead: { weeks: number }) {
+function computeDeliveryDate(fromDate: string, lead: { days: number }) {
   const d = new Date(fromDate);
   if (isNaN(d.getTime())) return '—';
-  d.setDate(d.getDate() + (lead.weeks || 6) * 7);
+  let remaining = lead.days || 30;
+  while (remaining > 0) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) remaining--;
+  }
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
@@ -178,30 +193,147 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
 }
 
 /* ------------------------------------------------------------------ */
-/*  ORDER TYPE OPTIONS                                                  */
-/* ------------------------------------------------------------------ */
-const ORDER_TYPES = ['Direct', 'Normal', 'Estimate', 'Mock Up', 'Sample Chair', 'Showroom', 'Swatch Request'];
-
-/* ------------------------------------------------------------------ */
 /*  HEADER SELECT FIELD                                                 */
 /* ------------------------------------------------------------------ */
 function HeaderSelectField({ label, value, options, onChange }: {
-  label: string; value: string | null; options: string[]; onChange: (v: string | null) => void;
+  label: string; value: string | null; options: string[];
+  onChange?: (v: string | null) => void;
 }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>{label}</div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+      <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
         <select
           value={value ?? ''}
-          onChange={(e) => onChange(e.target.value || null)}
+          onChange={(e) => onChange?.(e.target.value || null)}
           className="om-header-select"
-          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit', outline: 'none', minWidth: 80 } as React.CSSProperties}
+          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', border: 'none', background: 'transparent', padding: 0, paddingRight: 20, cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none', fontFamily: 'inherit', outline: 'none' }}
         >
           <option value="">Not set</option>
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
-        <IconChevronDown size={12} stroke={2} style={{ opacity: 0.45, pointerEvents: 'none' as const }} />
+        <span style={{ position: 'absolute', right: 0, pointerEvents: 'none', color: 'var(--ink-3)', display: 'flex', alignItems: 'center' }}>
+          <IconChevronDown size={12} stroke={2} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  HEADER DATE FIELD                                                   */
+/* ------------------------------------------------------------------ */
+function HeaderDateField({ label, value, onChange }: {
+  label: string; value: string | null; onChange?: (v: string | null) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const display = value
+    ? new Date(value + 'T00:00:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+    : '—';
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>{label}</div>
+      {editing ? (
+        <input
+          type="date"
+          autoFocus
+          value={value ?? ''}
+          onChange={(e) => onChange?.(e.target.value || null)}
+          onBlur={() => setEditing(false)}
+          style={{ ...sBodyB, color: 'var(--ink)', border: '2px solid var(--brand)', borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: '#fff', fontFamily: 'inherit' }}
+        />
+      ) : (
+        <button
+          onClick={() => setEditing(true)}
+          className="om-header-edit"
+          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', border: 'none', background: 'transparent', padding: 0, textAlign: 'left', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'inherit' }}>
+          <span>{display}</span>
+          <IconEdit size={12} stroke={1.7} style={{ opacity: 0.5 }} />
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  GOOGLE MAPS LOADER                                                  */
+/* ------------------------------------------------------------------ */
+const GMAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+let _mapsPromise: Promise<void> | null = null;
+
+function ensureMaps(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((window as any).google?.maps?.places) return Promise.resolve();
+  if (_mapsPromise) return _mapsPromise;
+  _mapsPromise = new Promise<void>((resolve) => {
+    const cb = '_gmInit';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any)[cb] = () => { resolve(); delete (window as any)[cb]; };
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&libraries=places&callback=${cb}`;
+    s.async = true;
+    document.head.appendChild(s);
+  });
+  return _mapsPromise;
+}
+
+/* ------------------------------------------------------------------ */
+/*  DELIVERY ADDRESS LOOKUP                                             */
+/* ------------------------------------------------------------------ */
+interface DeliveryAddress { companyName: string; line1: string; line2: string; line3: string; line4: string; city: string; county: string; postcode: string; }
+
+function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => void }) {
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const onFillRef = useRef(onFill);
+  useEffect(() => { onFillRef.current = onFill; }, [onFill]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => { ensureMaps().then(() => setReady(true)); }, []);
+
+  useEffect(() => {
+    if (!ready || !inputRef.current) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = (window as any).google;
+    const ac = new g.maps.places.Autocomplete(inputRef.current, {
+      fields: ['address_components', 'name'],
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const listener = ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const get = (type: string): string => (place.address_components as any[])?.find((c) => c.types.includes(type))?.long_name ?? '';
+      const streetNum = get('street_number');
+      const route     = get('route');
+      onFillRef.current({
+        companyName: place.name || '',
+        line1:       [streetNum, route].filter(Boolean).join(' '),
+        line2:       get('subpremise') || get('premise'),
+        line3:       '',
+        line4:       '',
+        city:        get('postal_town') || get('locality') || get('administrative_area_level_2'),
+        county:      get('administrative_area_level_2') || get('administrative_area_level_1'),
+        postcode:    get('postal_code'),
+      });
+      if (inputRef.current) inputRef.current.value = '';
+    });
+    return () => { g?.maps?.event?.removeListener(listener); };
+  }, [ready]);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Search Address</div>
+      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff' }}>
+        <span style={{ width: 44, height: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--ink-3)' }}>
+          <IconSearch size={16} stroke={1.7} />
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder={ready ? 'Start typing an address…' : 'Loading…'}
+          disabled={!ready}
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', ...sBody, color: 'var(--ink)', paddingRight: 12, fontFamily: 'inherit' }}
+        />
       </div>
     </div>
   );
@@ -216,7 +348,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div style={{ borderBottom: '1px solid var(--line)', paddingBottom: expanded ? 24 : 8 }}>
+    <div style={{ borderBottom: '1px solid var(--line)', paddingBottom: expanded ? 24 : 0 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 32, padding: '20px 0 16px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px 32px' }}>
           <HeaderField label="Reference"      value={order.reference}     placeholder="Required" required onChange={(v) => onUpdateMeta('reference', v)} />
@@ -237,30 +369,53 @@ function OrderHeader({ order, total, onUpdateMeta }: {
       <button
         onClick={() => setExpanded(e => !e)}
         className="om-expand-toggle"
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: 'none', background: 'transparent', cursor: 'pointer', padding: '4px 0', ...sBody, color: 'var(--ink-2)', fontFamily: 'inherit', transition: 'color .15s ease' }}
+        style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', cursor: 'pointer', padding: '0 4px', height: 44, ...sLargeB, color: 'var(--brand)', fontFamily: 'inherit', transition: 'background .15s ease' }}
       >
-        <span>{expanded ? 'Hide details' : 'More details'}</span>
+        <span>Order Details</span>
         <span style={{ display: 'inline-flex', alignItems: 'center', transition: 'transform .2s ease', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-          <IconChevronDown size={14} stroke={2} />
+          <IconChevronDown size={16} stroke={2} />
         </span>
       </button>
 
       {expanded && (
-        <div style={{ paddingTop: 20, marginTop: 12, borderTop: '1px solid var(--line)', animation: 'slideDown .2s ease' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '18px 32px', marginBottom: 28 }}>
-            <HeaderSelectField label="Order Type"      value={order.orderType ?? null}      options={ORDER_TYPES} onChange={(v) => onUpdateMeta('orderType', v)} />
-            <HeaderField       label="Sales Person"    value={order.salesPerson ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('salesPerson', v)} />
-            <HeaderField       label="HM Sales Person" value={order.hmSalesPerson ?? null}  placeholder="Not set" onChange={(v) => onUpdateMeta('hmSalesPerson', v)} />
-            <HeaderSelectField label="Contract"        value={order.contract ?? null}        options={[]} onChange={(v) => onUpdateMeta('contract', v)} />
-          </div>
-          <div>
-            <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, marginBottom: 14 }}>Delivery Address</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px 32px' }}>
-              <HeaderField label="Line 1"   value={order.deliveryLine1 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine1', v)} />
-              <HeaderField label="Line 2"   value={order.deliveryLine2 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine2', v)} />
-              <HeaderField label="City"     value={order.deliveryCity ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCity', v)} />
-              <HeaderField label="County"   value={order.deliveryCounty ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
-              <HeaderField label="Postcode" value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+        <div style={{ paddingTop: 20, animation: 'slideDown .2s ease' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px 64px' }}>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <DeliveryAddressLookup onFill={(addr) => {
+                onUpdateMeta('companyName',      addr.companyName || null);
+                onUpdateMeta('deliveryLine1',    addr.line1       || null);
+                onUpdateMeta('deliveryLine2',    addr.line2       || null);
+                onUpdateMeta('deliveryLine3',    addr.line3       || null);
+                onUpdateMeta('deliveryLine4',    addr.line4       || null);
+                onUpdateMeta('deliveryCity',     addr.city        || null);
+                onUpdateMeta('deliveryCounty',   addr.county      || null);
+                onUpdateMeta('deliveryPostcode', addr.postcode    || null);
+              }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Delivery Address</div>
+              <HeaderField label="Company Name"   value={order.companyName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('companyName', v)} />
+              <HeaderField label="Address Line 1" value={order.deliveryLine1 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine1', v)} />
+              <HeaderField label="Address Line 2" value={order.deliveryLine2 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine2', v)} />
+              <HeaderField label="Address Line 3" value={order.deliveryLine3 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine3', v)} />
+              <HeaderField label="Address Line 4" value={order.deliveryLine4 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine4', v)} />
+              <HeaderField label="City"           value={order.deliveryCity ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCity', v)} />
+              <HeaderField label="County"         value={order.deliveryCounty ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
+              <HeaderField label="Postcode"       value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Contact</div>
+              <HeaderField label="Contact Name"      value={order.contactName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('contactName', v)} />
+              <HeaderField label="Contact Email"     value={order.contactEmail ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('contactEmail', v)} />
+              <HeaderField label="Contact Telephone" value={order.contactTelephone ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('contactTelephone', v)} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Order Details</div>
+              <HeaderField       label="Purchase Order"  value={order.purchaseOrder ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('purchaseOrder', v)} />
+              <HeaderSelectField label="Contract"        value={order.contract ?? null}      options={CONTRACT_OPTIONS} onChange={(v) => onUpdateMeta('contract', v)} />
+              <HeaderSelectField label="HM Sales Person" value={order.hmSalesPerson ?? null} options={HM_SALES_PERSONS} onChange={(v) => onUpdateMeta('hmSalesPerson', v)} />
+              <HeaderField       label="Sales Person"    value={order.salesPerson ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('salesPerson', v)} />
+              <HeaderDateField   label="Pricing Date"    value={order.pricingDate ?? null}   onChange={(v) => onUpdateMeta('pricingDate', v)} />
             </div>
           </div>
         </div>
@@ -272,14 +427,12 @@ function OrderHeader({ order, total, onUpdateMeta }: {
 /* ------------------------------------------------------------------ */
 /*  TAB STRIP                                                           */
 /* ------------------------------------------------------------------ */
-type DetailTab = 'details' | 'lines' | 'documents' | 'history' | 'margins';
+type DetailTab = 'lines' | 'documents' | 'history';
 
 const DETAIL_TABS: Array<{ id: DetailTab; label: string }> = [
-  { id: 'details',   label: 'Order Details' },
   { id: 'lines',     label: 'Order Lines' },
   { id: 'documents', label: 'Documents' },
   { id: 'history',   label: 'History' },
-  { id: 'margins',   label: 'Margins' },
 ];
 
 function TabStrip({ active, onChange }: { active: DetailTab; onChange: (t: DetailTab) => void }) {
@@ -302,7 +455,7 @@ function TabStrip({ active, onChange }: { active: DetailTab; onChange: (t: Detai
 /*  COMING SOON PLACEHOLDER                                             */
 /* ------------------------------------------------------------------ */
 function ComingSoon({ tab }: { tab: string }) {
-  const titles: Record<string, string> = { details: 'Order Details', documents: 'Documents', history: 'History', margins: 'Margins' };
+  const titles: Record<string, string> = { documents: 'Documents', history: 'History' };
   return (
     <div style={{ padding: '80px 24px', textAlign: 'center', border: '1px dashed var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg-soft)' }}>
       <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 6 }}>{titles[tab] ?? tab} — coming soon</div>
@@ -761,9 +914,9 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
         <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{fmt(total, currency)}</div>
       </div>
       <div style={{ flex: 1, paddingLeft: 32, ...sBody, color: missingMeta.length ? 'var(--amber)' : 'var(--ink-2)' }}>
-        {missingMeta.length === 0
-          ? (canSubmit ? 'Ready to submit.' : 'Resolve invalid lines before submitting.')
-          : `Missing for submission: ${missingMeta.join(', ')}. Complete on Order Details.`}
+        {missingMeta.length > 0
+          ? `Missing for submission: ${missingMeta.join(', ')}. Complete in Order Details.`
+          : (!canSubmit ? 'Resolve invalid lines before submitting.' : null)}
       </div>
       <div style={{ display: 'flex', gap: 12 }}>
         <button onClick={onCancel}    className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Cancel</button>
@@ -794,7 +947,7 @@ const CSS = `
   .om-tab-strip:hover[data-active="false"] { color: var(--ink); }
   .om-header-edit:hover { color: var(--brand) !important; }
   .om-header-select:hover { color: var(--brand) !important; }
-  .om-expand-toggle:hover { color: var(--brand) !important; }
+  .om-expand-toggle:hover { background: var(--line) !important; }
   .om-stroke-btn:hover { background: var(--ink); color: #fff; }
   .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
   .om-line-row:hover { background: var(--bg-soft); }
@@ -810,6 +963,12 @@ const CSS = `
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  .pac-container { border: 2px solid var(--black); border-radius: var(--radius); box-shadow: var(--shadow-pop); margin-top: 2px; z-index: 9999; font-family: inherit; }
+  .pac-item { padding: 8px 12px; cursor: pointer; font-size: 13px; color: var(--ink); }
+  .pac-item:hover, .pac-item-selected { background: var(--bg-soft); }
+  .pac-item-query { color: var(--ink); font-size: 13px; }
+  .pac-matched { font-weight: 700; }
+  .pac-icon { display: none; }
 `;
 
 /* ------------------------------------------------------------------ */
@@ -821,8 +980,13 @@ function toStored(o: OrderData): StoredOrder {
     orderPlaced: o.orderPlaced, reference: o.reference, customer: o.customer,
     purchaseOrder: o.purchaseOrder, lines: o.lines as unknown[],
     orderType: o.orderType, salesPerson: o.salesPerson, hmSalesPerson: o.hmSalesPerson,
-    contract: o.contract, deliveryLine1: o.deliveryLine1, deliveryLine2: o.deliveryLine2,
+    contract: o.contract,
+    companyName: o.companyName,
+    deliveryLine1: o.deliveryLine1, deliveryLine2: o.deliveryLine2,
+    deliveryLine3: o.deliveryLine3, deliveryLine4: o.deliveryLine4,
     deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode,
+    contactName: o.contactName, contactEmail: o.contactEmail, contactTelephone: o.contactTelephone,
+    pricingDate: o.pricingDate,
   };
 }
 
@@ -882,7 +1046,26 @@ export default function OrderDetailPage() {
     setOrder(buildDemoOrder(draftNo));
   }, [id, location.state]);
 
-  const updateMeta  = useCallback((key: keyof OrderData, value: string | null) => setOrder(o => o ? { ...o, [key]: value } : o), []);
+  const updateMeta = useCallback((key: keyof OrderData, value: string | null) => {
+    setOrder(o => {
+      if (!o) return o;
+      const updated = { ...o, [key]: value };
+      if (key === 'contract' && value) {
+        const contract = CONTRACTS.find(c => c.name === value);
+        if (contract) {
+          updated.lines = updated.lines.map(line => {
+            if (!line.productLine) return line;
+            const plcMeta = PRODUCT_LINE_PLCS[line.productLine];
+            if (!plcMeta) return line;
+            const discount = getContractDiscount(contract, plcMeta.plc);
+            if (discount === null) return line;
+            return { ...line, discount };
+          });
+        }
+      }
+      return updated;
+    });
+  }, []);
   const updateLine  = useCallback((id: string, patch: Partial<OrderLine>) => setOrder(o => o ? { ...o, lines: o.lines.map(l => l.id === id ? { ...l, ...patch } : l) } : o), []);
   const updateChild = useCallback((lineId: string, childId: string, patch: Partial<SuperChild>) => {
     setOrder(o => o ? { ...o, lines: o.lines.map(l => {
@@ -961,8 +1144,8 @@ export default function OrderDetailPage() {
     if (!order) return [];
     const out: string[] = [];
     if (!order.reference)     out.push('Reference');
-    if (!order.customer)      out.push('Customer');
     if (!order.purchaseOrder) out.push('Purchase Order');
+    if (!order.deliveryLine1) out.push('Delivery Address');
     return out;
   }, [order]);
 
