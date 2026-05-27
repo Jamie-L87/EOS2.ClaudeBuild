@@ -32,7 +32,7 @@ interface OrderLine {
   isSuper?: boolean;
   superChildren?: SuperChild[] | null;
   lineStatus?: string;
-  leadTime?: { min: number; max: number; label: string; weeks: number };
+  leadTime?: { min: number; max: number; label: string; days: number };
   _explodedSuper?: Record<string, unknown>;
 }
 
@@ -82,21 +82,25 @@ function fmt(n: number, c = 'EUR') {
 /*  Lead time helpers                                                   */
 /* ------------------------------------------------------------------ */
 const LEAD_TIMES: Record<string, { min: number; max: number }> = {
-  AERON: { min: 6, max: 8 }, COSM: { min: 4, max: 6 }, SAYL: { min: 3, max: 5 },
-  EM: { min: 8, max: 10 },   LINO: { min: 4, max: 6 }, ZEPH: { min: 5, max: 7 },
-  CAPER: { min: 4, max: 6 }, PRONTA: { min: 2, max: 4 }, CIVIC_TABLES: { min: 6, max: 8 },
-  DEFAULT: { min: 4, max: 8 },
+  AERON: { min: 30, max: 40 }, COSM: { min: 20, max: 30 }, SAYL: { min: 15, max: 25 },
+  EM: { min: 40, max: 50 },    LINO: { min: 20, max: 30 }, ZEPH: { min: 25, max: 35 },
+  CAPER: { min: 20, max: 30 }, PRONTA: { min: 10, max: 20 }, CIVIC_TABLES: { min: 30, max: 40 },
+  DEFAULT: { min: 20, max: 40 },
 };
 
 function mockLeadTime(productLine: string | null) {
   const spec = (productLine && LEAD_TIMES[productLine]) || LEAD_TIMES.DEFAULT;
-  return { min: spec.min, max: spec.max, label: `${spec.min}–${spec.max} wks`, weeks: spec.max };
+  return { min: spec.min, max: spec.max, label: `${spec.min}–${spec.max} days`, days: spec.max };
 }
 
-function computeDeliveryDate(fromDate: string, lead: { weeks: number }) {
+function computeDeliveryDate(fromDate: string, lead: { days: number }) {
   const d = new Date(fromDate);
   if (isNaN(d.getTime())) return '—';
-  d.setDate(d.getDate() + (lead.weeks || 6) * 7);
+  let remaining = lead.days || 30;
+  while (remaining > 0) {
+    d.setDate(d.getDate() + 1);
+    if (d.getDay() !== 0 && d.getDay() !== 6) remaining--;
+  }
   return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
@@ -422,13 +426,12 @@ function OrderHeader({ order, total, onUpdateMeta }: {
 /* ------------------------------------------------------------------ */
 /*  TAB STRIP                                                           */
 /* ------------------------------------------------------------------ */
-type DetailTab = 'lines' | 'documents' | 'history' | 'margins';
+type DetailTab = 'lines' | 'documents' | 'history';
 
 const DETAIL_TABS: Array<{ id: DetailTab; label: string }> = [
   { id: 'lines',     label: 'Order Lines' },
   { id: 'documents', label: 'Documents' },
   { id: 'history',   label: 'History' },
-  { id: 'margins',   label: 'Margins' },
 ];
 
 function TabStrip({ active, onChange }: { active: DetailTab; onChange: (t: DetailTab) => void }) {
@@ -451,7 +454,7 @@ function TabStrip({ active, onChange }: { active: DetailTab; onChange: (t: Detai
 /*  COMING SOON PLACEHOLDER                                             */
 /* ------------------------------------------------------------------ */
 function ComingSoon({ tab }: { tab: string }) {
-  const titles: Record<string, string> = { documents: 'Documents', history: 'History', margins: 'Margins' };
+  const titles: Record<string, string> = { documents: 'Documents', history: 'History' };
   return (
     <div style={{ padding: '80px 24px', textAlign: 'center', border: '1px dashed var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg-soft)' }}>
       <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 6 }}>{titles[tab] ?? tab} — coming soon</div>
