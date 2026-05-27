@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -49,11 +49,17 @@ interface OrderData {
   salesPerson?: string | null;
   hmSalesPerson?: string | null;
   contract?: string | null;
+  companyName?: string | null;
   deliveryLine1?: string | null;
   deliveryLine2?: string | null;
+  deliveryLine3?: string | null;
+  deliveryLine4?: string | null;
   deliveryCity?: string | null;
   deliveryCounty?: string | null;
   deliveryPostcode?: string | null;
+  contactName?: string | null;
+  contactEmail?: string | null;
+  contactTelephone?: string | null;
 }
 
 /* ------------------------------------------------------------------ */
@@ -178,30 +184,83 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
 }
 
 /* ------------------------------------------------------------------ */
-/*  ORDER TYPE OPTIONS                                                  */
+/*  GOOGLE MAPS LOADER                                                  */
 /* ------------------------------------------------------------------ */
-const ORDER_TYPES = ['Direct', 'Normal', 'Estimate', 'Mock Up', 'Sample Chair', 'Showroom', 'Swatch Request'];
+const GMAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
+let _mapsPromise: Promise<void> | null = null;
+
+function ensureMaps(): Promise<void> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((window as any).google?.maps?.places) return Promise.resolve();
+  if (_mapsPromise) return _mapsPromise;
+  _mapsPromise = new Promise<void>((resolve) => {
+    const cb = '_gmInit';
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any)[cb] = () => { resolve(); delete (window as any)[cb]; };
+    const s = document.createElement('script');
+    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&libraries=places&callback=${cb}`;
+    s.async = true;
+    document.head.appendChild(s);
+  });
+  return _mapsPromise;
+}
 
 /* ------------------------------------------------------------------ */
-/*  HEADER SELECT FIELD                                                 */
+/*  DELIVERY ADDRESS LOOKUP                                             */
 /* ------------------------------------------------------------------ */
-function HeaderSelectField({ label, value, options, onChange }: {
-  label: string; value: string | null; options: string[]; onChange: (v: string | null) => void;
-}) {
+interface DeliveryAddress { companyName: string; line1: string; line2: string; line3: string; line4: string; city: string; county: string; postcode: string; }
+
+function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => void }) {
+  const inputRef  = useRef<HTMLInputElement>(null);
+  const onFillRef = useRef(onFill);
+  useEffect(() => { onFillRef.current = onFill; }, [onFill]);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => { ensureMaps().then(() => setReady(true)); }, []);
+
+  useEffect(() => {
+    if (!ready || !inputRef.current) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const g = (window as any).google;
+    const ac = new g.maps.places.Autocomplete(inputRef.current, {
+      fields: ['address_components', 'name'],
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const listener = ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const get = (type: string): string => (place.address_components as any[])?.find((c) => c.types.includes(type))?.long_name ?? '';
+      const streetNum = get('street_number');
+      const route     = get('route');
+      onFillRef.current({
+        companyName: place.name || '',
+        line1:       [streetNum, route].filter(Boolean).join(' '),
+        line2:       get('subpremise') || get('premise'),
+        line3:       '',
+        line4:       '',
+        city:        get('postal_town') || get('locality') || get('administrative_area_level_2'),
+        county:      get('administrative_area_level_2') || get('administrative_area_level_1'),
+        postcode:    get('postal_code'),
+      });
+      if (inputRef.current) inputRef.current.value = '';
+    });
+    return () => { g?.maps?.event?.removeListener(listener); };
+  }, [ready]);
+
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
-      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>{label}</div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <select
-          value={value ?? ''}
-          onChange={(e) => onChange(e.target.value || null)}
-          className="om-header-select"
-          style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit', outline: 'none', minWidth: 80 } as React.CSSProperties}
-        >
-          <option value="">Not set</option>
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
-        </select>
-        <IconChevronDown size={12} stroke={2} style={{ opacity: 0.45, pointerEvents: 'none' as const }} />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Search Address</div>
+      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff' }}>
+        <span style={{ width: 44, height: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--ink-3)' }}>
+          <IconSearch size={16} stroke={1.7} />
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder={ready ? 'Start typing an address…' : 'Loading…'}
+          disabled={!ready}
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', ...sBody, color: 'var(--ink)', paddingRight: 12, fontFamily: 'inherit' }}
+        />
       </div>
     </div>
   );
@@ -247,20 +306,34 @@ function OrderHeader({ order, total, onUpdateMeta }: {
 
       {expanded && (
         <div style={{ paddingTop: 20, marginTop: 12, borderTop: '1px solid var(--line)', animation: 'slideDown .2s ease' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '18px 32px', marginBottom: 28 }}>
-            <HeaderSelectField label="Order Type"      value={order.orderType ?? null}      options={ORDER_TYPES} onChange={(v) => onUpdateMeta('orderType', v)} />
-            <HeaderField       label="Sales Person"    value={order.salesPerson ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('salesPerson', v)} />
-            <HeaderField       label="HM Sales Person" value={order.hmSalesPerson ?? null}  placeholder="Not set" onChange={(v) => onUpdateMeta('hmSalesPerson', v)} />
-            <HeaderSelectField label="Contract"        value={order.contract ?? null}        options={[]} onChange={(v) => onUpdateMeta('contract', v)} />
-          </div>
-          <div>
-            <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, marginBottom: 14 }}>Delivery Address</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px 32px' }}>
-              <HeaderField label="Line 1"   value={order.deliveryLine1 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine1', v)} />
-              <HeaderField label="Line 2"   value={order.deliveryLine2 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine2', v)} />
-              <HeaderField label="City"     value={order.deliveryCity ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCity', v)} />
-              <HeaderField label="County"   value={order.deliveryCounty ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
-              <HeaderField label="Postcode" value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, marginBottom: 16 }}>Delivery Address</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px 64px' }}>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <DeliveryAddressLookup onFill={(addr) => {
+                onUpdateMeta('companyName',      addr.companyName || null);
+                onUpdateMeta('deliveryLine1',    addr.line1       || null);
+                onUpdateMeta('deliveryLine2',    addr.line2       || null);
+                onUpdateMeta('deliveryLine3',    addr.line3       || null);
+                onUpdateMeta('deliveryLine4',    addr.line4       || null);
+                onUpdateMeta('deliveryCity',     addr.city        || null);
+                onUpdateMeta('deliveryCounty',   addr.county      || null);
+                onUpdateMeta('deliveryPostcode', addr.postcode    || null);
+              }} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <HeaderField label="Company Name"   value={order.companyName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('companyName', v)} />
+              <HeaderField label="Address Line 1" value={order.deliveryLine1 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine1', v)} />
+              <HeaderField label="Address Line 2" value={order.deliveryLine2 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine2', v)} />
+              <HeaderField label="Address Line 3" value={order.deliveryLine3 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine3', v)} />
+              <HeaderField label="Address Line 4" value={order.deliveryLine4 ?? null}    placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryLine4', v)} />
+              <HeaderField label="City"           value={order.deliveryCity ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCity', v)} />
+              <HeaderField label="County"         value={order.deliveryCounty ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
+              <HeaderField label="Postcode"       value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <HeaderField label="Contact Name"      value={order.contactName ?? null}      placeholder="Not set" onChange={(v) => onUpdateMeta('contactName', v)} />
+              <HeaderField label="Contact Email"     value={order.contactEmail ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('contactEmail', v)} />
+              <HeaderField label="Contact Telephone" value={order.contactTelephone ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('contactTelephone', v)} />
             </div>
           </div>
         </div>
@@ -810,6 +883,12 @@ const CSS = `
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  .pac-container { border: 2px solid var(--black); border-radius: var(--radius); box-shadow: var(--shadow-pop); margin-top: 2px; z-index: 9999; font-family: inherit; }
+  .pac-item { padding: 8px 12px; cursor: pointer; font-size: 13px; color: var(--ink); }
+  .pac-item:hover, .pac-item-selected { background: var(--bg-soft); }
+  .pac-item-query { color: var(--ink); font-size: 13px; }
+  .pac-matched { font-weight: 700; }
+  .pac-icon { display: none; }
 `;
 
 /* ------------------------------------------------------------------ */
@@ -821,8 +900,12 @@ function toStored(o: OrderData): StoredOrder {
     orderPlaced: o.orderPlaced, reference: o.reference, customer: o.customer,
     purchaseOrder: o.purchaseOrder, lines: o.lines as unknown[],
     orderType: o.orderType, salesPerson: o.salesPerson, hmSalesPerson: o.hmSalesPerson,
-    contract: o.contract, deliveryLine1: o.deliveryLine1, deliveryLine2: o.deliveryLine2,
+    contract: o.contract,
+    companyName: o.companyName,
+    deliveryLine1: o.deliveryLine1, deliveryLine2: o.deliveryLine2,
+    deliveryLine3: o.deliveryLine3, deliveryLine4: o.deliveryLine4,
     deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode,
+    contactName: o.contactName, contactEmail: o.contactEmail, contactTelephone: o.contactTelephone,
   };
 }
 
