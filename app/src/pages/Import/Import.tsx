@@ -931,8 +931,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', gap: 16, flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 14 }}>
-            <span style={{ ...sBody, color: 'var(--ink-2)' }}>{hasContract ? 'Contract Total' : 'Subtotal'}</span>
-            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: hasContract ? 'var(--brand)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
+            <span style={{ ...sBody, color: 'var(--ink-2)' }}>Subtotal</span>
+            <span style={{ fontWeight: 700, fontSize: 24, letterSpacing: '0.01em', color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
               {formatPrice(buyingTotal, items[0]?.currency || 'EUR')}
             </span>
             {hasContract && (
