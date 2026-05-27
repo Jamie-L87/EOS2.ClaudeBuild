@@ -137,6 +137,25 @@ function parseLineItemsSheet(sheet: XLSX.WorkSheet): ParseResult {
   return { items };
 }
 
+// EOS 1 upload template: Line_Details sheet
+// Columns: A=Line, B=Item (article code), C=Feature String, D=Quantity
+// Row 1 is empty, row 2 is headers, data starts row 3 (index 2)
+function parseLineDetailsSheet(sheet: XLSX.WorkSheet): ParseResult {
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }) as unknown[][];
+  const items: ParsedItem[] = [];
+  for (let i = 2; i < rows.length; i++) {
+    const row = rows[i] as unknown[];
+    const articleCode = String(row[1] ?? '').trim();
+    if (!articleCode) continue;
+    const featureString = String(row[2] ?? '').trim();
+    const rawQty = row[3];
+    const parsedQty = typeof rawQty === 'number' ? Math.round(rawQty) : parseInt(String(rawQty), 10);
+    const qty = !isNaN(parsedQty) && parsedQty > 0 ? parsedQty : 1;
+    items.push({ articleCode, featureString, qty });
+  }
+  return { items };
+}
+
 export function parseXLSX(arrayBuffer: ArrayBuffer): ParseResult {
   let workbook: XLSX.WorkBook;
   try { workbook = XLSX.read(arrayBuffer, { type: 'array' }); }
@@ -144,6 +163,9 @@ export function parseXLSX(arrayBuffer: ArrayBuffer): ParseResult {
 
   const lineSheet = workbook.Sheets['LineItems'];
   if (lineSheet) return parseLineItemsSheet(lineSheet);
+
+  const lineDetailsSheet = workbook.Sheets['Line_Details'];
+  if (lineDetailsSheet) return parseLineDetailsSheet(lineDetailsSheet);
 
   if (workbook.Sheets['Customer Details']) {
     return { items: [], error: 'This is a Customer import template. To import customers, use the Customers page.' };
