@@ -171,6 +171,8 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
       {editing ? (
         <input
           autoFocus value={v}
+          id={`hf-${label.toLowerCase().replace(/\s+/g, '-')}`}
+          name={`hf-${label.toLowerCase().replace(/\s+/g, '-')}`}
           onChange={(e) => setV(e.target.value)}
           onBlur={() => { onChange?.(v.trim() || null); setEditing(false); }}
           onKeyDown={(e) => {
@@ -266,13 +268,14 @@ function ensureMaps(): Promise<void> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if ((window as any).google?.maps?.places) return Promise.resolve();
   if (_mapsPromise) return _mapsPromise;
-  _mapsPromise = new Promise<void>((resolve) => {
+  _mapsPromise = new Promise<void>((resolve, reject) => {
     const cb = '_gmInit';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (window as any)[cb] = () => { resolve(); delete (window as any)[cb]; };
     const s = document.createElement('script');
     s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&libraries=places&callback=${cb}`;
     s.async = true;
+    s.onerror = () => { _mapsPromise = null; reject(new Error('Google Maps script failed to load — check the API key and browser console.')); };
     document.head.appendChild(s);
   });
   return _mapsPromise;
@@ -288,8 +291,14 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
   const onFillRef = useRef(onFill);
   useEffect(() => { onFillRef.current = onFill; }, [onFill]);
   const [ready, setReady] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  useEffect(() => { ensureMaps().then(() => setReady(true)); }, []);
+  useEffect(() => {
+    ensureMaps().then(() => setReady(true)).catch((e: Error) => {
+      console.error('[Maps]', e.message);
+      setLoadError(e.message);
+    });
+  }, []);
 
   useEffect(() => {
     if (!ready || !inputRef.current) return;
@@ -329,12 +338,20 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
         </span>
         <input
           ref={inputRef}
+          id="delivery-address-search"
+          name="delivery-address-search"
           type="text"
-          placeholder={ready ? 'Start typing an address…' : 'Loading…'}
-          disabled={!ready}
-          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', ...sBody, color: 'var(--ink)', paddingRight: 12, fontFamily: 'inherit' }}
+          autoComplete="off"
+          placeholder={loadError ? 'Maps unavailable' : (ready ? 'Start typing an address…' : 'Loading…')}
+          disabled={!ready || !!loadError}
+          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', ...sBody, color: loadError ? 'var(--red)' : 'var(--ink)', paddingRight: 12, fontFamily: 'inherit' }}
         />
       </div>
+      {loadError && (
+        <div style={{ ...sBody, fontSize: 12, color: 'var(--red)' }}>
+          Could not load Google Maps — check the API key is valid and the Maps JavaScript API + Places API are enabled in Google Cloud Console.
+        </div>
+      )}
     </div>
   );
 }
