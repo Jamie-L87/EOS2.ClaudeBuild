@@ -496,15 +496,6 @@ function LineStatusPill({ status }: { status: string }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  SUPER BADGE                                                         */
-/* ------------------------------------------------------------------ */
-function SuperBadge({ count }: { count: number }) {
-  return (
-    <span style={{ fontWeight: 700, letterSpacing: 0.4, fontSize: 10.5, background: 'var(--blue)', color: '#fff', padding: '2px 8px', borderRadius: 999, textTransform: 'uppercase', flexShrink: 0 }}>
-      Super · {count} parts
-    </span>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  DRAG HANDLE                                                         */
@@ -636,8 +627,8 @@ function IconExplode({ size: s = 18 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 const LINE_COLS = '28px 36px minmax(200px, 1.5fr) minmax(140px, 1.4fr) 100px 100px 80px 110px 140px 72px 110px 110px 76px';
 
-function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, isSuper, expanded, onToggleExpand }: {
-  line: OrderLine; idx: number; currency: string; orderPlaced: string;
+function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, isSuper, expanded, onToggleExpand }: {
+  line: OrderLine; idx: number; lineNum: number | 'SP'; currency: string; orderPlaced: string;
   isDragging: boolean; isOver: boolean;
   onDragStart: () => void; onDragOver: (e: React.DragEvent) => void;
   onDragLeave: () => void; onDrop: (e: React.DragEvent) => void; onDragEnd: () => void;
@@ -714,7 +705,7 @@ function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragS
             {expanded ? <IconMinus size={14} stroke={2.4} /> : <IconPlus size={14} stroke={2.4} />}
           </button>
         )}
-        <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{idx + 1}</span>
+        <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{lineNum}</span>
         {isInvalid && <span style={{ width: 14, height: 14, borderRadius: 7, background: 'var(--red)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={9} stroke={3} /></span>}
       </div>
 
@@ -729,7 +720,6 @@ function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragS
         ) : (
           <button onClick={startEdit} className="om-code-edit"
             style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '0 8px', width: '100%', border: 'none', background: 'transparent', cursor: 'text', padding: 0, textAlign: 'left', fontFamily: 'inherit' }}>
-            {isSuper && line.superChildren && <SuperBadge count={line.superChildren.length} />}
             <span style={{ ...sBodyB, color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{line.articleCode}</span>
             {line.featureString && (
               <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{line.featureString}</span>
@@ -801,7 +791,7 @@ function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragS
 /*  LINE BLOCK (wraps row + super children)                             */
 /* ------------------------------------------------------------------ */
 function LineBlock(props: {
-  line: OrderLine; idx: number; currency: string; orderPlaced: string;
+  line: OrderLine; idx: number; lineNum: number | 'SP'; currency: string; orderPlaced: string;
   isDragging: boolean; isOver: boolean;
   onDragStart: () => void; onDragOver: (e: React.DragEvent) => void;
   onDragLeave: () => void; onDrop: (e: React.DragEvent) => void; onDragEnd: () => void;
@@ -834,6 +824,22 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
 }) {
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
+
+  const lineNumMap = useMemo(() => {
+    const map = new Map<string, number | 'SP'>();
+    let counter = 1;
+    for (const line of lines) {
+      const isSuper = !!line.isSuper && !!line.superChildren?.length;
+      if (isSuper) {
+        map.set(line.id, 'SP');
+        counter += line.superChildren?.length ?? 1;
+      } else {
+        map.set(line.id, counter);
+        counter += 1;
+      }
+    }
+    return map;
+  }, [lines]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return lines;
@@ -889,7 +895,7 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
           filtered.map((line, idx) => (
             <LineBlock
               key={line.id}
-              line={line} idx={idx} currency={currency} orderPlaced={orderPlaced}
+              line={line} idx={idx} lineNum={lineNumMap.get(line.id) ?? idx + 1} currency={currency} orderPlaced={orderPlaced}
               isDragging={dragIdx === idx}
               isOver={overIdx === idx && dragIdx !== null && dragIdx !== idx}
               onDragStart={() => setDragIdx(idx)}

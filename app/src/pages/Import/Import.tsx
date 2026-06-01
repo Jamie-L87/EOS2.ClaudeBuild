@@ -610,15 +610,6 @@ function Chip({ label, color }: { label: string; color?: 'green' | 'red' | 'ambe
 }
 
 /* ------------------------------------------------------------------ */
-/*  SUPER BADGE                                                         */
-/* ------------------------------------------------------------------ */
-function SuperBadge({ count }: { count: number }) {
-  return (
-    <span style={{ ...sBodyB, fontSize: 10.5, letterSpacing: 0.4, background: 'var(--blue)', color: '#fff', padding: '2px 8px', borderRadius: 999, textTransform: 'uppercase', flexShrink: 0 }}>
-      Super · {count} parts
-    </span>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  ICON EXPLODE (inline — only used on Import page)                   */
@@ -736,7 +727,6 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
                   {item.featureString && (
                     <span style={{ ...sBody, color: 'var(--ink-2)', fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", fontSize: 12 }}>{item.featureString}</span>
                   )}
-                  {isSuper && <SuperBadge count={item.superChildren!.length} />}
                 </div>
                 {status === 'failed' && item.validationError && (
                   <div style={{ ...sBody, fontSize: 12, color: 'var(--red)', marginTop: 4 }}>{item.validationError}</div>
