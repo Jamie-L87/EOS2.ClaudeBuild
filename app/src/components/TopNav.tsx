@@ -7,6 +7,7 @@ import {
 
 interface TopNavProps {
   onMenu: () => void;
+  basketCount?: number;
 }
 
 const sLargeB = { ...t.largeB };
@@ -23,10 +24,10 @@ function readBasketCount(): number {
   }
 }
 
-export default function TopNav({ onMenu }: TopNavProps) {
+export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavProps) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const basketCount = readBasketCount();
+  const basketCount = basketCountProp ?? readBasketCount();
   return (
     <header style={styles.bar}>
       <div style={styles.menuGroup}>

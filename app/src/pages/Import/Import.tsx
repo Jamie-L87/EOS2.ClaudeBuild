@@ -1113,7 +1113,7 @@ export default function ImportPage() {
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
       `}</style>
 
-      <TopNav onMenu={() => setNavOpen(true)} />
+      <TopNav onMenu={() => setNavOpen(true)} basketCount={basket.items.length} />
       <NavDrawer open={navOpen} onClose={() => setNavOpen(false)} current="import" />
 
       <main style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px 40px' }}>
