@@ -640,7 +640,7 @@ function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onD
   const [codeVal, setCodeVal] = useState('');
   const combined = line.articleCode + (line.featureString ? ' ' + line.featureString : '');
 
-  const startEdit = () => { setCodeVal(combined); setEditingCode(true); };
+  const startEdit = () => { setCodeVal(line.articleCode === 'NEW-LINE' ? '' : combined); setEditingCode(true); };
   const saveEdit  = () => {
     const v  = codeVal.trim();
     if (v && v !== combined) {
