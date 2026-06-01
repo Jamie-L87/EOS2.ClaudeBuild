@@ -91,7 +91,7 @@ const LEAD_TIMES: Record<string, { min: number; max: number }> = {
 
 function mockLeadTime(productLine: string | null) {
   const spec = (productLine && LEAD_TIMES[productLine]) || LEAD_TIMES.DEFAULT;
-  return { min: spec.min, max: spec.max, label: `${spec.min}–${spec.max} days`, days: spec.max };
+  return { min: spec.min, max: spec.max, label: `${spec.max}`, days: spec.max };
 }
 
 function computeDeliveryDate(fromDate: string, lead: { days: number }) {
@@ -102,7 +102,7 @@ function computeDeliveryDate(fromDate: string, lead: { days: number }) {
     d.setDate(d.getDate() + 1);
     if (d.getDay() !== 0 && d.getDay() !== 6) remaining--;
   }
-  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
 }
 
 /* ------------------------------------------------------------------ */
@@ -492,12 +492,7 @@ function LineStatusPill({ status }: { status: string }) {
     'not-found': { fg: 'var(--red)',   dot: 'var(--red)',   label: 'Not found' },
   };
   const c = map[status] ?? map['pending'];
-  return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-      <span style={{ width: 8, height: 8, borderRadius: 4, background: c.dot, flexShrink: 0 }} />
-      <span style={{ ...sBody, color: c.fg }}>{c.label}</span>
-    </span>
-  );
+  return <span style={{ ...sBody, color: c.fg }}>{c.label}</span>;
 }
 
 /* ------------------------------------------------------------------ */
@@ -639,7 +634,7 @@ function IconExplode({ size: s = 18 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 /*  LINE ROW                                                            */
 /* ------------------------------------------------------------------ */
-const LINE_COLS = '40px 48px minmax(160px, 1.2fr) minmax(140px, 1.4fr) 80px 100px 80px 110px 120px 100px 120px 110px 76px';
+const LINE_COLS = '28px 36px minmax(200px, 1.5fr) minmax(140px, 1.4fr) 100px 100px 80px 110px 140px 72px 110px 110px 76px';
 
 function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, isSuper, expanded, onToggleExpand }: {
   line: OrderLine; idx: number; currency: string; orderPlaced: string;
@@ -733,11 +728,11 @@ function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragS
           />
         ) : (
           <button onClick={startEdit} className="om-code-edit"
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 3, width: '100%', border: 'none', background: 'transparent', cursor: 'text', padding: 0, textAlign: 'left', fontFamily: 'inherit' }}>
+            style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: '0 8px', width: '100%', border: 'none', background: 'transparent', cursor: 'text', padding: 0, textAlign: 'left', fontFamily: 'inherit' }}>
             {isSuper && line.superChildren && <SuperBadge count={line.superChildren.length} />}
-            <span style={{ ...sBodyB, color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{line.articleCode}</span>
+            <span style={{ ...sBodyB, color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{line.articleCode}</span>
             {line.featureString && (
-              <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '100%' }}>{line.featureString}</span>
+              <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{line.featureString}</span>
             )}
           </button>
         )}
@@ -753,25 +748,25 @@ function LineRow({ line, idx, currency, orderPlaced, isDragging, isOver, onDragS
         <QtyStepper qty={line.qty} onChange={(q) => onUpdate({ qty: Math.max(1, q) })} />
       </div>
 
-      <div style={{ padding: '0 12px', textAlign: 'right' }}>
+      <div style={{ padding: '0 12px', textAlign: 'right', overflow: 'hidden' }}>
         <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
           {effectiveListPrice > 0 ? fmt(effectiveListPrice, ccy) : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </span>
       </div>
 
-      <div style={{ padding: '0 12px', textAlign: 'right' }}>
+      <div style={{ padding: '0 12px', textAlign: 'right', overflow: 'hidden' }}>
         <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
           {line.discount > 0 ? `${line.discount}%` : '—'}
         </span>
       </div>
 
-      <div style={{ padding: '0 12px', textAlign: 'right' }}>
+      <div style={{ padding: '0 12px', textAlign: 'right', overflow: 'hidden' }}>
         <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
           {effectiveListPrice > 0 ? fmt(unitBuying, ccy) : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </span>
       </div>
 
-      <div style={{ padding: '0 12px', textAlign: 'right' }}>
+      <div style={{ padding: '0 12px', textAlign: 'right', overflow: 'hidden' }}>
         <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>
           {effectiveListPrice > 0 ? fmt(totalBuying, ccy) : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </span>
