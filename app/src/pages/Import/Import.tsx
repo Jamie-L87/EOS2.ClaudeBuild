@@ -6,7 +6,7 @@ import {
   IconChevronRight, IconUpload, IconCheck, IconClose,
   IconPlus, IconMinus, IconEdit, IconCopy, IconTrash,
 } from '../../components/Icons';
-import { t } from '../../tokens';
+import { t, size } from '../../tokens';
 import {
   parseOBX, parseSIF, parseTextInput, parseXLSX,
   applyColumnMapping, autoDetectColumns, validateBasketItems,
@@ -1116,7 +1116,7 @@ export default function ImportPage() {
       <TopNav onMenu={() => setNavOpen(true)} basketCount={basket.items.length} />
       <NavDrawer open={navOpen} onClose={() => setNavOpen(false)} current="import" />
 
-      <main style={{ maxWidth: 1280, margin: '0 auto', padding: '0 40px 40px' }}>
+      <main style={{ maxWidth: size.maxWidth, margin: '0 auto', padding: `0 ${size.pagePad}px 40px` }}>
         <PageHeader />
 
         <div style={{ marginTop: 24 }}>
