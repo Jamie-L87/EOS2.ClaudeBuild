@@ -73,6 +73,7 @@ const sLargeB = { ...t.largeB };
 
 const CONTRACT_OPTIONS = CONTRACTS.map(c => c.name);
 const HM_SALES_PERSONS = ['Alex Thompson', 'Sarah Williams', 'James Mitchell', 'Emma Clarke', 'David Hughes'];
+const ORDER_TYPE_OPTIONS = ['Normal', 'Direct', 'Showroom', 'MockUp', 'FOC', 'SwatchRequest', 'Sample'];
 
 const CCY: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
 function fmt(n: number, c = 'EUR') {
@@ -429,6 +430,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Order Details</div>
               <HeaderField       label="Purchase Order"  value={order.purchaseOrder ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('purchaseOrder', v)} />
+              <HeaderSelectField label="Order Type"      value={order.orderType ?? null}     options={ORDER_TYPE_OPTIONS} onChange={(v) => onUpdateMeta('orderType', v)} />
               <HeaderSelectField label="Contract"        value={order.contract ?? null}      options={CONTRACT_OPTIONS} onChange={(v) => onUpdateMeta('contract', v)} />
               <HeaderSelectField label="HM Sales Person" value={order.hmSalesPerson ?? null} options={HM_SALES_PERSONS} onChange={(v) => onUpdateMeta('hmSalesPerson', v)} />
               <HeaderField       label="Sales Person"    value={order.salesPerson ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('salesPerson', v)} />
