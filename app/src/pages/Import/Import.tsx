@@ -672,8 +672,8 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount }: {
-  item: BasketItem; index: number;
+function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount }: {
+  item: BasketItem; lineNum: number | 'SP';
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
   onExplode: () => void;
@@ -707,7 +707,7 @@ function BasketRow({ item, index, onRemove, onQtyChange, onCopy, onUpdateArticle
                 {expanded ? <IconMinus size={14} stroke={2.4} /> : <IconPlus size={14} stroke={2.4} />}
               </button>
             ) : <span style={{ width: 22 }} />}
-            <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{index + 1}</span>
+            <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{lineNum}</span>
             {status === 'pending' && <span style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid var(--line)', borderTopColor: 'var(--brand)', display: 'inline-block', animation: 'spin .8s linear infinite', flexShrink: 0 }} />}
             {status === 'passed' && !isSuper && <span style={{ width: 16, height: 16, borderRadius: 8, background: 'var(--green)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconCheck size={10} stroke={3} /></span>}
             {status === 'failed' && <span style={{ width: 16, height: 16, borderRadius: 8, background: 'var(--red)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={10} stroke={3} /></span>}
@@ -830,6 +830,22 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 
   if (!items.length) return null;
 
+  const lineNumMap = useMemo(() => {
+    const map = new Map<string, number | 'SP'>();
+    let counter = 1;
+    for (const item of items) {
+      const isSuper = !!item.isSuper && !!item.superChildren?.length;
+      if (isSuper) {
+        map.set(item.id, 'SP');
+        counter += item.superChildren?.length ?? 1;
+      } else {
+        map.set(item.id, counter);
+        counter += 1;
+      }
+    }
+    return map;
+  }, [items]);
+
   const totalQty    = items.reduce((s, i) => s + i.qty, 0);
   const grand       = items.reduce((s, i) => s + (i.listPrice * i.qty), 0);
   const passedCount = items.filter(i => i.validationStatus === 'passed').length;
@@ -904,7 +920,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           </thead>
           <tbody>
             {items.map((item, i) => (
-              <BasketRow key={item.id} item={item} index={i}
+              <BasketRow key={item.id} item={item} lineNum={lineNumMap.get(item.id) ?? i + 1}
                 onRemove={() => onRemove(item.id)}
                 onQtyChange={(q) => onQtyChange(item.id, q)}
                 onCopy={() => onCopy(item.id)}
