@@ -828,8 +828,6 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
     return () => document.removeEventListener('mousedown', handler);
   }, [saveMenuOpen]);
 
-  if (!items.length) return null;
-
   const lineNumMap = useMemo(() => {
     const map = new Map<string, number | 'SP'>();
     let counter = 1;
@@ -845,6 +843,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
     }
     return map;
   }, [items]);
+
+  if (!items.length) return null;
 
   const totalQty    = items.reduce((s, i) => s + i.qty, 0);
   const grand       = items.reduce((s, i) => s + (i.listPrice * i.qty), 0);
