@@ -70,7 +70,8 @@ function itemContractPrice(item: BasketItem, contract: Contract): number | null 
 /*  File drop zone accept map                                           */
 /* ------------------------------------------------------------------ */
 const ACCEPT_MAP: Record<string, string> = {
-  '.obx':  'OBX',
+  '.eos':  'EOS',
+  '.obx':  'EOS',
   '.sif':  'SIF',
   '.xlsx': 'Excel',
 };
@@ -135,7 +136,7 @@ function FileDropZone({ onParsed, disabled }: { onParsed: (e: FileParseEvent) =>
       let result;
       try {
         if (ext === '.xlsx') { const buf = await file.arrayBuffer(); result = parseXLSX(buf); }
-        else { const text = await file.text(); result = ext === '.obx' ? parseOBX(text) : parseSIF(text); }
+        else { const text = await file.text(); result = (ext === '.obx' || ext === '.eos') ? parseOBX(text) : parseSIF(text); }
       } catch (err) { result = { items: [], error: (err as Error).message }; }
 
       if (result.error) {
