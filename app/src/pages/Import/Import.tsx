@@ -844,7 +844,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
   const [expandSuper, setExpandSuper] = useState(false);
   const [loading, setLoading] = useState(false);
-  const formatMeta = { obx: 'OBX', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
+  const formatMeta = { obx: 'EOS', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
 
   const toggle = (key: ExtraFieldKey) => setSelected(prev => {
     const next = new Set(prev);
@@ -975,7 +975,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
 /*  BASKET TABLE                                                        */
 /* ------------------------------------------------------------------ */
 const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: string }[] = [
-  { id: 'obx',  label: 'OBX',   desc: 'pCon / EOS 2 import',  ext: '.obx'  },
+  { id: 'obx',  label: 'EOS',   desc: 'EOS 2 Export/Import',  ext: '.eos'  },
   { id: 'xlsx', label: 'Excel', desc: 'Re-importable workbook', ext: '.xlsx' },
   { id: 'csv',  label: 'CSV',   desc: 'Universal spreadsheet',  ext: '.csv'  },
   { id: 'json', label: 'JSON',  desc: 'Structured data / API',  ext: '.json' },
@@ -1286,7 +1286,7 @@ export default function ImportPage() {
     }
     const getConfig = async (): Promise<{ blob: Blob; ext: string }> => {
       switch (format) {
-        case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'obx'  };
+        case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'eos'  };
         case 'csv':  return { blob: new Blob([exportCSV(exportItems, extraFields)],  { type: 'text/csv'         }), ext: 'csv'  };
         case 'json': return { blob: new Blob([exportJSON(exportItems, extraFields)], { type: 'application/json' }), ext: 'json' };
         case 'xlsx': return { blob: await exportXLSXBlob(exportItems, extraFields),                                  ext: 'xlsx' };
