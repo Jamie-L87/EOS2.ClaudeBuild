@@ -836,10 +836,12 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 /*  EXPORT FIELD PICKER                                                 */
 /* ------------------------------------------------------------------ */
 const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
+const CONTRACT_ONLY_FIELDS = new Set<ExtraFieldKey>(['discountPct', 'unitBuyingPrice']);
 
-function ExportFieldPicker({ format, hasSuperProducts, onConfirm, onCancel }: {
+function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, onCancel }: {
   format: ExportFormat;
   hasSuperProducts: boolean;
+  hasContract: boolean;
   onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => void;
   onCancel: () => void;
 }) {
@@ -922,18 +924,26 @@ function ExportFieldPicker({ format, hasSuperProducts, onConfirm, onCancel }: {
           <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Add to export</div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
             {EXTRA_EXPORT_FIELDS.map(f => {
+              const needsContract = CONTRACT_ONLY_FIELDS.has(f.key);
+              const disabled = needsContract && !hasContract;
               const checked = selected.has(f.key);
               return (
-                <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: 'pointer' }}>
+                <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1 }}>
                   <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
                     {checked && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
                   </div>
-                  <input type="checkbox" checked={checked} onChange={() => toggle(f.key)} style={{ display: 'none' }} />
+                  <input type="checkbox" checked={checked} disabled={disabled} onChange={() => !disabled && toggle(f.key)} style={{ display: 'none' }} />
                   <span style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>{f.label}</span>
                 </label>
               );
             })}
           </div>
+          {!hasContract && (
+            <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
+              <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Select a contract in the basket to enable Discount % and Unit Buying Price</span>
+            </div>
+          )}
         </div>
 
         <div style={{ height: 1, background: 'var(--line)' }} />
@@ -1152,6 +1162,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       <ExportFieldPicker
         format={exportPicker}
         hasSuperProducts={items.some(i => i.isSuper)}
+        hasContract={hasContract}
         onConfirm={(fields, expandSuper) => { const fmt = exportPicker; setExportPicker(null); onExport(fmt, fields, expandSuper); }}
         onCancel={() => setExportPicker(null)}
       />
