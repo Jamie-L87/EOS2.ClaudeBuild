@@ -44,10 +44,7 @@ function mockEnrich(articleCode: string, listPrice: number, productLine: string 
   const h = hashCode(articleCode);
   const plcMeta = productLine ? PRODUCT_LINE_PLCS[productLine] : null;
   const leadTimes = ['4–6 weeks', '6–8 weeks', '8–10 weeks', '10–12 weeks', '12–14 weeks'];
-  const origins: [string, string][] = [
-    ['EU', 'Netherlands'], ['EU', 'Germany'], ['EU', 'Italy'], ['US', 'United States'],
-  ];
-  const [origin, countryOfOrigin] = origins[h % origins.length];
+  const countries = ['Netherlands', 'Germany', 'Italy', 'United States'];
   return {
     plc: plcMeta?.plc ?? '',
     description: productName ?? '',
@@ -56,8 +53,7 @@ function mockEnrich(articleCode: string, listPrice: number, productLine: string 
     leadTime: leadTimes[h % leadTimes.length],
     weightKg: parseFloat(((h % 200 + 50) / 10).toFixed(1)),
     volumeLtrs: parseFloat(((h % 300 + 80) / 10).toFixed(1)),
-    origin,
-    countryOfOrigin,
+    countryOfOrigin: countries[h % countries.length],
   };
 }
 

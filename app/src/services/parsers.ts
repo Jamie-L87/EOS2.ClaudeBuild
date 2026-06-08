@@ -44,7 +44,6 @@ export interface BasketItem {
   leadTime?: string;
   weightKg?: number;
   volumeLtrs?: number;
-  origin?: string;
   countryOfOrigin?: string;
 }
 
@@ -59,7 +58,6 @@ export const EXTRA_EXPORT_FIELDS = [
   { key: 'leadTime'        as const, label: 'Lead Time'               },
   { key: 'weightKg'        as const, label: 'Weight (KG)'             },
   { key: 'volumeLtrs'      as const, label: 'Volume (Ltrs)'           },
-  { key: 'origin'          as const, label: 'Origin'                  },
   { key: 'countryOfOrigin' as const, label: 'Country of Origin'       },
 ] as const;
 
@@ -322,7 +320,6 @@ const EXTRA_COL_META: Partial<Record<ExtraFieldKey, { width: number; numFmt?: st
   leadTime:        { width: 14 },
   weightKg:        { width: 12, numFmt: '0.0',      align: 'right' },
   volumeLtrs:      { width: 12, numFmt: '0.0',      align: 'right' },
-  origin:          { width: 12 },
   countryOfOrigin: { width: 20 },
 };
 
