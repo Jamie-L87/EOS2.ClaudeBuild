@@ -838,11 +838,12 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
   format: ExportFormat;
   hasSuperProducts: boolean;
   hasContract: boolean;
-  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => void;
+  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => Promise<void>;
   onCancel: () => void;
 }) {
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
   const [expandSuper, setExpandSuper] = useState(false);
+  const [loading, setLoading] = useState(false);
   const formatMeta = { obx: 'OBX', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
 
   const toggle = (key: ExtraFieldKey) => setSelected(prev => {
@@ -851,15 +852,18 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
     return next;
   });
 
-  const handleConfirm = () => onConfirm(
-    EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
-    expandSuper,
-  );
+  const handleConfirm = async () => {
+    setLoading(true);
+    await onConfirm(
+      EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
+      expandSuper,
+    );
+  };
 
   return (
     <>
       <div
-        onClick={onCancel}
+        onClick={loading ? undefined : onCancel}
         style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }}
       />
       <div style={{
@@ -944,15 +948,24 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
 
         <div style={{ height: 1, background: 'var(--line)' }} />
 
-        {/* Footer */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, padding: '16px 24px' }}>
-          <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Cancel
-          </button>
-          <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Generate Export{selected.size > 0 ? ` (+${selected.size})` : ''}
-          </button>
-        </div>
+        {loading ? (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16, padding: '32px 24px' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', border: '3px solid var(--line)', borderTopColor: 'var(--brand)', animation: 'spin 0.7s linear infinite', flexShrink: 0 }} />
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 4 }}>Fetching field data…</div>
+              <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 13 }}>Retrieving additional product information. This may take a moment.</div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, padding: '16px 24px' }}>
+            <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Cancel
+            </button>
+            <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Generate Export{selected.size > 0 ? ` (+${selected.size})` : ''}
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
@@ -1159,7 +1172,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         format={exportPicker}
         hasSuperProducts={items.some(i => i.isSuper)}
         hasContract={hasContract}
-        onConfirm={(fields, expandSuper) => { const fmt = exportPicker; setExportPicker(null); onExport(fmt, fields, expandSuper); }}
+        onConfirm={async (fields, expandSuper) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper); setExportPicker(null); }}
         onCancel={() => setExportPicker(null)}
       />
     )}
@@ -1268,6 +1281,9 @@ export default function ImportPage() {
         unitBuyingPrice: parseFloat((item.listPrice * (1 - disc / 100)).toFixed(2)),
       };
     });
+    if (extraFields.length > 0) {
+      await new Promise(res => setTimeout(res, 1800));
+    }
     const getConfig = async (): Promise<{ blob: Blob; ext: string }> => {
       switch (format) {
         case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'obx'  };
