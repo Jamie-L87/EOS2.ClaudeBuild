@@ -43,8 +43,6 @@ function hashCode(s: string): number {
 function mockEnrich(articleCode: string, listPrice: number, productLine: string | null, productName: string | null) {
   const h = hashCode(articleCode);
   const plcMeta = productLine ? PRODUCT_LINE_PLCS[productLine] : null;
-  const discountPct = 35;
-  const unitBuyingPrice = parseFloat((listPrice * (1 - discountPct / 100)).toFixed(2));
   const leadTimes = ['4–6 weeks', '6–8 weeks', '8–10 weeks', '10–12 weeks', '12–14 weeks'];
   const origins: [string, string][] = [
     ['EU', 'Netherlands'], ['EU', 'Germany'], ['EU', 'Italy'], ['US', 'United States'],
@@ -52,11 +50,9 @@ function mockEnrich(articleCode: string, listPrice: number, productLine: string 
   const [origin, countryOfOrigin] = origins[h % origins.length];
   return {
     plc: plcMeta?.plc ?? '',
-    discountPct,
     description: productName ?? '',
     longDescription: `${plcMeta?.name ?? productLine ?? 'Product'} — ${articleCode}`,
     unitListPrice: listPrice,
-    unitBuyingPrice,
     leadTime: leadTimes[h % leadTimes.length],
     weightKg: parseFloat(((h % 200 + 50) / 10).toFixed(1)),
     volumeLtrs: parseFloat(((h % 300 + 80) / 10).toFixed(1)),
@@ -1253,7 +1249,18 @@ export default function ImportPage() {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
-    const exportItems = expandSuper ? expandSuperItems(basket.items) : basket.items;
+    const rawItems = expandSuper ? expandSuperItems(basket.items) : basket.items;
+    const exportItems = rawItems.map(item => {
+      if (!selectedContract || !item.productLine || item.listPrice <= 0) return item;
+      const plc = PRODUCT_LINE_PLCS[item.productLine]?.plc;
+      const disc = plc ? getContractDiscount(selectedContract, plc) : null;
+      if (disc === null) return item;
+      return {
+        ...item,
+        discountPct: disc,
+        unitBuyingPrice: parseFloat((item.listPrice * (1 - disc / 100)).toFixed(2)),
+      };
+    });
     const getConfig = async (): Promise<{ blob: Blob; ext: string }> => {
       switch (format) {
         case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'obx'  };
@@ -1270,7 +1277,7 @@ export default function ImportPage() {
     a.href = url; a.download = fileName; a.click();
     URL.revokeObjectURL(url);
     basket.clear();
-  }, [basket]);
+  }, [basket, selectedContract]);
 
   const inputPanelGrid: React.CSSProperties = {
     display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: 24, alignItems: 'stretch',
