@@ -34,7 +34,36 @@ export interface BasketItem {
   validationError: string | null;
   isSuper?: boolean;
   superChildren?: SuperChild[] | null;
+  // Optional enriched fields (populated on validation)
+  plc?: string;
+  discountPct?: number;
+  description?: string;
+  longDescription?: string;
+  unitListPrice?: number;
+  unitBuyingPrice?: number;
+  leadTime?: string;
+  weightKg?: number;
+  volumeLtrs?: number;
+  origin?: string;
+  countryOfOrigin?: string;
 }
+
+export const EXTRA_EXPORT_FIELDS = [
+  { key: 'plc'             as const, label: 'PLC (Product Line Code)' },
+  { key: 'discountPct'     as const, label: 'Discount %'              },
+  { key: 'description'     as const, label: 'Description'             },
+  { key: 'longDescription' as const, label: 'Long Description'        },
+  { key: 'unitListPrice'   as const, label: 'Unit List Price'         },
+  { key: 'unitBuyingPrice' as const, label: 'Unit Buying Price'       },
+  { key: 'totalPrice'      as const, label: 'Total Price'             },
+  { key: 'leadTime'        as const, label: 'Lead Time'               },
+  { key: 'weightKg'        as const, label: 'Weight (KG)'             },
+  { key: 'volumeLtrs'      as const, label: 'Volume (Ltrs)'           },
+  { key: 'origin'          as const, label: 'Origin'                  },
+  { key: 'countryOfOrigin' as const, label: 'Country of Origin'       },
+] as const;
+
+export type ExtraFieldKey = typeof EXTRA_EXPORT_FIELDS[number]['key'];
 
 /* ========================== OBX ========================== */
 export function parseOBX(text: string): ParseResult {
@@ -231,6 +260,15 @@ export function autoDetectColumns(
 }
 
 /* ========================== Exports ========================== */
+function resolveExtraField(item: BasketItem, key: ExtraFieldKey): string | number {
+  if (key === 'totalPrice') {
+    const buying = item.unitBuyingPrice ?? item.listPrice;
+    return parseFloat((buying * item.qty).toFixed(2));
+  }
+  const val = (item as unknown as Record<string, unknown>)[key];
+  return val !== undefined && val !== null ? (val as string | number) : '';
+}
+
 export function exportOBX(items: BasketItem[]): string {
   const lines: string[] = ['<?xml version="1.0" encoding="utf-8"?>', '<cutBuffer>', '  <items>'];
   for (const item of items) {
@@ -249,25 +287,37 @@ function csvCell(val: string | number): string {
   return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-export function exportCSV(items: BasketItem[]): string {
-  const header = ['Article Code', 'Feature String', 'Qty'];
-  const rows = items.map(i => [i.articleCode, i.featureString, i.qty]);
+export function exportCSV(items: BasketItem[], extraFields: ExtraFieldKey[] = []): string {
+  const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
+  const header = ['Article Code', 'Feature String', 'Qty', ...extraLabels];
+  const rows = items.map(i => [
+    i.articleCode, i.featureString, i.qty,
+    ...extraFields.map(k => resolveExtraField(i, k)),
+  ]);
   return [header, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
 }
 
-export function exportJSON(items: BasketItem[]): string {
+export function exportJSON(items: BasketItem[], extraFields: ExtraFieldKey[] = []): string {
   return JSON.stringify(
-    items.map(i => ({ articleCode: i.articleCode, featureString: i.featureString, qty: i.qty })),
+    items.map(i => {
+      const base: Record<string, unknown> = { articleCode: i.articleCode, featureString: i.featureString, qty: i.qty };
+      for (const k of extraFields) base[k] = resolveExtraField(i, k);
+      return base;
+    }),
     null, 2,
   );
 }
 
 // Produces a Line_Details sheet matching the EOS 1 template structure for round-trip import
-export function exportXLSXBlob(items: BasketItem[]): Blob {
+export function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFieldKey[] = []): Blob {
+  const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
   const rows: (string | number)[][] = [
     [],
-    ['Line', 'Item', 'Feature String', 'Quantity'],
-    ...items.map((item, i) => [i + 1, item.articleCode, item.featureString, item.qty]),
+    ['Line', 'Item', 'Feature String', 'Quantity', ...extraLabels],
+    ...items.map((item, i) => [
+      i + 1, item.articleCode, item.featureString, item.qty,
+      ...extraFields.map(k => resolveExtraField(item, k)),
+    ]),
   ];
   const ws = XLSX.utils.aoa_to_sheet(rows);
   const wb = XLSX.utils.book_new();

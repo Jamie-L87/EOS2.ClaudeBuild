@@ -11,12 +11,13 @@ import {
   parseOBX, parseSIF, parseTextInput, parseXLSX,
   applyColumnMapping, autoDetectColumns, validateBasketItems,
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
+  EXTRA_EXPORT_FIELDS,
 } from '../../services/parsers';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import type { Contract } from '../../data/contracts';
 
 type ExportFormat = 'obx' | 'csv' | 'xlsx' | 'json';
-import type { ParsedItem, SheetData, BasketItem } from '../../services/parsers';
+import type { ParsedItem, SheetData, BasketItem, ExtraFieldKey } from '../../services/parsers';
 import type { SuperChild } from '../../data/superProducts';
 import { upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
@@ -31,6 +32,37 @@ const sLargeB = { ...t.largeB };
 const CURRENCY_SYMBOLS: Record<string, string> = { GBP: '£', EUR: '€', USD: '$' };
 function formatPrice(n: number, ccy = 'EUR') {
   return (CURRENCY_SYMBOLS[ccy] ?? ccy + ' ') + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function hashCode(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) & 0x7fffffff;
+  return h;
+}
+
+function mockEnrich(articleCode: string, listPrice: number, productLine: string | null, productName: string | null) {
+  const h = hashCode(articleCode);
+  const plcMeta = productLine ? PRODUCT_LINE_PLCS[productLine] : null;
+  const discountPct = 35;
+  const unitBuyingPrice = parseFloat((listPrice * (1 - discountPct / 100)).toFixed(2));
+  const leadTimes = ['4–6 weeks', '6–8 weeks', '8–10 weeks', '10–12 weeks', '12–14 weeks'];
+  const origins: [string, string][] = [
+    ['EU', 'Netherlands'], ['EU', 'Germany'], ['EU', 'Italy'], ['US', 'United States'],
+  ];
+  const [origin, countryOfOrigin] = origins[h % origins.length];
+  return {
+    plc: plcMeta?.plc ?? '',
+    discountPct,
+    description: productName ?? '',
+    longDescription: `${plcMeta?.name ?? productLine ?? 'Product'} — ${articleCode}`,
+    unitListPrice: listPrice,
+    unitBuyingPrice,
+    leadTime: leadTimes[h % leadTimes.length],
+    weightKg: parseFloat(((h % 200 + 50) / 10).toFixed(1)),
+    volumeLtrs: parseFloat(((h % 300 + 80) / 10).toFixed(1)),
+    origin,
+    countryOfOrigin,
+  };
 }
 
 function itemContractPrice(item: BasketItem, contract: Contract): number | null {
@@ -480,16 +512,21 @@ function useBasket() {
       const next = [...prev, ...newItems];
       setTimeout(() => {
         validateBasketItems(newItems, ({ id, result }) => {
-          setItems(cur => cur.map(i => i.id !== id ? i : {
-            ...i,
-            validationStatus: result.valid ? 'passed' : 'failed',
-            validationError: result.error,
-            productName: result.valid ? result.productName : null,
-            productLine: result.productLine || null,
-            listPrice: result.price || 0,
-            currency: result.currency || 'EUR',
-            isSuper: !!result.isSuper,
-            superChildren: result.superChildren || null,
+          setItems(cur => cur.map(i => {
+            if (i.id !== id) return i;
+            const price = result.price || 0;
+            return {
+              ...i,
+              validationStatus: result.valid ? 'passed' : 'failed',
+              validationError: result.error,
+              productName: result.valid ? result.productName : null,
+              productLine: result.productLine || null,
+              listPrice: price,
+              currency: result.currency || 'EUR',
+              isSuper: !!result.isSuper,
+              superChildren: result.superChildren || null,
+              ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
+            };
           }));
         });
       }, 0);
@@ -534,16 +571,21 @@ function useBasket() {
       const it = updated[idx];
       setTimeout(() => {
         validateBasketItems([it], ({ id: vid, result }) => {
-          setItems(cur => cur.map(i => i.id !== vid ? i : {
-            ...i,
-            validationStatus: result.valid ? 'passed' : 'failed',
-            validationError: result.error,
-            productName: result.valid ? result.productName : null,
-            productLine: result.productLine || null,
-            listPrice: result.price || 0,
-            currency: result.currency || 'EUR',
-            isSuper: !!result.isSuper,
-            superChildren: result.superChildren || null,
+          setItems(cur => cur.map(i => {
+            if (i.id !== vid) return i;
+            const price = result.price || 0;
+            return {
+              ...i,
+              validationStatus: result.valid ? 'passed' : 'failed',
+              validationError: result.error,
+              productName: result.valid ? result.productName : null,
+              productLine: result.productLine || null,
+              listPrice: price,
+              currency: result.currency || 'EUR',
+              isSuper: !!result.isSuper,
+              superChildren: result.superChildren || null,
+              ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
+            };
           }));
         });
       }, 0);
@@ -795,6 +837,105 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 }
 
 /* ------------------------------------------------------------------ */
+/*  EXPORT FIELD PICKER                                                 */
+/* ------------------------------------------------------------------ */
+const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
+
+function ExportFieldPicker({ format, onConfirm, onCancel }: {
+  format: ExportFormat;
+  onConfirm: (fields: ExtraFieldKey[]) => void;
+  onCancel: () => void;
+}) {
+  const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
+  const formatMeta = { obx: 'OBX', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
+
+  const toggle = (key: ExtraFieldKey) => setSelected(prev => {
+    const next = new Set(prev);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
+
+  const handleConfirm = () => onConfirm(
+    EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key)
+  );
+
+  return (
+    <>
+      <div
+        onClick={onCancel}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }}
+      />
+      <div style={{
+        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+        zIndex: 301, background: '#fff', border: '2px solid var(--black)',
+        borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
+        width: 520, maxWidth: 'calc(100vw - 32px)',
+        animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
+      }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 16px' }}>
+          <div>
+            <div style={{ ...sLargeB, color: 'var(--ink)' }}>Export as {formatMeta}</div>
+            <div style={{ ...sBody, color: 'var(--ink-2)', marginTop: 2 }}>Choose which fields to include</div>
+          </div>
+          <button onClick={onCancel} className="om-row-action" style={{ width: 32, height: 32, border: 'none', background: 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 'var(--radius)', flexShrink: 0, color: 'var(--ink-2)' }}>
+            <IconClose size={16} />
+          </button>
+        </div>
+
+        <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
+
+        {/* Always included */}
+        <div style={{ padding: '16px 24px 12px' }}>
+          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Always included</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {STANDARD_EXPORT_FIELDS.map(f => (
+              <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '4px 10px' }}>
+                <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{f}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
+
+        {/* Optional fields */}
+        <div style={{ padding: '16px 24px 20px' }}>
+          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Add to export</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
+            {EXTRA_EXPORT_FIELDS.map(f => {
+              const checked = selected.has(f.key);
+              return (
+                <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: 'pointer' }}>
+                  <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                    {checked && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                  </div>
+                  <input type="checkbox" checked={checked} onChange={() => toggle(f.key)} style={{ display: 'none' }} />
+                  <span style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>{f.label}</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ height: 1, background: 'var(--line)' }} />
+
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, padding: '16px 24px' }}>
+          <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Cancel
+          </button>
+          <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Generate Export{selected.size > 0 ? ` (+${selected.size})` : ''}
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  BASKET TABLE                                                        */
 /* ------------------------------------------------------------------ */
 const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: string }[] = [
@@ -813,11 +954,12 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
-  onExport: (format: ExportFormat) => void;
+  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[]) => void;
   selectedContract: Contract | null;
   onContractChange: (id: string) => void;
 }) {
   const [saveMenuOpen, setSaveMenuOpen] = useState(false);
+  const [exportPicker, setExportPicker] = useState<ExportFormat | null>(null);
   const saveMenuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!saveMenuOpen) return;
@@ -869,6 +1011,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const buyingTotal = items.reduce((s, i, idx) => s + (contractPrices[idx] ?? i.listPrice) * i.qty, 0);
 
   return (
+    <>
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', overflow: 'hidden', marginTop: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--line)', flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -963,7 +1106,10 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
             {saveMenuOpen && (
               <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
                 {EXPORT_FORMATS.map(f => (
-                  <button key={f.id} onClick={() => { setSaveMenuOpen(false); onExport(f.id); }}
+                  <button key={f.id} onClick={() => {
+                    setSaveMenuOpen(false);
+                    if (f.id === 'obx') { onExport('obx', []); } else { setExportPicker(f.id); }
+                  }}
                     className="om-export-option"
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left', gap: 16, fontFamily: 'inherit' }}>
                     <span style={{ ...sBodyB, color: 'var(--ink)' }}>{f.label}</span>
@@ -985,6 +1131,14 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         </div>
       </div>
     </div>
+    {exportPicker && (
+      <ExportFieldPicker
+        format={exportPicker}
+        onConfirm={fields => { const fmt = exportPicker; setExportPicker(null); onExport(fmt, fields); }}
+        onCancel={() => setExportPicker(null)}
+      />
+    )}
+    </>
   );
 }
 
@@ -1073,15 +1227,15 @@ export default function ImportPage() {
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
 
-  const onExport = useCallback(async (format: ExportFormat) => {
+  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[]) => {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
     const configs: Record<ExportFormat, { blob: Blob; ext: string }> = {
-      obx:  { blob: new Blob([exportOBX(basket.items)],  { type: 'application/xml'   }), ext: 'obx'  },
-      csv:  { blob: new Blob([exportCSV(basket.items)],  { type: 'text/csv'          }), ext: 'csv'  },
-      json: { blob: new Blob([exportJSON(basket.items)], { type: 'application/json'  }), ext: 'json' },
-      xlsx: { blob: exportXLSXBlob(basket.items),                                        ext: 'xlsx' },
+      obx:  { blob: new Blob([exportOBX(basket.items)],                { type: 'application/xml'  }), ext: 'obx'  },
+      csv:  { blob: new Blob([exportCSV(basket.items, extraFields)],    { type: 'text/csv'         }), ext: 'csv'  },
+      json: { blob: new Blob([exportJSON(basket.items, extraFields)],   { type: 'application/json' }), ext: 'json' },
+      xlsx: { blob: exportXLSXBlob(basket.items, extraFields),                                         ext: 'xlsx' },
     };
     const { blob, ext } = configs[format];
     const fileName = `basket-${ts}.${ext}`;
@@ -1103,6 +1257,7 @@ export default function ImportPage() {
         @keyframes slideDown { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes toastIn   { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
         @keyframes spin      { to { transform: rotate(360deg); } }
+        @keyframes pickerIn  { from { opacity: 0; transform: translate(-50%,-50%) scale(.97); } to { opacity: 1; transform: translate(-50%,-50%) scale(1); } }
         button:focus-visible, a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .om-dropzone[data-state="idle"]:hover { border-color: var(--brand) !important; background: var(--brand-soft) !important; }
         .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
