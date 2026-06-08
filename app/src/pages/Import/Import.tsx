@@ -1254,13 +1254,15 @@ export default function ImportPage() {
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
     const exportItems = expandSuper ? expandSuperItems(basket.items) : basket.items;
-    const configs: Record<ExportFormat, { blob: Blob; ext: string }> = {
-      obx:  { blob: new Blob([exportOBX(exportItems)],                { type: 'application/xml'  }), ext: 'obx'  },
-      csv:  { blob: new Blob([exportCSV(exportItems, extraFields)],    { type: 'text/csv'         }), ext: 'csv'  },
-      json: { blob: new Blob([exportJSON(exportItems, extraFields)],   { type: 'application/json' }), ext: 'json' },
-      xlsx: { blob: exportXLSXBlob(exportItems, extraFields),                                         ext: 'xlsx' },
+    const getConfig = async (): Promise<{ blob: Blob; ext: string }> => {
+      switch (format) {
+        case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'obx'  };
+        case 'csv':  return { blob: new Blob([exportCSV(exportItems, extraFields)],  { type: 'text/csv'         }), ext: 'csv'  };
+        case 'json': return { blob: new Blob([exportJSON(exportItems, extraFields)], { type: 'application/json' }), ext: 'json' };
+        case 'xlsx': return { blob: await exportXLSXBlob(exportItems, extraFields),                                  ext: 'xlsx' };
+      }
     };
-    const { blob, ext } = configs[format];
+    const { blob, ext } = await getConfig();
     const fileName = `basket-${ts}.${ext}`;
 
     const url = URL.createObjectURL(blob);

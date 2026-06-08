@@ -308,25 +308,86 @@ export function exportJSON(items: BasketItem[], extraFields: ExtraFieldKey[] = [
   );
 }
 
-// Produces a Line_Details sheet matching the EOS 1 template structure for round-trip import
-export function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFieldKey[] = []): Blob {
+const XLSX_MIME = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+// Column metadata for extra fields: width (chars) + optional numFmt + alignment
+const EXTRA_COL_META: Partial<Record<ExtraFieldKey, { width: number; numFmt?: string; align?: 'left' | 'right' | 'center' }>> = {
+  plc:             { width: 16 },
+  discountPct:     { width: 12, numFmt: '0"%"',     align: 'right' },
+  description:     { width: 26 },
+  longDescription: { width: 42 },
+  unitListPrice:   { width: 18, numFmt: '#,##0.00', align: 'right' },
+  unitBuyingPrice: { width: 18, numFmt: '#,##0.00', align: 'right' },
+  totalPrice:      { width: 18, numFmt: '#,##0.00', align: 'right' },
+  leadTime:        { width: 14 },
+  weightKg:        { width: 12, numFmt: '0.0',      align: 'right' },
+  volumeLtrs:      { width: 12, numFmt: '0.0',      align: 'right' },
+  origin:          { width: 12 },
+  countryOfOrigin: { width: 20 },
+};
+
+export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFieldKey[] = []): Promise<Blob> {
+  const { default: ExcelJS } = await import('exceljs');
+
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'EOS Cloud';
+  const ws = wb.addWorksheet('Line_Details');
+
+  // ── Column widths ──────────────────────────────────────────────────
+  const stdColWidths = [5, 20, 36, 8];
+  const extraColWidths = extraFields.map(k => EXTRA_COL_META[k]?.width ?? 18);
+  ws.columns = [...stdColWidths, ...extraColWidths].map((width, i) => ({ key: `c${i}`, width }));
+
+  // ── Freeze header row ──────────────────────────────────────────────
+  ws.views = [{ state: 'frozen', xSplit: 0, ySplit: 1, topLeftCell: 'A2' }];
+
+  const INK   = 'FF252525';
+  const WHITE = 'FFFFFFFF';
+  const LINE  = 'FFEBEBEB';
+
+  type HAlign = 'left' | 'right' | 'center';
+  const stdAligns: HAlign[] = ['center', 'left', 'left', 'center'];
+  const extraAligns: HAlign[] = extraFields.map(k => EXTRA_COL_META[k]?.align ?? 'left');
+  const colAligns = [...stdAligns, ...extraAligns];
+
   const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
-  const rows: (string | number)[][] = [
-    [],
-    ['Line', 'Item', 'Feature String', 'Quantity', ...extraLabels],
-    ...items.map((item, i) => [
+  const headers = ['#', 'Article Code', 'Feature String', 'Qty', ...extraLabels];
+
+  // ── Header row ─────────────────────────────────────────────────────
+  const hRow = ws.addRow(headers);
+  hRow.height = 22;
+  hRow.eachCell({ includeEmpty: true }, (cell, col) => {
+    cell.fill   = { type: 'pattern', pattern: 'solid', fgColor: { argb: INK } };
+    cell.font   = { bold: true, color: { argb: WHITE }, size: 10.5, name: 'Calibri' };
+    cell.alignment = { vertical: 'middle', horizontal: colAligns[col - 1] ?? 'left' };
+  });
+
+  // ── Data rows ──────────────────────────────────────────────────────
+  const thinLine = { style: 'thin' as const, color: { argb: LINE } };
+  const dataBorder = { top: thinLine, left: thinLine, bottom: thinLine, right: thinLine };
+
+  items.forEach((item, i) => {
+    const values: (string | number)[] = [
       i + 1, item.articleCode, item.featureString, item.qty,
       ...extraFields.map(k => resolveExtraField(item, k)),
-    ]),
-  ];
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Line_Details');
-  const binaryStr: string = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-  const buf = new ArrayBuffer(binaryStr.length);
-  const view = new Uint8Array(buf);
-  for (let i = 0; i < binaryStr.length; i++) view[i] = binaryStr.charCodeAt(i) & 0xff;
-  return new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    ];
+    const row = ws.addRow(values);
+    row.height = 18;
+    row.eachCell({ includeEmpty: true }, (cell, col) => {
+      cell.font      = { size: 10.5, name: 'Calibri', color: { argb: INK } };
+      cell.alignment = { vertical: 'middle', horizontal: colAligns[col - 1] ?? 'left' };
+      cell.border    = dataBorder;
+      const extraIdx = col - 5; // 0-based index into extraFields
+      if (col === 4) cell.numFmt = '0'; // Qty
+      else if (extraIdx >= 0 && extraFields[extraIdx]) {
+        const fmt = EXTRA_COL_META[extraFields[extraIdx]]?.numFmt;
+        if (fmt) cell.numFmt = fmt;
+      }
+    });
+  });
+
+  const buf = await wb.xlsx.writeBuffer();
+  return new Blob([buf as ArrayBuffer], { type: XLSX_MIME });
 }
 
 export function expandSuperItems(items: BasketItem[]): BasketItem[] {
