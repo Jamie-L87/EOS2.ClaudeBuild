@@ -329,6 +329,31 @@ export function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFieldKey[]
   return new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
+export function expandSuperItems(items: BasketItem[]): BasketItem[] {
+  const out: BasketItem[] = [];
+  for (const item of items) {
+    if (item.isSuper && item.superChildren?.length) {
+      for (const child of item.superChildren) {
+        out.push({
+          id: `${item.id}-${child.articleCode}`,
+          articleCode: child.articleCode,
+          featureString: child.featureString,
+          qty: child.qty * item.qty,
+          productName: child.shortDescription,
+          productLine: item.productLine,
+          listPrice: child.listPrice,
+          currency: child.currency ?? item.currency,
+          validationStatus: 'passed',
+          validationError: null,
+        });
+      }
+    } else {
+      out.push(item);
+    }
+  }
+  return out;
+}
+
 /* ========================== Basket validation ========================== */
 export async function validateBasketItems(
   items: BasketItem[],

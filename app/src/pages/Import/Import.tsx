@@ -11,7 +11,7 @@ import {
   parseOBX, parseSIF, parseTextInput, parseXLSX,
   applyColumnMapping, autoDetectColumns, validateBasketItems,
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
-  EXTRA_EXPORT_FIELDS,
+  expandSuperItems, EXTRA_EXPORT_FIELDS,
 } from '../../services/parsers';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import type { Contract } from '../../data/contracts';
@@ -841,12 +841,14 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 /* ------------------------------------------------------------------ */
 const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
 
-function ExportFieldPicker({ format, onConfirm, onCancel }: {
+function ExportFieldPicker({ format, hasSuperProducts, onConfirm, onCancel }: {
   format: ExportFormat;
-  onConfirm: (fields: ExtraFieldKey[]) => void;
+  hasSuperProducts: boolean;
+  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => void;
   onCancel: () => void;
 }) {
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
+  const [expandSuper, setExpandSuper] = useState(false);
   const formatMeta = { obx: 'OBX', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
 
   const toggle = (key: ExtraFieldKey) => setSelected(prev => {
@@ -856,7 +858,8 @@ function ExportFieldPicker({ format, onConfirm, onCancel }: {
   });
 
   const handleConfirm = () => onConfirm(
-    EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key)
+    EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
+    expandSuper,
   );
 
   return (
@@ -897,6 +900,24 @@ function ExportFieldPicker({ format, onConfirm, onCancel }: {
             ))}
           </div>
         </div>
+
+        {hasSuperProducts && (
+          <>
+            <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
+            <div style={{ padding: '14px 24px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: expandSuper ? 'none' : '1px solid var(--ink-2)', background: expandSuper ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                  {expandSuper && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+                <input type="checkbox" checked={expandSuper} onChange={e => setExpandSuper(e.target.checked)} style={{ display: 'none' }} />
+                <div>
+                  <div style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>Expand super products into component lines</div>
+                  <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, marginTop: 1 }}>Each super product is replaced by its individual component articles</div>
+                </div>
+              </label>
+            </div>
+          </>
+        )}
 
         <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
 
@@ -954,7 +975,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
-  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[]) => void;
+  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => void;
   selectedContract: Contract | null;
   onContractChange: (id: string) => void;
 }) {
@@ -1108,7 +1129,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 {EXPORT_FORMATS.map(f => (
                   <button key={f.id} onClick={() => {
                     setSaveMenuOpen(false);
-                    if (f.id === 'obx') { onExport('obx', []); } else { setExportPicker(f.id); }
+                    if (f.id === 'obx') { onExport('obx', [], false); } else { setExportPicker(f.id); }
                   }}
                     className="om-export-option"
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left', gap: 16, fontFamily: 'inherit' }}>
@@ -1134,7 +1155,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
     {exportPicker && (
       <ExportFieldPicker
         format={exportPicker}
-        onConfirm={fields => { const fmt = exportPicker; setExportPicker(null); onExport(fmt, fields); }}
+        hasSuperProducts={items.some(i => i.isSuper)}
+        onConfirm={(fields, expandSuper) => { const fmt = exportPicker; setExportPicker(null); onExport(fmt, fields, expandSuper); }}
         onCancel={() => setExportPicker(null)}
       />
     )}
@@ -1227,15 +1249,16 @@ export default function ImportPage() {
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
 
-  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[]) => {
+  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
+    const exportItems = expandSuper ? expandSuperItems(basket.items) : basket.items;
     const configs: Record<ExportFormat, { blob: Blob; ext: string }> = {
-      obx:  { blob: new Blob([exportOBX(basket.items)],                { type: 'application/xml'  }), ext: 'obx'  },
-      csv:  { blob: new Blob([exportCSV(basket.items, extraFields)],    { type: 'text/csv'         }), ext: 'csv'  },
-      json: { blob: new Blob([exportJSON(basket.items, extraFields)],   { type: 'application/json' }), ext: 'json' },
-      xlsx: { blob: exportXLSXBlob(basket.items, extraFields),                                         ext: 'xlsx' },
+      obx:  { blob: new Blob([exportOBX(exportItems)],                { type: 'application/xml'  }), ext: 'obx'  },
+      csv:  { blob: new Blob([exportCSV(exportItems, extraFields)],    { type: 'text/csv'         }), ext: 'csv'  },
+      json: { blob: new Blob([exportJSON(exportItems, extraFields)],   { type: 'application/json' }), ext: 'json' },
+      xlsx: { blob: exportXLSXBlob(exportItems, extraFields),                                         ext: 'xlsx' },
     };
     const { blob, ext } = configs[format];
     const fileName = `basket-${ts}.${ext}`;
