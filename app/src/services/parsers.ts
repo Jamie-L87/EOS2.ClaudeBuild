@@ -274,6 +274,7 @@ export function exportOBX(items: BasketItem[]): string {
     lines.push('    <bskArticle>');
     lines.push(`      <artNr type="final">${artNr}</artNr>`);
     lines.push(`      <quantity>${item.qty}</quantity>`);
+    lines.push(`      <listPrice currency="${item.currency || 'GBP'}">${item.listPrice}</listPrice>`);
     lines.push('    </bskArticle>');
   }
   lines.push('  </items>', '</cutBuffer>');
