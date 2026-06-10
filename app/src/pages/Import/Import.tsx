@@ -833,7 +833,7 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 /* ------------------------------------------------------------------ */
 /*  EXPORT FIELD PICKER                                                 */
 /* ------------------------------------------------------------------ */
-const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
+const STANDARD_EXPORT_FIELDS = ['Article Code', 'Qty'];
 const CONTRACT_ONLY_FIELDS = new Set<ExtraFieldKey>(['discountPct', 'unitBuyingPrice']);
 
 function fmtPreviewValue(key: ExtraFieldKey, item: BasketItem, currency: string): string {
@@ -863,13 +863,12 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
   hasContract: boolean;
   items: BasketItem[];
   selectedContract: Contract | null;
-  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature: boolean) => Promise<void>;
+  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => Promise<void>;
   onCancel: () => void;
 }) {
   const variant = useVariant('exportPreview');
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
   const [expandSuper, setExpandSuper] = useState(false);
-  const [combineArticleFeature, setCombineArticleFeature] = useState(false);
   const [loading, setLoading] = useState(false);
   const formatMeta = { obx: 'EOS', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
 
@@ -895,7 +894,6 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
     await onConfirm(
       EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
       expandSuper,
-      combineArticleFeature,
     );
   };
 
@@ -913,16 +911,6 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
             </div>
           ))}
         </div>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-          <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: combineArticleFeature ? 'none' : '1px solid var(--ink-2)', background: combineArticleFeature ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
-            {combineArticleFeature && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
-          </div>
-          <input type="checkbox" checked={combineArticleFeature} onChange={e => setCombineArticleFeature(e.target.checked)} style={{ display: 'none' }} />
-          <div>
-            <div style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>Combine Article Code + Feature String into one field</div>
-            <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, marginTop: 1 }}>e.g. <span style={{ fontFamily: 'monospace' }}>AER1B23DW ALP G1 G1 G1 BB BK</span></div>
-          </div>
-        </label>
       </div>
 
       {hasSuperProducts && (
@@ -978,10 +966,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
   const previewTable = (
     <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
       <colgroup>
-        {combineArticleFeature
-          ? <col style={{ width: '32%', minWidth: 160 }} />
-          : <><col style={{ width: '18%', minWidth: 120 }} /><col style={{ width: '18%', minWidth: 110 }} /></>
-        }
+        <col style={{ width: '32%', minWidth: 160 }} />
         <col style={{ width: 52 }} />
         {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
           <col key={f.key} style={{ minWidth: 90 }} />
@@ -989,19 +974,9 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
       </colgroup>
       <thead>
         <tr>
-          {combineArticleFeature ? (
-            <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
-              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Article Code</div>
-            </th>
-          ) : (
-            (['articleCode', 'featureString'] as const).map(col => (
-              <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
-                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {{ articleCode: 'Article Code', featureString: 'Feature String' }[col]}
-                </div>
-              </th>
-            ))
-          )}
+          <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Article Code</div>
+          </th>
           <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', fontFamily: 'inherit' }}>Qty</th>
           {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
             <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
@@ -1015,20 +990,9 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
           const combined = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
           return (
             <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
-              {combineArticleFeature ? (
-                <td title={combined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                  <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{combined}</div>
-                </td>
-              ) : (
-                <>
-                  <td title={item.articleCode} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.articleCode}</div>
-                  </td>
-                  <td title={item.featureString || undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.featureString || '—'}</div>
-                  </td>
-                </>
-              )}
+              <td title={combined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{combined}</div>
+              </td>
               <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
               {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
                 const val = fmtPreviewValue(f.key, item, selectedContract?.currency || 'GBP');
@@ -1154,7 +1118,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
-  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature?: boolean) => void;
+  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => void;
   selectedContract: Contract | null;
   onContractChange: (id: string) => void;
 }) {
@@ -1338,7 +1302,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         hasContract={hasContract}
         items={items}
         selectedContract={selectedContract}
-        onConfirm={async (fields, expandSuper, combineArticleFeature) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper, combineArticleFeature); setExportPicker(null); }}
+        onConfirm={async (fields, expandSuper) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper); setExportPicker(null); }}
         onCancel={() => setExportPicker(null)}
       />
     )}
@@ -1431,7 +1395,7 @@ export default function ImportPage() {
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
 
-  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature = false) => {
+  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
@@ -1447,13 +1411,11 @@ export default function ImportPage() {
         unitBuyingPrice: parseFloat((item.listPrice * (1 - disc / 100)).toFixed(2)),
       };
     });
-    const finalItems = combineArticleFeature
-      ? exportItems.map(item => ({
-          ...item,
-          articleCode: item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode,
-          featureString: '',
-        }))
-      : exportItems;
+    const finalItems = exportItems.map(item => ({
+      ...item,
+      articleCode: item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode,
+      featureString: '',
+    }));
     if (extraFields.length > 0) {
       await new Promise(res => setTimeout(res, 1800));
     }
