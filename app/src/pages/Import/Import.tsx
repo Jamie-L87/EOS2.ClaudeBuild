@@ -836,15 +836,20 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
 const CONTRACT_ONLY_FIELDS = new Set<ExtraFieldKey>(['discountPct', 'unitBuyingPrice']);
 
-function fmtPreviewValue(key: ExtraFieldKey, item: BasketItem): string {
-  const currency = item.currency || 'GBP';
-  const fmt = (n: number) => n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function fmtPreviewValue(key: ExtraFieldKey, item: BasketItem, currency: string): string {
+  const fmt = (n: number) => {
+    try {
+      return new Intl.NumberFormat('en-GB', { style: 'currency', currency }).format(n);
+    } catch {
+      return n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+  };
   if (key === 'totalPrice') {
     const base = item.unitBuyingPrice ?? item.listPrice;
-    return `${currency} ${fmt(base * item.qty)}`;
+    return fmt(base * item.qty);
   }
-  if (key === 'unitListPrice') return item.unitListPrice != null ? `${currency} ${fmt(item.unitListPrice)}` : '—';
-  if (key === 'unitBuyingPrice') return item.unitBuyingPrice != null ? `${currency} ${fmt(item.unitBuyingPrice)}` : '—';
+  if (key === 'unitListPrice') return item.unitListPrice != null ? fmt(item.unitListPrice) : '—';
+  if (key === 'unitBuyingPrice') return item.unitBuyingPrice != null ? fmt(item.unitBuyingPrice) : '—';
   if (key === 'discountPct') return item.discountPct != null ? `${item.discountPct}%` : '—';
   if (key === 'weightKg') return item.weightKg != null ? `${item.weightKg} kg` : '—';
   if (key === 'volumeLtrs') return item.volumeLtrs != null ? `${item.volumeLtrs} L` : '—';
@@ -1077,7 +1082,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                         )}
                         <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
                         {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
-                          const val = fmtPreviewValue(f.key, item);
+                          const val = fmtPreviewValue(f.key, item, selectedContract?.currency || 'GBP');
                           return (
                             <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
                               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val}</div>

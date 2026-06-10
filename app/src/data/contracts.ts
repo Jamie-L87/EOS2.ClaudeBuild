@@ -44,6 +44,7 @@ export interface ContractLine {
 export interface Contract {
   id: string;
   name: string;
+  currency: string;
   lines: ContractLine[];
 }
 
@@ -54,6 +55,7 @@ export const CONTRACTS: Contract[] = [
   {
     id: 'standard-2025',
     name: 'Standard Dealer 2025',
+    currency: 'GBP',
     lines: [
       { plc: 'SE-EF',    productName: 'Aeron',        discount: 56 },
       { plc: 'WC',       productName: 'Caper',        discount: 51 },
@@ -82,6 +84,7 @@ export const CONTRACTS: Contract[] = [
   {
     id: 'preferred-2025',
     name: 'Preferred Partner 2025',
+    currency: 'USD',
     lines: [
       { plc: 'SE-EF',    productName: 'Aeron',        discount: 66 },
       { plc: 'WC',       productName: 'Caper',        discount: 61 },
