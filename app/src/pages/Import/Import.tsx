@@ -21,6 +21,7 @@ import type { ParsedItem, SheetData, BasketItem, ExtraFieldKey } from '../../ser
 import type { SuperChild } from '../../data/superProducts';
 import { upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
+import { useVariant } from '../../hooks/useVariant';
 
 /* ------------------------------------------------------------------ */
 /*  Token shorthands                                                    */
@@ -835,17 +836,48 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 const STANDARD_EXPORT_FIELDS = ['Article Code', 'Feature String', 'Qty'];
 const CONTRACT_ONLY_FIELDS = new Set<ExtraFieldKey>(['discountPct', 'unitBuyingPrice']);
 
-function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, onCancel }: {
+function fmtPreviewValue(key: ExtraFieldKey, item: BasketItem): string {
+  const currency = item.currency || 'GBP';
+  const fmt = (n: number) => n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (key === 'totalPrice') {
+    const base = item.unitBuyingPrice ?? item.listPrice;
+    return `${currency} ${fmt(base * item.qty)}`;
+  }
+  if (key === 'unitListPrice') return item.unitListPrice != null ? `${currency} ${fmt(item.unitListPrice)}` : '—';
+  if (key === 'unitBuyingPrice') return item.unitBuyingPrice != null ? `${currency} ${fmt(item.unitBuyingPrice)}` : '—';
+  if (key === 'discountPct') return item.discountPct != null ? `${item.discountPct}%` : '—';
+  if (key === 'weightKg') return item.weightKg != null ? `${item.weightKg} kg` : '—';
+  if (key === 'volumeLtrs') return item.volumeLtrs != null ? `${item.volumeLtrs} L` : '—';
+  const val = (item as unknown as Record<string, unknown>)[key];
+  return val != null && val !== '' ? String(val) : '—';
+}
+
+function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selectedContract, onConfirm, onCancel }: {
   format: ExportFormat;
   hasSuperProducts: boolean;
   hasContract: boolean;
+  items: BasketItem[];
+  selectedContract: Contract | null;
   onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => Promise<void>;
   onCancel: () => void;
 }) {
+  const variant = useVariant('exportPreview');
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
   const [expandSuper, setExpandSuper] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [step, setStep] = useState<'pick' | 'preview'>('pick');
   const formatMeta = { obx: 'EOS', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
+
+  const previewRows = useMemo(() => {
+    const raw = expandSuper ? expandSuperItems(items) : items;
+    return raw.map(item => {
+      if (!selectedContract || !item.productLine || item.listPrice <= 0) return item;
+      const plc = PRODUCT_LINE_PLCS[item.productLine]?.plc;
+      const disc = plc ? getContractDiscount(selectedContract, plc) : null;
+      if (disc === null) return item;
+      return { ...item, discountPct: disc, unitBuyingPrice: parseFloat((item.listPrice * (1 - disc / 100)).toFixed(2)) };
+    }).slice(0, 5);
+  }, [items, expandSuper, selectedContract]);
 
   const toggle = (key: ExtraFieldKey) => setSelected(prev => {
     const next = new Set(prev);
@@ -854,6 +886,10 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
   });
 
   const handleConfirm = async () => {
+    if (variant === 'b' && step === 'pick') {
+      setStep('preview');
+      return;
+    }
     setLoading(true);
     await onConfirm(
       EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
@@ -871,8 +907,9 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
-        width: 520, maxWidth: 'calc(100vw - 32px)',
+        width: step === 'preview' ? 860 : 520, maxWidth: 'calc(100vw - 32px)',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
+        transition: 'width .2s ease',
       }}>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px 16px' }}>
@@ -957,13 +994,62 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, onConfirm, o
               <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 13 }}>Retrieving additional product information. This may take a moment.</div>
             </div>
           </div>
+        ) : step === 'preview' ? (
+          <>
+            {/* Preview panel */}
+            <div style={{ padding: '14px 24px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Preview — first {previewRows.length} of {(expandSuper ? expandSuperItems(items) : items).length} rows
+              </div>
+              {selected.size > 0 && (
+                <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{selected.size} extra field{selected.size > 1 ? 's' : ''} included</div>
+              )}
+            </div>
+            <div style={{ overflowX: 'auto', margin: '0 0 0 0' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
+                <thead>
+                  <tr>
+                    {(['articleCode', 'featureString', 'qty'] as const).map(col => (
+                      <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 14px', height: 38, textAlign: 'left', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>
+                        {{ articleCode: 'Article Code', featureString: 'Feature String', qty: 'Qty' }[col]}
+                      </th>
+                    ))}
+                    {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
+                      <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 14px', height: 38, textAlign: 'left', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>{f.label}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewRows.map((item, i) => (
+                    <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{item.articleCode}</td>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink-2)', fontFamily: 'inherit' }}>{item.featureString || '—'}</td>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
+                      {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
+                        <td key={f.key} style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{fmtPreviewValue(f.key, item)}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div style={{ height: 1, background: 'var(--line)', marginTop: 0 }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '16px 24px' }}>
+              <button onClick={() => setStep('pick')} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                ← Back
+              </button>
+              <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+                Download
+              </button>
+            </div>
+          </>
         ) : (
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, padding: '16px 24px' }}>
             <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
               Cancel
             </button>
             <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
-              Generate Export{selected.size > 0 ? ` (+${selected.size})` : ''}
+              {variant === 'b' ? 'Preview Export' : `Generate Export${selected.size > 0 ? ` (+${selected.size})` : ''}`}
             </button>
           </div>
         )}
@@ -1173,6 +1259,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         format={exportPicker}
         hasSuperProducts={items.some(i => i.isSuper)}
         hasContract={hasContract}
+        items={items}
+        selectedContract={selectedContract}
         onConfirm={async (fields, expandSuper) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper); setExportPicker(null); }}
         onCancel={() => setExportPicker(null)}
       />
