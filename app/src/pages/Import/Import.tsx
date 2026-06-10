@@ -922,67 +922,71 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
           </button>
         </div>
 
-        <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
-
-        {/* Always included */}
-        <div style={{ padding: '16px 24px 12px' }}>
-          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Always included</div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {STANDARD_EXPORT_FIELDS.map(f => (
-              <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '4px 10px' }}>
-                <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{f}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {hasSuperProducts && (
+        {step !== 'preview' && (
           <>
             <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
-            <div style={{ padding: '14px 24px' }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: expandSuper ? 'none' : '1px solid var(--ink-2)', background: expandSuper ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
-                  {expandSuper && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+
+            {/* Always included */}
+            <div style={{ padding: '16px 24px 12px' }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Always included</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {STANDARD_EXPORT_FIELDS.map(f => (
+                  <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '4px 10px' }}>
+                    <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{f}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {hasSuperProducts && (
+              <>
+                <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
+                <div style={{ padding: '14px 24px' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+                    <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: expandSuper ? 'none' : '1px solid var(--ink-2)', background: expandSuper ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                      {expandSuper && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                    </div>
+                    <input type="checkbox" checked={expandSuper} onChange={e => setExpandSuper(e.target.checked)} style={{ display: 'none' }} />
+                    <div>
+                      <div style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>Expand super products into component lines</div>
+                      <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, marginTop: 1 }}>Each super product is replaced by its individual component articles</div>
+                    </div>
+                  </label>
                 </div>
-                <input type="checkbox" checked={expandSuper} onChange={e => setExpandSuper(e.target.checked)} style={{ display: 'none' }} />
-                <div>
-                  <div style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>Expand super products into component lines</div>
-                  <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, marginTop: 1 }}>Each super product is replaced by its individual component articles</div>
+              </>
+            )}
+
+            <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
+
+            {/* Optional fields */}
+            <div style={{ padding: '16px 24px 20px' }}>
+              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Add to export</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
+                {EXTRA_EXPORT_FIELDS.map(f => {
+                  const needsContract = CONTRACT_ONLY_FIELDS.has(f.key);
+                  const disabled = needsContract && !hasContract;
+                  const checked = selected.has(f.key);
+                  return (
+                    <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1 }}>
+                      <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                        {checked && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                      </div>
+                      <input type="checkbox" checked={checked} disabled={disabled} onChange={() => !disabled && toggle(f.key)} style={{ display: 'none' }} />
+                      <span style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>{f.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              {!hasContract && (
+                <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
+                  <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Select a contract in the basket to enable Discount % and Unit Buying Price</span>
                 </div>
-              </label>
+              )}
             </div>
           </>
         )}
-
-        <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
-
-        {/* Optional fields */}
-        <div style={{ padding: '16px 24px 20px' }}>
-          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Add to export</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 16px' }}>
-            {EXTRA_EXPORT_FIELDS.map(f => {
-              const needsContract = CONTRACT_ONLY_FIELDS.has(f.key);
-              const disabled = needsContract && !hasContract;
-              const checked = selected.has(f.key);
-              return (
-                <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1 }}>
-                  <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
-                    {checked && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
-                  </div>
-                  <input type="checkbox" checked={checked} disabled={disabled} onChange={() => !disabled && toggle(f.key)} style={{ display: 'none' }} />
-                  <span style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>{f.label}</span>
-                </label>
-              );
-            })}
-          </div>
-          {!hasContract && (
-            <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8, padding: '8px 10px', background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)' }}>
-              <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Select a contract in the basket to enable Discount % and Unit Buying Price</span>
-            </div>
-          )}
-        </div>
 
         <div style={{ height: 1, background: 'var(--line)' }} />
 
@@ -1231,7 +1235,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 {EXPORT_FORMATS.map(f => (
                   <button key={f.id} onClick={() => {
                     setSaveMenuOpen(false);
-                    if (f.id === 'obx') { onExport('obx', [], false); } else { setExportPicker(f.id); }
+                    setExportPicker(f.id);
                   }}
                     className="om-export-option"
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', padding: '12px 16px', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left', gap: 16, fontFamily: 'inherit' }}>
