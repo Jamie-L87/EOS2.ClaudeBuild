@@ -907,7 +907,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
-        width: step === 'preview' ? 860 : 520, maxWidth: 'calc(100vw - 32px)',
+        width: step === 'preview' ? 920 : 520, maxWidth: 'calc(100vw - 32px)',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
         transition: 'width .2s ease',
       }}>
@@ -1000,7 +1000,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
           </div>
         ) : step === 'preview' ? (
           <>
-            {/* Preview panel */}
+            {/* Preview table — fixed columns, truncated */}
             <div style={{ padding: '14px 24px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                 Preview — first {previewRows.length} of {(expandSuper ? expandSuperItems(items) : items).length} rows
@@ -1009,35 +1009,53 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                 <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{selected.size} extra field{selected.size > 1 ? 's' : ''} included</div>
               )}
             </div>
-            <div style={{ overflowX: 'auto', margin: '0 0 0 0' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
+            <div style={{ padding: '0 24px 16px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+                <colgroup>
+                  <col style={{ width: '18%', minWidth: 120 }} />
+                  <col style={{ width: '18%', minWidth: 110 }} />
+                  <col style={{ width: 52 }} />
+                  {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
+                    <col key={f.key} style={{ minWidth: 90 }} />
+                  ))}
+                </colgroup>
                 <thead>
                   <tr>
                     {(['articleCode', 'featureString', 'qty'] as const).map(col => (
-                      <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 14px', height: 38, textAlign: 'left', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>
-                        {{ articleCode: 'Article Code', featureString: 'Feature String', qty: 'Qty' }[col]}
+                      <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {{ articleCode: 'Article Code', featureString: 'Feature String', qty: 'Qty' }[col]}
+                        </div>
                       </th>
                     ))}
                     {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
-                      <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 14px', height: 38, textAlign: 'left', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>{f.label}</th>
+                      <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.label}</div>
+                      </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {previewRows.map((item, i) => (
                     <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{item.articleCode}</td>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink-2)', fontFamily: 'inherit' }}>{item.featureString || '—'}</td>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.articleCode}</div>
+                      </td>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.featureString || '—'}</div>
+                      </td>
+                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
                       {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
-                        <td key={f.key} style={{ ...sBody, fontSize: 13, padding: '0 14px', height: 40, whiteSpace: 'nowrap', color: 'var(--ink)', fontFamily: 'inherit' }}>{fmtPreviewValue(f.key, item)}</td>
+                        <td key={f.key} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fmtPreviewValue(f.key, item)}</div>
+                        </td>
                       ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div style={{ height: 1, background: 'var(--line)', marginTop: 0 }} />
+            <div style={{ height: 1, background: 'var(--line)' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, padding: '16px 24px' }}>
               <button onClick={() => setStep('pick')} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
                 ← Back
