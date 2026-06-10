@@ -1112,7 +1112,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
               Cancel
             </button>
             <button onClick={handleConfirm} className="om-primary-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
-              {variant === 'b' ? 'Preview Export' : `Generate Export${selected.size > 0 ? ` (+${selected.size})` : ''}`}
+              {variant === 'b' && (format === 'csv' || format === 'xlsx') ? 'Preview Export' : variant === 'b' ? 'Download' : `Generate Export${selected.size > 0 ? ` (+${selected.size})` : ''}`}
             </button>
           </div>
         )}
