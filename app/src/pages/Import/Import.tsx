@@ -892,7 +892,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
   });
 
   const handleConfirm = async () => {
-    if (variant === 'b' && step === 'pick') {
+    if (variant === 'b' && step === 'pick' && (format === 'csv' || format === 'xlsx')) {
       setStep('preview');
       return;
     }
