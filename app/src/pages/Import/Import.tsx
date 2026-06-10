@@ -858,12 +858,13 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
   hasContract: boolean;
   items: BasketItem[];
   selectedContract: Contract | null;
-  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean) => Promise<void>;
+  onConfirm: (fields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature: boolean) => Promise<void>;
   onCancel: () => void;
 }) {
   const variant = useVariant('exportPreview');
   const [selected, setSelected] = useState<Set<ExtraFieldKey>>(new Set());
   const [expandSuper, setExpandSuper] = useState(false);
+  const [combineArticleFeature, setCombineArticleFeature] = useState(false);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<'pick' | 'preview'>('pick');
   const formatMeta = { obx: 'EOS', csv: 'CSV', xlsx: 'Excel', json: 'JSON' }[format];
@@ -894,6 +895,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
     await onConfirm(
       EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => f.key),
       expandSuper,
+      combineArticleFeature,
     );
   };
 
@@ -927,9 +929,9 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
             <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
 
             {/* Always included */}
-            <div style={{ padding: '16px 24px 12px' }}>
+            <div style={{ padding: '16px 24px 14px' }}>
               <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>Always included</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
                 {STANDARD_EXPORT_FIELDS.map(f => (
                   <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', padding: '4px 10px' }}>
                     <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -937,6 +939,16 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                   </div>
                 ))}
               </div>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
+                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: combineArticleFeature ? 'none' : '1px solid var(--ink-2)', background: combineArticleFeature ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                  {combineArticleFeature && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                </div>
+                <input type="checkbox" checked={combineArticleFeature} onChange={e => setCombineArticleFeature(e.target.checked)} style={{ display: 'none' }} />
+                <div>
+                  <div style={{ ...sBody, color: 'var(--ink)', fontSize: 13 }}>Combine Article Code + Feature String into one field</div>
+                  <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12, marginTop: 1 }}>e.g. <span style={{ fontFamily: 'monospace' }}>AER1B23DW ALP G1 G1 G1 BB BK</span></div>
+                </div>
+              </label>
             </div>
 
             {hasSuperProducts && (
@@ -1012,8 +1024,10 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
             <div style={{ padding: '0 24px 16px' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <colgroup>
-                  <col style={{ width: '18%', minWidth: 120 }} />
-                  <col style={{ width: '18%', minWidth: 110 }} />
+                  {combineArticleFeature
+                    ? <col style={{ width: '32%', minWidth: 160 }} />
+                    : <><col style={{ width: '18%', minWidth: 120 }} /><col style={{ width: '18%', minWidth: 110 }} /></>
+                  }
                   <col style={{ width: 52 }} />
                   {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
                     <col key={f.key} style={{ minWidth: 90 }} />
@@ -1021,13 +1035,20 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                 </colgroup>
                 <thead>
                   <tr>
-                    {(['articleCode', 'featureString', 'qty'] as const).map(col => (
-                      <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
-                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {{ articleCode: 'Article Code', featureString: 'Feature String', qty: 'Qty' }[col]}
-                        </div>
+                    {combineArticleFeature ? (
+                      <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Article Code</div>
                       </th>
-                    ))}
+                    ) : (
+                      (['articleCode', 'featureString'] as const).map(col => (
+                        <th key={col} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {{ articleCode: 'Article Code', featureString: 'Feature String' }[col]}
+                          </div>
+                        </th>
+                      ))
+                    )}
+                    <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', fontFamily: 'inherit' }}>Qty</th>
                     {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
                       <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
                         <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.label}</div>
@@ -1036,25 +1057,36 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                   </tr>
                 </thead>
                 <tbody>
-                  {previewRows.map((item, i) => (
-                    <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
-                      <td title={item.articleCode} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.articleCode}</div>
-                      </td>
-                      <td title={item.featureString || undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                        <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.featureString || '—'}</div>
-                      </td>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
-                      {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
-                        const val = fmtPreviewValue(f.key, item);
-                        return (
-                          <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val}</div>
+                  {previewRows.map((item, i) => {
+                    const combined = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
+                    return (
+                      <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
+                        {combineArticleFeature ? (
+                          <td title={combined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{combined}</div>
                           </td>
-                        );
-                      })}
-                    </tr>
-                  ))}
+                        ) : (
+                          <>
+                            <td title={item.articleCode} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.articleCode}</div>
+                            </td>
+                            <td title={item.featureString || undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.featureString || '—'}</div>
+                            </td>
+                          </>
+                        )}
+                        <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
+                        {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
+                          const val = fmtPreviewValue(f.key, item);
+                          return (
+                            <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                              <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val}</div>
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -1102,7 +1134,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onUpdateArticleCode: (id: string, code: string) => void;
   onExplode: (id: string) => void;
   onCreateOrder: () => void;
-  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => void;
+  onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature?: boolean) => void;
   selectedContract: Contract | null;
   onContractChange: (id: string) => void;
 }) {
@@ -1286,7 +1318,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         hasContract={hasContract}
         items={items}
         selectedContract={selectedContract}
-        onConfirm={async (fields, expandSuper) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper); setExportPicker(null); }}
+        onConfirm={async (fields, expandSuper, combineArticleFeature) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper, combineArticleFeature); setExportPicker(null); }}
         onCancel={() => setExportPicker(null)}
       />
     )}
@@ -1379,7 +1411,7 @@ export default function ImportPage() {
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
   }, [basket, navigate]);
 
-  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => {
+  const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean, combineArticleFeature = false) => {
     const now = new Date();
     const ts = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}-${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
 
@@ -1395,15 +1427,22 @@ export default function ImportPage() {
         unitBuyingPrice: parseFloat((item.listPrice * (1 - disc / 100)).toFixed(2)),
       };
     });
+    const finalItems = combineArticleFeature
+      ? exportItems.map(item => ({
+          ...item,
+          articleCode: item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode,
+          featureString: '',
+        }))
+      : exportItems;
     if (extraFields.length > 0) {
       await new Promise(res => setTimeout(res, 1800));
     }
     const getConfig = async (): Promise<{ blob: Blob; ext: string }> => {
       switch (format) {
-        case 'obx':  return { blob: new Blob([exportOBX(exportItems)],              { type: 'application/xml'  }), ext: 'eos'  };
-        case 'csv':  return { blob: new Blob([exportCSV(exportItems, extraFields)],  { type: 'text/csv'         }), ext: 'csv'  };
-        case 'json': return { blob: new Blob([exportJSON(exportItems, extraFields)], { type: 'application/json' }), ext: 'json' };
-        case 'xlsx': return { blob: await exportXLSXBlob(exportItems, extraFields),                                  ext: 'xlsx' };
+        case 'obx':  return { blob: new Blob([exportOBX(finalItems)],              { type: 'application/xml'  }), ext: 'eos'  };
+        case 'csv':  return { blob: new Blob([exportCSV(finalItems, extraFields)],  { type: 'text/csv'         }), ext: 'csv'  };
+        case 'json': return { blob: new Blob([exportJSON(finalItems, extraFields)], { type: 'application/json' }), ext: 'json' };
+        case 'xlsx': return { blob: await exportXLSXBlob(finalItems, extraFields),                                  ext: 'xlsx' };
       }
     };
     const { blob, ext } = await getConfig();
