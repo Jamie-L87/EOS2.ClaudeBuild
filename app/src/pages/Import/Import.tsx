@@ -1038,18 +1038,21 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                 <tbody>
                   {previewRows.map((item, i) => (
                     <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                      <td title={item.articleCode} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
                         <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.articleCode}</div>
                       </td>
-                      <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                      <td title={item.featureString || undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink-2)', fontFamily: 'inherit', overflow: 'hidden' }}>
                         <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.featureString || '—'}</div>
                       </td>
                       <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
-                      {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
-                        <td key={f.key} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                          <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{fmtPreviewValue(f.key, item)}</div>
-                        </td>
-                      ))}
+                      {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
+                        const val = fmtPreviewValue(f.key, item);
+                        return (
+                          <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                            <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val}</div>
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </tbody>
