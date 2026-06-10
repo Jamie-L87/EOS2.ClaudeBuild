@@ -914,7 +914,8 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
-        width: step === 'preview' ? 920 : 520, maxWidth: 'calc(100vw - 32px)',
+        width: step === 'preview' ? Math.min((combineArticleFeature ? 212 : 282) + selected.size * 100 + 80, 1400) : 520,
+        maxWidth: 'calc(100vw - 32px)',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
         transition: 'width .2s ease',
       }}>
@@ -1026,7 +1027,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
                 <div style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>{selected.size} extra field{selected.size > 1 ? 's' : ''} included</div>
               )}
             </div>
-            <div style={{ padding: '0 24px 16px' }}>
+            <div style={{ padding: '0 24px 16px', overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
                 <colgroup>
                   {combineArticleFeature
