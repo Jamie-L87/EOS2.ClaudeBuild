@@ -988,16 +988,23 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
       <tbody>
         {previewRows.map((item, i) => {
           const combined = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
+          const isParent = !!item.superExpanded;
+          const isComp   = !!item.superParentCode;
+          const rowBg    = isParent ? 'var(--blue-soft)' : isComp ? '#F3F5F5' : (i % 2 === 0 ? '#fff' : 'var(--bg-soft)');
+          const textCol  = isComp ? 'var(--ink-2)' : 'var(--ink)';
           return (
-            <tr key={item.id} style={{ background: i % 2 === 0 ? '#fff' : 'var(--bg-soft)', borderBottom: '1px solid var(--line)' }}>
-              <td title={combined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
-                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{combined}</div>
+            <tr key={item.id} style={{ background: rowBg, borderBottom: '1px solid var(--line)' }}>
+              <td title={combined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: textCol, fontFamily: 'inherit', overflow: 'hidden', fontWeight: isParent ? 700 : undefined }}>
+                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', paddingLeft: isComp ? 16 : 0 }}>
+                  {isComp && <span style={{ marginRight: 6, opacity: 0.5 }}>└</span>}
+                  {combined}
+                </div>
               </td>
-              <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit' }}>{item.qty}</td>
+              <td style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: textCol, fontFamily: 'inherit' }}>{item.qty}</td>
               {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => {
                 const val = fmtPreviewValue(f.key, item, selectedContract?.currency || 'GBP');
                 return (
-                  <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: 'var(--ink)', fontFamily: 'inherit', overflow: 'hidden' }}>
+                  <td key={f.key} title={val !== '—' ? val : undefined} style={{ ...sBody, fontSize: 13, padding: '0 12px', height: 40, color: textCol, fontFamily: 'inherit', overflow: 'hidden' }}>
                     <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{val}</div>
                   </td>
                 );

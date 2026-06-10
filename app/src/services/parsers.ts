@@ -34,6 +34,8 @@ export interface BasketItem {
   validationError: string | null;
   isSuper?: boolean;
   superChildren?: SuperChild[] | null;
+  superExpanded?: boolean;   // set on parent when expanded for export
+  superParentCode?: string;  // set on component rows when parent is expanded
   // Optional enriched fields (populated on validation)
   plc?: string;
   discountPct?: number;
@@ -270,6 +272,7 @@ function resolveExtraField(item: BasketItem, key: ExtraFieldKey): string | numbe
 export function exportOBX(items: BasketItem[]): string {
   const lines: string[] = ['<?xml version="1.0" encoding="utf-8"?>', '<cutBuffer>', '  <items>'];
   for (const item of items) {
+    if (item.superParentCode) continue; // OBX uses parent article code only
     const artNr = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
     lines.push('    <bskArticle>');
     lines.push(`      <artNr type="final">${artNr}</artNr>`);
@@ -288,9 +291,10 @@ function csvCell(val: string | number): string {
 
 export function exportCSV(items: BasketItem[], extraFields: ExtraFieldKey[] = []): string {
   const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
-  const header = ['Article Code', 'Feature String', 'Qty', ...extraLabels];
+  const header = ['Article Code', 'Qty', ...extraLabels];
   const rows = items.map(i => [
-    i.articleCode, i.featureString, i.qty,
+    i.superParentCode ? `  └ ${i.articleCode}` : i.articleCode,
+    i.qty,
     ...extraFields.map(k => resolveExtraField(i, k)),
   ]);
   return [header, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
@@ -299,7 +303,9 @@ export function exportCSV(items: BasketItem[], extraFields: ExtraFieldKey[] = []
 export function exportJSON(items: BasketItem[], extraFields: ExtraFieldKey[] = []): string {
   return JSON.stringify(
     items.map(i => {
-      const base: Record<string, unknown> = { articleCode: i.articleCode, featureString: i.featureString, qty: i.qty };
+      const base: Record<string, unknown> = { articleCode: i.articleCode, qty: i.qty };
+      if (i.superExpanded) base.type = 'super-product';
+      else if (i.superParentCode) { base.type = 'component'; base.superParentCode = i.superParentCode; }
       for (const k of extraFields) base[k] = resolveExtraField(i, k);
       return base;
     }),
@@ -332,24 +338,27 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
   const ws = wb.addWorksheet('Line_Details');
 
   // ── Column widths ──────────────────────────────────────────────────
-  const stdColWidths = [5, 20, 36, 8];
+  const stdColWidths = [5, 42, 8];
   const extraColWidths = extraFields.map(k => EXTRA_COL_META[k]?.width ?? 18);
   ws.columns = [...stdColWidths, ...extraColWidths].map((width, i) => ({ key: `c${i}`, width }));
 
   // ── Freeze header row ──────────────────────────────────────────────
   ws.views = [{ state: 'frozen', xSplit: 0, ySplit: 1, topLeftCell: 'A2' }];
 
-  const INK   = 'FF252525';
-  const WHITE = 'FFFFFFFF';
-  const LINE  = 'FFEBEBEB';
+  const INK      = 'FF252525';
+  const INK2     = 'FF616161';
+  const WHITE    = 'FFFFFFFF';
+  const LINE     = 'FFEBEBEB';
+  const SUPER_BG = 'FFDCE7EF'; // Blue-10 — expanded super product parent rows
+  const COMP_BG  = 'FFF3F5F5'; // Blue-5  — component rows
 
   type HAlign = 'left' | 'right' | 'center';
-  const stdAligns: HAlign[] = ['center', 'left', 'left', 'center'];
+  const stdAligns: HAlign[] = ['center', 'left', 'center'];
   const extraAligns: HAlign[] = extraFields.map(k => EXTRA_COL_META[k]?.align ?? 'left');
   const colAligns = [...stdAligns, ...extraAligns];
 
   const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
-  const headers = ['#', 'Article Code', 'Feature String', 'Qty', ...extraLabels];
+  const headers = ['#', 'Article Code', 'Qty', ...extraLabels];
 
   // ── Header row ─────────────────────────────────────────────────────
   const hRow = ws.addRow(headers);
@@ -365,18 +374,23 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
   const dataBorder = { top: thinLine, left: thinLine, bottom: thinLine, right: thinLine };
 
   items.forEach((item, i) => {
+    const isParent = !!item.superExpanded;
+    const isComp   = !!item.superParentCode;
+    const articleCodeDisplay = isComp ? `  └ ${item.articleCode}` : item.articleCode;
     const values: (string | number)[] = [
-      i + 1, item.articleCode, item.featureString, item.qty,
+      i + 1, articleCodeDisplay, item.qty,
       ...extraFields.map(k => resolveExtraField(item, k)),
     ];
     const row = ws.addRow(values);
-    row.height = 18;
+    row.height = isParent ? 20 : 18;
+    const rowBg = isParent ? SUPER_BG : isComp ? COMP_BG : null;
     row.eachCell({ includeEmpty: true }, (cell, col) => {
-      cell.font      = { size: 10.5, name: 'Calibri', color: { argb: INK } };
+      cell.font      = { size: 10.5, name: 'Calibri', bold: isParent, color: { argb: isComp ? INK2 : INK } };
       cell.alignment = { vertical: 'middle', horizontal: colAligns[col - 1] ?? 'left' };
       cell.border    = dataBorder;
-      const extraIdx = col - 5; // 0-based index into extraFields
-      if (col === 4) cell.numFmt = '0'; // Qty
+      if (rowBg) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rowBg } };
+      const extraIdx = col - 4; // 0-based index into extraFields
+      if (col === 3) cell.numFmt = '0'; // Qty
       else if (extraIdx >= 0 && extraFields[extraIdx]) {
         const fmt = EXTRA_COL_META[extraFields[extraIdx]]?.numFmt;
         if (fmt) cell.numFmt = fmt;
@@ -392,6 +406,10 @@ export function expandSuperItems(items: BasketItem[]): BasketItem[] {
   const out: BasketItem[] = [];
   for (const item of items) {
     if (item.isSuper && item.superChildren?.length) {
+      const parentCode = item.featureString
+        ? `${item.articleCode} ${item.featureString}`
+        : item.articleCode;
+      out.push({ ...item, superExpanded: true });
       for (const child of item.superChildren) {
         out.push({
           id: `${item.id}-${child.articleCode}`,
@@ -404,6 +422,7 @@ export function expandSuperItems(items: BasketItem[]): BasketItem[] {
           currency: child.currency ?? item.currency,
           validationStatus: 'passed',
           validationError: null,
+          superParentCode: parentCode,
         });
       }
     } else {
