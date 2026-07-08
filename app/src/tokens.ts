@@ -42,7 +42,7 @@ export const size = {
   tabH:       55,   /* tab bar / search bar / primary button height */
   navH:       92,   /* top nav height */
   footerH:    72,   /* page footer height */
-  maxWidth:   1550, /* main content container */
+  maxWidth:   1408, /* main content container */
   pagePad:    40,   /* horizontal page padding */
 } as const;
 

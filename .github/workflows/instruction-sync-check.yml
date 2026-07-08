@@ -1,0 +1,82 @@
+name: Instruction Sync Check
+
+on:
+  pull_request:
+    paths:
+      - CLAUDE.md
+      - .github/copilot-instructions.md
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - CLAUDE.md
+      - .github/copilot-instructions.md
+
+jobs:
+  check-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed instruction files
+        id: changes
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE_SHA="${{ github.event.before }}"
+            HEAD_SHA="${{ github.sha }}"
+          fi
+
+          if [[ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]]; then
+            BASE_SHA="$(git rev-list --max-parents=0 HEAD | tail -n 1)"
+          fi
+
+          git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed_files.txt
+          echo "Changed files:"
+          cat changed_files.txt
+
+          CLAUDE_CHANGED=false
+          COPILOT_CHANGED=false
+
+          if grep -qx "CLAUDE.md" changed_files.txt; then
+            CLAUDE_CHANGED=true
+          fi
+
+          if grep -qx ".github/copilot-instructions.md" changed_files.txt; then
+            COPILOT_CHANGED=true
+          fi
+
+          echo "claude_changed=$CLAUDE_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "copilot_changed=$COPILOT_CHANGED" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce paired updates
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          CLAUDE_CHANGED="${{ steps.changes.outputs.claude_changed }}"
+          COPILOT_CHANGED="${{ steps.changes.outputs.copilot_changed }}"
+
+          if [[ "$CLAUDE_CHANGED" == "true" && "$COPILOT_CHANGED" != "true" ]]; then
+            echo "ERROR: CLAUDE.md changed but .github/copilot-instructions.md was not updated."
+            echo "Update both files in the same change to keep instructions synchronized."
+            exit 1
+          fi
+
+          if [[ "$COPILOT_CHANGED" == "true" && "$CLAUDE_CHANGED" != "true" ]]; then
+            echo "ERROR: .github/copilot-instructions.md changed but CLAUDE.md was not updated."
+            echo "Update both files in the same change to keep CLAUDE.md as source of truth."
+            exit 1
+          fi
+
+          echo "Instruction files are synchronized for this change."

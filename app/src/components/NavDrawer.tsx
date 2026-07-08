@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconClose, IconChevronRight, IconUpload } from './Icons';
-type NavId = 'import' | 'orders';
+type NavId = 'import' | 'orders' | 'catalogueAccess';
 
 interface NavDrawerProps {
   open: boolean;
@@ -40,6 +40,7 @@ const NAV_ITEMS: Array<{
 }> = [
   { id: 'import', label: 'Import',  sub: 'Upload files or paste codes',         path: '/',       Icon: IconUpload },
   { id: 'orders', label: 'Orders',  sub: 'Active, completed and archived',       path: '/orders', Icon: IconOrders },
+  { id: 'catalogueAccess', label: 'Catalogue Management', sub: 'Catalogue and customer group management', path: '/admin/catalogue-access', Icon: IconOrders },
 ];
 
 export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
