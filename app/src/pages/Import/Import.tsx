@@ -8,7 +8,7 @@ import {
 } from '../../components/Icons';
 import { t, size } from '../../tokens';
 import {
-  parseOBX, parseSIF, parseTextInput, parseXLSX,
+  parseOBX, parseSIF, parseTextInput, parseXLSX, parseCSV,
   applyColumnMapping, autoDetectColumns, validateBasketItems,
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
   expandSuperItems, EXTRA_EXPORT_FIELDS,
@@ -75,6 +75,7 @@ const ACCEPT_MAP: Record<string, string> = {
   '.obx':  'EOS',
   '.sif':  'SIF',
   '.xlsx': 'Excel',
+  '.csv':  'CSV',
 };
 const ACCEPTED_EXT = Object.keys(ACCEPT_MAP).join(',');
 
@@ -100,7 +101,7 @@ function PageHeader() {
       </nav>
       <h1 style={{ fontWeight: 700, fontSize: 30, lineHeight: 1.2, margin: '0 0 8px', color: 'var(--ink)', letterSpacing: '0.01em' }}>Import</h1>
       <p style={{ ...sBody, color: 'var(--ink-2)', margin: 0, maxWidth: 720 }}>
-        Upload a file (OBX, SIF or Excel) or paste article codes to build a basket of items, then create an order.
+        Upload a file (EOS, SIF, Excel or CSV) or paste article codes to build a basket of items, then create an order.
       </p>
     </div>
   );
@@ -137,7 +138,11 @@ function FileDropZone({ onParsed, disabled }: { onParsed: (e: FileParseEvent) =>
       let result;
       try {
         if (ext === '.xlsx') { const buf = await file.arrayBuffer(); result = parseXLSX(buf); }
-        else { const text = await file.text(); result = (ext === '.obx' || ext === '.eos') ? parseOBX(text) : parseSIF(text); }
+        else {
+          const text = await file.text();
+          if (ext === '.csv') result = parseCSV(text);
+          else result = (ext === '.obx' || ext === '.eos') ? parseOBX(text) : parseSIF(text);
+        }
       } catch (err) { result = { items: [], error: (err as Error).message }; }
 
       if (result.error) {
@@ -378,7 +383,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
         <div>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 4 }}>Map columns</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>
-            We couldn't recognise this Excel layout. Pick the columns that contain article codes and quantities. This works best when each row represents a single line item.
+            We couldn't recognise this file's layout. Pick the columns that contain article codes and quantities. This works best when each row represents a single line item.
           </div>
         </div>
         <button onClick={onCancel} aria-label="Cancel mapping"

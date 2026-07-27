@@ -146,7 +146,15 @@ export function parseTextInput(text: string): ParsedItem[] {
 
 /* ========================== XLSX ========================== */
 const ARTICLE_CODE_RE = /^[A-Z][A-Z0-9\-_.]{2,}$/i;
-const ARTICLE_KW = ['article', 'item', 'product', 'code', 'sku', 'part no', 'ref', 'material'];
+// Article-code headers are scored rather than last-match-wins: several of our own
+// export columns ("PLC (Product Line Code)", "Product Name") contain article
+// keywords and would otherwise be mistaken for the code column on re-import.
+const ARTICLE_STRONG  = ['article code', 'article', 'item code', 'item no', 'item', 'sku', 'part no', 'material'];
+const ARTICLE_WEAK    = ['product', 'code', 'ref'];
+const ARTICLE_EXCLUDE = [
+  'plc', 'product line', 'line code', 'product name', 'description',
+  'price', 'total', 'discount', 'currency', 'lead time', 'weight', 'volume', 'country',
+];
 const QTY_KW    = ['qty', 'quantity', 'amount', 'units', 'count'];
 const FEAT_KW   = ['feature', 'config', 'option', 'spec', 'string'];
 
@@ -185,6 +193,40 @@ export function parseXLSX(arrayBuffer: ArrayBuffer): ParseResult {
   return { items: [], needsMapping: true, sheetData };
 }
 
+/* ========================== CSV ========================== */
+// Excel writes CSVs with a semicolon separator in most European locales, so
+// sniff the delimiter from the header line rather than assuming a comma.
+function detectDelimiter(text: string): string {
+  const firstLine = text.split(/\r?\n/, 1)[0] ?? '';
+  const semis  = (firstLine.match(/;/g) || []).length;
+  const commas = (firstLine.match(/,/g) || []).length;
+  const tabs   = (firstLine.match(/\t/g) || []).length;
+  if (tabs > semis && tabs > commas) return '\t';
+  return semis > commas ? ';' : ',';
+}
+
+export function parseCSV(text: string): ParseResult {
+  if (!text.trim()) return { items: [], error: 'The CSV file is empty.' };
+
+  let workbook: XLSX.WorkBook;
+  try { workbook = XLSX.read(text, { type: 'string', FS: detectDelimiter(text) }); }
+  catch (_e: unknown) { return { items: [], error: 'Could not read the CSV file. Ensure it is a valid .csv file.' }; }
+
+  const sheetName = workbook.SheetNames[0];
+  if (!sheetName) return { items: [], error: 'No data found in the CSV file.' };
+
+  const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, defval: '' }) as unknown[][];
+  if (!rows.length) return { items: [], error: 'No data found in the CSV file.' };
+
+  // Route through the same column-mapping flow as Excel, so auto-detection and
+  // the manual mapper are shared rather than duplicated.
+  return { items: [], needsMapping: true, sheetData: [{ name: 'CSV', rows }] };
+}
+
+// Exported super products write their components as indented "└ CODE" rows.
+// Those are re-fetched from PDM on import, so they must never be read back in.
+const SUPER_COMPONENT_RE = /^\s*[└├]/;
+
 export function applyColumnMapping(
   sheetData: SheetData[],
   sheetIndex: number,
@@ -195,6 +237,7 @@ export function applyColumnMapping(
   const items: ParsedItem[] = [];
   for (const row of rows) {
     const rowArr = row as unknown[];
+    if (rowArr.some(c => SUPER_COMPONENT_RE.test(String(c ?? '')))) continue;
     let code = '', feat = '', qty = 1;
     for (const [colStr, role] of Object.entries(columnRoles)) {
       const idx = parseInt(colStr, 10);
@@ -222,13 +265,17 @@ export function autoDetectColumns(
 
   for (let hRow = 0; hRow <= Math.min(2, rows.length - 2); hRow++) {
     const header = rows[hRow] as unknown[];
-    let articleCol = -1, featCol = -1, qtyCol = -1;
+    let articleCol = -1, featCol = -1, qtyCol = -1, articleScore = 0;
     for (let c = 0; c < header.length; c++) {
       const h = String(header[c] ?? '').toLowerCase().trim();
       if (!h) continue;
-      if (ARTICLE_KW.some(kw => h.includes(kw))) articleCol = c;
-      else if (FEAT_KW.some(kw => h.includes(kw))) featCol = c;
-      else if (QTY_KW.some(kw => h.includes(kw))) qtyCol = c;
+      if (QTY_KW.some(kw => h.includes(kw)))  { if (qtyCol  === -1) qtyCol  = c; continue; }
+      if (FEAT_KW.some(kw => h.includes(kw))) { if (featCol === -1) featCol = c; continue; }
+      if (ARTICLE_EXCLUDE.some(kw => h.includes(kw))) continue;
+      const score = ARTICLE_STRONG.some(kw => h.includes(kw)) ? 3
+                  : ARTICLE_WEAK.some(kw => h.includes(kw))   ? 1
+                  : 0;
+      if (score > articleScore) { articleScore = score; articleCol = c; }
     }
     if (articleCol === -1) {
       for (let c = 0; c < Math.min(header.length, 8); c++) {
