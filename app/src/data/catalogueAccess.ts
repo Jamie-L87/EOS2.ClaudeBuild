@@ -117,6 +117,10 @@ export function toDealerCode(customer: CustomerRecord): string {
   return `${customer.site}-${customer.dealerNum}-${customer.currency}`;
 }
 
+export function uid(prefix: string): string {
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
 export function wildcardIncludes(text: string, query: string): boolean {
   const clean = query.trim().toLowerCase();
   if (!clean) return true;
