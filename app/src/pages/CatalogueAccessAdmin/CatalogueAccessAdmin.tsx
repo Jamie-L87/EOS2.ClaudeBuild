@@ -5,6 +5,7 @@ import NavDrawer from '../../components/NavDrawer';
 import {
   IconCheck,
   IconClose,
+  IconCopy,
   IconEdit,
   IconPlus,
   IconTrash,
@@ -13,6 +14,7 @@ import { color, radius, size, t } from '../../tokens';
 import {
   type CatalogueGroup,
   type CustomerGroup,
+  uid,
   wildcardIncludes,
 } from '../../data/catalogueAccess';
 import {
@@ -176,6 +178,20 @@ export default function CatalogueAccessAdminPage() {
 
   const openEditCustomerGroup = (group: CustomerGroup) => {
     navigate(`/admin/catalogue-access/customer-groups/${group.id}`, { state: { section: 'customer-groups' } });
+  };
+
+  const copyCatalogueGroup = (group: CatalogueGroup) => {
+    const existingNames = new Set(state.catalogueGroups.map(g => g.name));
+    let copyName = `${group.name} (Copy)`;
+    let n = 2;
+    while (existingNames.has(copyName)) {
+      copyName = `${group.name} (Copy ${n})`;
+      n += 1;
+    }
+
+    const newGroup: CatalogueGroup = { id: uid('cg'), name: copyName, catalogueIds: [...group.catalogueIds] };
+    saveState({ ...state, catalogueGroups: [...state.catalogueGroups, newGroup] });
+    setToast(`Copied "${group.name}" to "${copyName}".`);
   };
 
   const deleteCatalogueGroup = (id: string) => {
@@ -359,6 +375,7 @@ export default function CatalogueAccessAdminPage() {
                           <td style={{ ...sBody, padding: '12px', borderBottom: '1px solid var(--line)' }}>{group.catalogueIds.length}</td>
                           <td style={{ padding: '12px', borderBottom: '1px solid var(--line)', display: 'flex', gap: 8 }}>
                             <IconActionButton label="Edit" onClick={() => openEditCatalogueGroup(group)} icon={<IconEdit size={14} />} />
+                            <IconActionButton label="Copy" onClick={() => copyCatalogueGroup(group)} icon={<IconCopy size={14} />} />
                             <IconActionButton label="Delete" onClick={() => setConfirmDelete({ kind: 'catalogue', id: group.id, name: group.name })} icon={<IconTrash size={14} />} />
                           </td>
                         </tr>
