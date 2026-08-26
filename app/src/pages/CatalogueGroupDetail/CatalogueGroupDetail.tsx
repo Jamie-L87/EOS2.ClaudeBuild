@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
 import { size, t } from '../../tokens';
-import { CATALOGUES, uid, wildcardIncludes } from '../../data/catalogueAccess';
+import { CATALOGUES, isCatalogueLive, uid, wildcardIncludes } from '../../data/catalogueAccess';
 import { loadCatalogueAccessState, saveCatalogueAccessState } from '../../services/catalogueAccessStore';
 import {
   Chip,
@@ -37,7 +37,7 @@ function RowList({
   actionLabel,
   onAction,
 }: {
-  rows: Array<{ id: number; name: string }>;
+  rows: Array<{ id: number; name: string; goLiveDate?: string }>;
   emptyLabel: string;
   actionLabel: string;
   onAction: (id: number) => void;
@@ -46,7 +46,14 @@ function RowList({
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
       {rows.map(row => (
         <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
-          <span style={{ ...sBody, color: 'var(--ink)' }}>{row.id} - {row.name}</span>
+          <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            {row.id} - {row.name}
+            {!isCatalogueLive(row) && (
+              <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)', background: 'var(--amber-soft)', border: '1px solid var(--amber)', borderRadius: 999, padding: '2px 8px' }}>
+                Live from {row.goLiveDate}
+              </span>
+            )}
+          </span>
           <button
             className="eos-stroke-btn"
             onClick={() => onAction(row.id)}

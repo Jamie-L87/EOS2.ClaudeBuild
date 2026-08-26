@@ -14,7 +14,7 @@ function defaultState(): CatalogueAccessState {
   return {
     catalogueGroups: [
       { id: 'cg-apmea-seating', name: 'APMEA Seating', catalogueIds: [4, 14, 31, 32, 33, 34] },
-      { id: 'cg-europe-seating', name: 'Europe Seating', catalogueIds: [21, 25, 26, 27, 28] },
+      { id: 'cg-europe-seating', name: 'Europe Seating', catalogueIds: [21, 25, 26, 27, 28, 51] },
       { id: 'cg-knoll-europe', name: 'Knoll Europe', catalogueIds: [19, 20, 24, 29, 44, 45] },
     ],
     customerGroups: [

@@ -18,6 +18,7 @@ import {
   type CatalogueGroup,
   type CustomerGroup,
   customerSearchText,
+  isCatalogueLive,
   toDealerCode,
   uid,
   wildcardIncludes,
@@ -172,6 +173,7 @@ export default function CatalogueAccessAdminPage() {
   const [dealerSearch, setDealerSearch] = useState('');
   const [dealerPage, setDealerPage] = useState(1);
   const [selectedDealerId, setSelectedDealerId] = useState<string>('');
+  const [dealerAsOfDate, setDealerAsOfDate] = useState<string>(() => new Date().toISOString().slice(0, 10));
 
   const dealerMatches = useMemo(() => {
     return CUSTOMERS.filter(customer => {
@@ -218,13 +220,26 @@ export default function CatalogueAccessAdminPage() {
     return new Set(entry?.catalogueIds ?? []);
   }, [state.dealerCatalogueExclusions, selectedDealerId]);
 
+  const dealerAsOf = useMemo(() => {
+    const parsed = new Date(dealerAsOfDate);
+    return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
+  }, [dealerAsOfDate]);
+
   const dealerCatalogues = useMemo(() => {
-    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && !dealerExcludedCatalogueIds.has(c.id));
-  }, [dealerCatalogueIdsFromGroups, dealerExcludedCatalogueIds]);
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id)
+      && isCatalogueLive(c, dealerAsOf)
+      && !dealerExcludedCatalogueIds.has(c.id));
+  }, [dealerCatalogueIdsFromGroups, dealerAsOf, dealerExcludedCatalogueIds]);
 
   const dealerExcludedCatalogues = useMemo(() => {
-    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && dealerExcludedCatalogueIds.has(c.id));
-  }, [dealerCatalogueIdsFromGroups, dealerExcludedCatalogueIds]);
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id)
+      && isCatalogueLive(c, dealerAsOf)
+      && dealerExcludedCatalogueIds.has(c.id));
+  }, [dealerCatalogueIdsFromGroups, dealerAsOf, dealerExcludedCatalogueIds]);
+
+  const dealerPendingCatalogues = useMemo(() => {
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && !isCatalogueLive(c, dealerAsOf));
+  }, [dealerCatalogueIdsFromGroups, dealerAsOf]);
 
   const selectDealer = (dealerId: string) => {
     setSelectedDealerId(dealerId);
@@ -678,8 +693,21 @@ export default function CatalogueAccessAdminPage() {
                   ) : (
                     <>
                       <div style={{ marginBottom: 20 }}>
-                        <h3 style={{ ...sLargeB, margin: 0, color: 'var(--ink)' }}>{selectedDealer.dealerName}</h3>
-                        <p style={{ ...sBody, margin: '6px 0 0', color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)} · {selectedDealer.customerType}</p>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+                          <div>
+                            <h3 style={{ ...sLargeB, margin: 0, color: 'var(--ink)' }}>{selectedDealer.dealerName}</h3>
+                            <p style={{ ...sBody, margin: '6px 0 0', color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)} · {selectedDealer.customerType}</p>
+                          </div>
+                          <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            <span style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Preview As Of</span>
+                            <input
+                              type="date"
+                              value={dealerAsOfDate}
+                              onChange={e => setDealerAsOfDate(e.target.value)}
+                              style={{ ...sBody, height: 38, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 10px', fontFamily: 'inherit' }}
+                            />
+                          </label>
+                        </div>
                         <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           {dealerCustomerGroups.length === 0 ? (
                             <Chip label="Not in any customer group" />
@@ -736,6 +764,22 @@ export default function CatalogueAccessAdminPage() {
                                   <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
                                     <span style={{ ...sBody, color: 'var(--ink-2)' }}>{c.id} - {c.name}</span>
                                     <IconActionButton label="Restore" onClick={() => restoreDealerCatalogue(c.id)} icon={<IconPlus size={14} />} />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {dealerPendingCatalogues.length > 0 && (
+                            <div style={{ marginTop: 16 }}>
+                              <div style={{ ...sBodyB, color: 'var(--amber)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                                Pending Go-Live (not yet visible to dealer) · {dealerPendingCatalogues.length}
+                              </div>
+                              <div style={{ border: '1px solid var(--amber)', background: 'var(--amber-soft)', borderRadius: 'var(--radius)', maxHeight: 200, overflow: 'auto' }}>
+                                {dealerPendingCatalogues.map(c => (
+                                  <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+                                    <span style={{ ...sBody, color: 'var(--ink)' }}>{c.id} - {c.name}</span>
+                                    <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)' }}>Live from {c.goLiveDate}</span>
                                   </div>
                                 ))}
                               </div>
