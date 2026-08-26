@@ -32,10 +32,16 @@ export interface CustomerCatalogueGroupAssignment {
   catalogueGroupIds: string[];
 }
 
+export interface DealerCatalogueExclusion {
+  dealerId: string;
+  catalogueIds: number[];
+}
+
 export interface CatalogueAccessState {
   catalogueGroups: CatalogueGroup[];
   customerGroups: CustomerGroup[];
   assignments: CustomerCatalogueGroupAssignment[];
+  dealerCatalogueExclusions: DealerCatalogueExclusion[];
 }
 
 export const CATALOGUES: CatalogueRecord[] = [
