@@ -4,8 +4,6 @@ export interface CatalogueRecord {
   id: number;
   name: string;
   leadTimeDays: number;
-  /** ISO date (YYYY-MM-DD) the catalogue becomes live. Undefined = already live. */
-  goLiveDate?: string;
 }
 
 export interface CustomerRecord {
@@ -39,17 +37,18 @@ export interface DealerCatalogueExclusion {
   catalogueIds: number[];
 }
 
+export interface CatalogueGoLiveDate {
+  catalogueId: number;
+  /** ISO date (YYYY-MM-DD) the catalogue becomes live and visible to dealers. */
+  goLiveDate: string;
+}
+
 export interface CatalogueAccessState {
   catalogueGroups: CatalogueGroup[];
   customerGroups: CustomerGroup[];
   assignments: CustomerCatalogueGroupAssignment[];
   dealerCatalogueExclusions: DealerCatalogueExclusion[];
-}
-
-function daysFromToday(days: number): string {
-  const d = new Date();
-  d.setDate(d.getDate() + days);
-  return d.toISOString().slice(0, 10);
+  catalogueGoLiveDates: CatalogueGoLiveDate[];
 }
 
 export const CATALOGUES: CatalogueRecord[] = [
@@ -91,12 +90,12 @@ export const CATALOGUES: CatalogueRecord[] = [
   { id: 48, name: 'Acoustic Solutions', leadTimeDays: 11 },
   { id: 49, name: 'Power and Data', leadTimeDays: 9 },
   { id: 50, name: 'Special Order Program', leadTimeDays: 35 },
-  { id: 51, name: 'Nordic Task Seating', leadTimeDays: 12, goLiveDate: daysFromToday(30) },
+  { id: 51, name: 'Nordic Task Seating', leadTimeDays: 12 },
 ];
 
-export function isCatalogueLive(catalogue: { goLiveDate?: string }, asOf: Date = new Date()): boolean {
-  if (!catalogue.goLiveDate) return true;
-  return new Date(catalogue.goLiveDate) <= asOf;
+export function isCatalogueLive(goLiveDate: string | undefined, asOf: Date = new Date()): boolean {
+  if (!goLiveDate) return true;
+  return new Date(goLiveDate) <= asOf;
 }
 
 const SITES: Array<{ site: string; currency: string }> = [

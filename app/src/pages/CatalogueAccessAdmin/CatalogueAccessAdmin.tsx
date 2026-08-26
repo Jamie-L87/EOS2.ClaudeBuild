@@ -225,21 +225,25 @@ export default function CatalogueAccessAdminPage() {
     return Number.isNaN(parsed.getTime()) ? new Date() : parsed;
   }, [dealerAsOfDate]);
 
+  const catalogueGoLiveById = useMemo(() => {
+    return new Map(state.catalogueGoLiveDates.map(g => [g.catalogueId, g.goLiveDate]));
+  }, [state.catalogueGoLiveDates]);
+
   const dealerCatalogues = useMemo(() => {
     return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id)
-      && isCatalogueLive(c, dealerAsOf)
+      && isCatalogueLive(catalogueGoLiveById.get(c.id), dealerAsOf)
       && !dealerExcludedCatalogueIds.has(c.id));
-  }, [dealerCatalogueIdsFromGroups, dealerAsOf, dealerExcludedCatalogueIds]);
+  }, [dealerCatalogueIdsFromGroups, catalogueGoLiveById, dealerAsOf, dealerExcludedCatalogueIds]);
 
   const dealerExcludedCatalogues = useMemo(() => {
     return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id)
-      && isCatalogueLive(c, dealerAsOf)
+      && isCatalogueLive(catalogueGoLiveById.get(c.id), dealerAsOf)
       && dealerExcludedCatalogueIds.has(c.id));
-  }, [dealerCatalogueIdsFromGroups, dealerAsOf, dealerExcludedCatalogueIds]);
+  }, [dealerCatalogueIdsFromGroups, catalogueGoLiveById, dealerAsOf, dealerExcludedCatalogueIds]);
 
   const dealerPendingCatalogues = useMemo(() => {
-    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && !isCatalogueLive(c, dealerAsOf));
-  }, [dealerCatalogueIdsFromGroups, dealerAsOf]);
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && !isCatalogueLive(catalogueGoLiveById.get(c.id), dealerAsOf));
+  }, [dealerCatalogueIdsFromGroups, catalogueGoLiveById, dealerAsOf]);
 
   const selectDealer = (dealerId: string) => {
     setSelectedDealerId(dealerId);
@@ -779,7 +783,7 @@ export default function CatalogueAccessAdminPage() {
                                 {dealerPendingCatalogues.map(c => (
                                   <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
                                     <span style={{ ...sBody, color: 'var(--ink)' }}>{c.id} - {c.name}</span>
-                                    <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)' }}>Live from {c.goLiveDate}</span>
+                                    <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)' }}>Live from {catalogueGoLiveById.get(c.id)}</span>
                                   </div>
                                 ))}
                               </div>
