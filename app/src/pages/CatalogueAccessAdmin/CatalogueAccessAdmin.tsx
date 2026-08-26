@@ -7,13 +7,18 @@ import {
   IconClose,
   IconCopy,
   IconEdit,
+  IconEye,
   IconPlus,
   IconTrash,
 } from '../../components/Icons';
 import { color, radius, size, t } from '../../tokens';
 import {
+  CATALOGUES,
+  CUSTOMERS,
   type CatalogueGroup,
   type CustomerGroup,
+  customerSearchText,
+  toDealerCode,
   uid,
   wildcardIncludes,
 } from '../../data/catalogueAccess';
@@ -27,13 +32,16 @@ import {
   IconActionButton,
   PrimaryButton,
   SearchInput,
+  StrokeButton,
 } from './shared';
 
 const sBody = { ...t.body };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
 
-type Section = 'catalogue-groups' | 'customer-groups' | 'assignment';
+type Section = 'catalogue-groups' | 'customer-groups' | 'assignment' | 'dealer-view';
+
+const DEALER_PAGE_SIZE = 20;
 
 function Footer() {
   return (
@@ -158,6 +166,57 @@ export default function CatalogueAccessAdminPage() {
   const filteredCatalogueGroupRowsForAssignment = useMemo(() => {
     return state.catalogueGroups.filter(group => wildcardIncludes(group.name, assignmentGroupQuery));
   }, [state.catalogueGroups, assignmentGroupQuery]);
+
+  const [dealerSiteQuery, setDealerSiteQuery] = useState('');
+  const [dealerTypeQuery, setDealerTypeQuery] = useState('');
+  const [dealerSearch, setDealerSearch] = useState('');
+  const [dealerPage, setDealerPage] = useState(1);
+  const [selectedDealerId, setSelectedDealerId] = useState<string>('');
+
+  const dealerMatches = useMemo(() => {
+    return CUSTOMERS.filter(customer => {
+      const bySite = wildcardIncludes(customer.site, dealerSiteQuery);
+      const byType = wildcardIncludes(customer.customerType, dealerTypeQuery);
+      const byText = wildcardIncludes(customerSearchText(customer), dealerSearch);
+      return bySite && byType && byText;
+    });
+  }, [dealerSiteQuery, dealerTypeQuery, dealerSearch]);
+
+  const dealerTotalPages = Math.max(1, Math.ceil(dealerMatches.length / DEALER_PAGE_SIZE));
+  const dealerCurrentPage = Math.min(dealerPage, dealerTotalPages);
+  const dealerPageRows = dealerMatches.slice(
+    (dealerCurrentPage - 1) * DEALER_PAGE_SIZE,
+    (dealerCurrentPage - 1) * DEALER_PAGE_SIZE + DEALER_PAGE_SIZE,
+  );
+
+  const selectedDealer = useMemo(
+    () => CUSTOMERS.find(c => c.id === selectedDealerId) ?? null,
+    [selectedDealerId],
+  );
+
+  const dealerCustomerGroups = useMemo(() => {
+    if (!selectedDealerId) return [];
+    return state.customerGroups.filter(group => group.customerIds.includes(selectedDealerId));
+  }, [state.customerGroups, selectedDealerId]);
+
+  const dealerCatalogueGroups = useMemo(() => {
+    const customerGroupIds = new Set(dealerCustomerGroups.map(g => g.id));
+    const catalogueGroupIds = new Set(
+      state.assignments
+        .filter(a => customerGroupIds.has(a.customerGroupId))
+        .flatMap(a => a.catalogueGroupIds),
+    );
+    return state.catalogueGroups.filter(group => catalogueGroupIds.has(group.id));
+  }, [dealerCustomerGroups, state.assignments, state.catalogueGroups]);
+
+  const dealerCatalogues = useMemo(() => {
+    const catalogueIds = new Set(dealerCatalogueGroups.flatMap(group => group.catalogueIds));
+    return CATALOGUES.filter(c => catalogueIds.has(c.id));
+  }, [dealerCatalogueGroups]);
+
+  const selectDealer = (dealerId: string) => {
+    setSelectedDealerId(dealerId);
+  };
 
   const saveState = (next: typeof state) => {
     setState(next);
@@ -317,6 +376,7 @@ export default function CatalogueAccessAdminPage() {
                 { id: 'catalogue-groups', label: 'Catalogue Groups' },
                 { id: 'customer-groups', label: 'Customer Groups' },
                 { id: 'assignment', label: 'Assignments' },
+                { id: 'dealer-view', label: 'Dealer View' },
               ].map((item, idx, arr) => (
                 <button
                   key={item.id}
@@ -522,6 +582,111 @@ export default function CatalogueAccessAdminPage() {
                     <div style={{ marginTop: 12 }}>
                       <Chip label={`Currently stored assignments: ${selectedAssignment.catalogueGroupIds.length}`} />
                     </div>
+                  )}
+                </TableCard>
+              )}
+
+              {section === 'dealer-view' && (
+                <TableCard
+                  title="Dealer View"
+                  toolbar={selectedDealer ? (
+                    <StrokeButton onClick={() => setSelectedDealerId('')}>Change Dealer</StrokeButton>
+                  ) : undefined}
+                >
+                  {!selectedDealer ? (
+                    <>
+                      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 16 }}>
+                        <SearchInput value={dealerSiteQuery} onChange={value => { setDealerPage(1); setDealerSiteQuery(value); }} placeholder="Search Site (* wildcard)" />
+                        <SearchInput value={dealerTypeQuery} onChange={value => { setDealerPage(1); setDealerTypeQuery(value); }} placeholder="Search dealer type" />
+                        <SearchInput value={dealerSearch} onChange={value => { setDealerPage(1); setDealerSearch(value); }} placeholder="Search dealer name or code..." />
+                      </div>
+
+                      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                        <thead>
+                          <tr>
+                            <th style={{ ...sBodyB, textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--line)' }}>Dealer Code</th>
+                            <th style={{ ...sBodyB, textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--line)' }}>Dealer Name</th>
+                            <th style={{ ...sBodyB, textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--line)' }}>Type</th>
+                            <th style={{ ...sBodyB, textAlign: 'left', padding: '10px 12px', borderBottom: '1px solid var(--line)' }}>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {dealerPageRows.map(c => (
+                            <tr className="eos-row" key={c.id}>
+                              <td style={{ ...sBodyB, padding: '12px', borderBottom: '1px solid var(--line)' }}>{toDealerCode(c)}</td>
+                              <td style={{ ...sBody, padding: '12px', borderBottom: '1px solid var(--line)' }}>{c.dealerName}</td>
+                              <td style={{ ...sBody, padding: '12px', borderBottom: '1px solid var(--line)', color: 'var(--ink-2)' }}>{c.customerType}</td>
+                              <td style={{ padding: '12px', borderBottom: '1px solid var(--line)' }}>
+                                <IconActionButton label="View" onClick={() => selectDealer(c.id)} icon={<IconEye size={14} />} />
+                              </td>
+                            </tr>
+                          ))}
+                          {dealerPageRows.length === 0 && (
+                            <tr>
+                              <td colSpan={4} style={{ ...sBody, color: 'var(--ink-2)', padding: '18px 12px' }}>No dealers match your search.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+
+                      <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+                        <span style={{ ...sBody, color: 'var(--ink-2)' }}>{dealerMatches.length} dealers match</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <StrokeButton onClick={() => setDealerPage(p => Math.max(1, p - 1))}>Previous</StrokeButton>
+                          <span style={{ ...sBody, color: 'var(--ink)' }}>Page {dealerCurrentPage} of {dealerTotalPages}</span>
+                          <StrokeButton onClick={() => setDealerPage(p => Math.min(dealerTotalPages, p + 1))}>Next</StrokeButton>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ marginBottom: 20 }}>
+                        <h3 style={{ ...sLargeB, margin: 0, color: 'var(--ink)' }}>{selectedDealer.dealerName}</h3>
+                        <p style={{ ...sBody, margin: '6px 0 0', color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)} · {selectedDealer.customerType}</p>
+                        <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                          {dealerCustomerGroups.length === 0 ? (
+                            <Chip label="Not in any customer group" />
+                          ) : (
+                            dealerCustomerGroups.map(g => <Chip key={g.id} label={`Customer Group: ${g.name}`} />)
+                          )}
+                        </div>
+                      </div>
+
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                        <div>
+                          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                            Assigned Catalogue Groups · {dealerCatalogueGroups.length}
+                          </div>
+                          <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 420, overflow: 'auto' }}>
+                            {dealerCatalogueGroups.map(group => (
+                              <div key={group.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+                                <span style={{ ...sBody, color: 'var(--ink)' }}>{group.name}</span>
+                                <span style={{ ...sBody, color: 'var(--ink-2)' }}>{group.catalogueIds.length} catalogues</span>
+                              </div>
+                            ))}
+                            {dealerCatalogueGroups.length === 0 && (
+                              <div style={{ ...sBody, color: 'var(--ink-2)', padding: 14 }}>No catalogue groups assigned to this dealer.</div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                            Resolved Catalogues (all groups combined) · {dealerCatalogues.length}
+                          </div>
+                          <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 420, overflow: 'auto' }}>
+                            {dealerCatalogues.map(c => (
+                              <div key={c.id} style={{ padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+                                <span style={{ ...sBody, color: 'var(--ink)' }}>{c.id} - {c.name}</span>
+                              </div>
+                            ))}
+                            {dealerCatalogues.length === 0 && (
+                              <div style={{ ...sBody, color: 'var(--ink-2)', padding: 14 }}>No catalogues assigned to this dealer.</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </TableCard>
               )}
