@@ -36,43 +36,60 @@ function RowList({
   emptyLabel,
   actionLabel,
   onAction,
+  onSetGoLiveDate,
 }: {
   rows: Array<{ id: number; name: string; goLiveDate?: string }>;
   emptyLabel: string;
   actionLabel: string;
   onAction: (id: number) => void;
+  onSetGoLiveDate: (id: number, date: string | null) => void;
 }) {
   return (
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
-      {rows.map(row => (
-        <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
-          <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-            {row.id} - {row.name}
-            {!isCatalogueLive(row) && (
-              <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)', background: 'var(--amber-soft)', border: '1px solid var(--amber)', borderRadius: 999, padding: '2px 8px' }}>
-                Live from {row.goLiveDate}
-              </span>
-            )}
-          </span>
-          <button
-            className="eos-stroke-btn"
-            onClick={() => onAction(row.id)}
-            style={{
-              ...sBodyB,
-              height: 30,
-              border: '1px solid var(--ink)',
-              borderRadius: 'var(--radius)',
-              background: 'var(--bg)',
-              color: 'var(--ink)',
-              padding: '0 8px',
-              cursor: 'pointer',
-              fontFamily: 'inherit',
-            }}
-          >
-            {actionLabel}
-          </button>
-        </div>
-      ))}
+      {rows.map(row => {
+        const pending = !isCatalogueLive(row.goLiveDate);
+        return (
+          <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+            <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+              {row.id} - {row.name}
+              {pending && (
+                <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)', background: 'var(--amber-soft)', border: '1px solid var(--amber)', borderRadius: 999, padding: '2px 8px', whiteSpace: 'nowrap' }}>
+                  Live from {row.goLiveDate}
+                </span>
+              )}
+            </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4 }}>Go-Live</span>
+                <input
+                  type="date"
+                  value={row.goLiveDate ?? ''}
+                  onChange={e => onSetGoLiveDate(row.id, e.target.value || null)}
+                  style={{ ...sBody, height: 30, border: '1px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 6px', fontFamily: 'inherit', fontSize: 12 }}
+                />
+              </label>
+              <button
+                className="eos-stroke-btn"
+                onClick={() => onAction(row.id)}
+                style={{
+                  ...sBodyB,
+                  height: 30,
+                  border: '1px solid var(--ink)',
+                  borderRadius: 'var(--radius)',
+                  background: 'var(--bg)',
+                  color: 'var(--ink)',
+                  padding: '0 8px',
+                  cursor: 'pointer',
+                  fontFamily: 'inherit',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {actionLabel}
+              </button>
+            </div>
+          </div>
+        );
+      })}
       {rows.length === 0 && <div style={{ ...sBody, color: 'var(--ink-2)', padding: 14 }}>{emptyLabel}</div>}
     </div>
   );
@@ -94,14 +111,19 @@ export default function CatalogueGroupDetailPage() {
   const [name, setName] = useState(existing?.name ?? '');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Set<number>>(new Set(existing?.catalogueIds ?? []));
+  const [goLiveDates, setGoLiveDates] = useState<Map<number, string>>(
+    () => new Map(initialState.catalogueGoLiveDates.map(g => [g.catalogueId, g.goLiveDate])),
+  );
   const [error, setError] = useState<string | null>(null);
 
   const role = sessionStorage.getItem('eos-user-role') ?? 'Admin';
   const isAdmin = role === 'Admin';
 
+  const withGoLiveDate = (c: (typeof CATALOGUES)[number]) => ({ ...c, goLiveDate: goLiveDates.get(c.id) });
+
   const filtered = CATALOGUES.filter(c => wildcardIncludes(`${c.id} ${c.name}`, search));
-  const selectedRows = CATALOGUES.filter(c => selected.has(c.id));
-  const availableRows = filtered.filter(c => !selected.has(c.id));
+  const selectedRows = CATALOGUES.filter(c => selected.has(c.id)).map(withGoLiveDate);
+  const availableRows = filtered.filter(c => !selected.has(c.id)).map(withGoLiveDate);
 
   const addCatalogue = (cid: number) => setSelected(prev => new Set(prev).add(cid));
   const removeCatalogue = (cid: number) => setSelected(prev => {
@@ -109,6 +131,20 @@ export default function CatalogueGroupDetailPage() {
     next.delete(cid);
     return next;
   });
+
+  const setCatalogueGoLive = (catalogueId: number, date: string | null) => {
+    setGoLiveDates(prev => {
+      const next = new Map(prev);
+      if (date) next.set(catalogueId, date);
+      else next.delete(catalogueId);
+
+      const current = loadCatalogueAccessState();
+      const catalogueGoLiveDates = Array.from(next.entries()).map(([id, goLiveDate]) => ({ catalogueId: id, goLiveDate }));
+      saveCatalogueAccessState({ ...current, catalogueGoLiveDates });
+
+      return next;
+    });
+  };
 
   const backToList = () => navigate('/admin/catalogue-access', { state: { section: 'catalogue-groups' } });
 
@@ -203,13 +239,13 @@ export default function CatalogueGroupDetailPage() {
                     <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
                       Current Catalogues In Group
                     </div>
-                    <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} />
+                    <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
                   </div>
                   <div>
                     <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
                       Available Catalogues To Add
                     </div>
-                    <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} />
+                    <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
                   </div>
                 </div>
               </section>

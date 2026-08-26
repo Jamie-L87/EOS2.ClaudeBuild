@@ -6,6 +6,12 @@ import {
 
 const STORAGE_KEY = 'eos-catalogue-access-admin:v1';
 
+function daysFromToday(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 function defaultState(): CatalogueAccessState {
   const ukDealers = CUSTOMERS.filter(c => c.site === 'UK').slice(0, 20).map(c => c.id);
   const apacDealers = CUSTOMERS.filter(c => ['JP', 'AU', 'IN'].includes(c.site)).slice(0, 15).map(c => c.id);
@@ -27,6 +33,9 @@ function defaultState(): CatalogueAccessState {
       { customerGroupId: 'cust-apac-dealers', catalogueGroupIds: ['cg-apmea-seating'] },
     ],
     dealerCatalogueExclusions: [],
+    catalogueGoLiveDates: [
+      { catalogueId: 51, goLiveDate: daysFromToday(30) },
+    ],
   };
 }
 
@@ -58,6 +67,13 @@ function sanitize(state: CatalogueAccessState): CatalogueAccessState {
         catalogueIds: Array.from(new Set(e.catalogueIds.filter(id => validCatalogueIds.has(id)))),
       }))
       .filter(e => e.catalogueIds.length > 0),
+    catalogueGoLiveDates: Array.from(
+      new Map(
+        (state.catalogueGoLiveDates ?? [])
+          .filter(g => validCatalogueIds.has(g.catalogueId))
+          .map(g => [g.catalogueId, g] as const),
+      ).values(),
+    ),
   };
 }
 
