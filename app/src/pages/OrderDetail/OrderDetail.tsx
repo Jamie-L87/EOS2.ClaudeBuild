@@ -560,7 +560,7 @@ function ShippedInput({ value, max, onChange }: { value: number; max: number; on
 /* ------------------------------------------------------------------ */
 /*  SUPER CHILDREN EXPANSION                                            */
 /* ------------------------------------------------------------------ */
-const sCols = 'minmax(140px, 1fr) 100px minmax(180px, 1.6fr) 110px 90px 90px 110px';
+const sCols = 'minmax(140px, 1fr) 130px minmax(180px, 1.6fr) 140px 90px 120px 100px 100px';
 
 function SuperChildren({ parent, currency, onUpdateChild }: {
   parent: OrderLine; currency: string; onUpdateChild: (childId: string, patch: Partial<SuperChild>) => void;
@@ -574,8 +574,8 @@ function SuperChildren({ parent, currency, onUpdateChild }: {
       </div>
       <div style={{ margin: '0 16px 16px 60px', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: sCols, background: 'var(--bg-soft)', minHeight: 38, alignItems: 'stretch' }}>
-          {['Component Item', 'Feature String', 'Short Description', 'Product Code', 'Quantity', 'Qty Shipped', 'Total Price'].map(h => (
-            <div key={h} style={{ padding: '0 14px', display: 'flex', alignItems: 'center', color: 'var(--ink-2)', ...sBodyB, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, whiteSpace: 'nowrap' }}>{h}</div>
+          {['Component Item', 'Feature String', 'Short Description', 'Product Code', 'Quantity', 'Qty Shipped', 'Unit Price', 'Total Price'].map(h => (
+            <div key={h} style={{ padding: '0 14px', display: 'flex', alignItems: 'center', color: 'var(--ink-2)', ...sBodyB, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h}</div>
           ))}
         </div>
         {children.map((c) => {
@@ -600,6 +600,9 @@ function SuperChildren({ parent, currency, onUpdateChild }: {
               </div>
               <div style={{ padding: '8px 14px' }}>
                 <ShippedInput value={c.qtyShipped ?? 0} max={effQty} onChange={(v) => onUpdateChild(c.id!, { qtyShipped: v })} />
+              </div>
+              <div style={{ padding: '8px 14px', textAlign: 'right' }}>
+                <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{fmt(c.listPrice || 0, ccy)}</span>
               </div>
               <div style={{ padding: '8px 14px', textAlign: 'right' }}>
                 <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{fmt(total, ccy)}</span>
