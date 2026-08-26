@@ -13,6 +13,8 @@ export interface CustomerRecord {
   currency: string;
   dealerName: string;
   customerType: 'Dealer' | 'Retailer' | 'Shop';
+  /** ISO 3166-1 alpha-2 country the dealer is registered in. Can differ from the site they operate/price on. */
+  country: string;
 }
 
 export interface CatalogueGroup {
@@ -113,6 +115,20 @@ const SITES: Array<{ site: string; currency: string }> = [
 
 const CUSTOMER_TYPES: CustomerRecord['customerType'][] = ['Dealer', 'Retailer', 'Shop'];
 
+// Country the dealer is registered in - usually matches the site's home country, but not always
+// (e.g. a dealer registered in a neighbouring country still operates/prices on this site).
+const SITE_HOME_COUNTRY: Record<string, string> = {
+  UK: 'GB', NL: 'NL', FR: 'FR', DE: 'DE', ES: 'ES', IT: 'IT', JP: 'JP', AU: 'AU', IN: 'IN', AE: 'AE',
+};
+const SITE_NEIGHBOUR_COUNTRY: Record<string, string> = {
+  UK: 'IE', NL: 'BE', FR: 'BE', DE: 'AT', ES: 'PT', IT: 'CH', JP: 'KR', AU: 'NZ', IN: 'BD', AE: 'SA',
+};
+
+function seededCountry(site: string, i: number): string {
+  if (i % 7 === 0) return SITE_NEIGHBOUR_COUNTRY[site] ?? SITE_HOME_COUNTRY[site] ?? site;
+  return SITE_HOME_COUNTRY[site] ?? site;
+}
+
 const NAME_PARTS = [
   'Tsunami', 'Axis', 'Herman', 'Miller', 'Knoll', 'Vertex', 'Summit', 'Nimbus', 'Atelier', 'Studio',
   'Meridian', 'North', 'South', 'East', 'West', 'Prime', 'Orbit', 'Bridge', 'Evergreen', 'Harbor',
@@ -169,6 +185,7 @@ function createCustomers(): CustomerRecord[] {
       currency: site.currency,
       dealerName: seededName(i),
       customerType: seededType(i),
+      country: seededCountry(site.site, i),
     });
   }
   return result;
@@ -183,5 +200,6 @@ export function customerSearchText(customer: CustomerRecord): string {
     customer.dealerNum,
     customer.dealerName,
     customer.customerType,
+    customer.country,
   ].join(' ');
 }

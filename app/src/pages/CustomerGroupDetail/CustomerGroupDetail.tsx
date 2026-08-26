@@ -19,7 +19,7 @@ const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
 
 type Tab = 'details' | 'assign';
-type CustomerRow = { id: string; code: string; dealerName: string; customerType: string };
+type CustomerRow = { id: string; code: string; dealerName: string; customerType: string; country: string };
 
 const PAGE_SIZE = 80;
 
@@ -49,9 +49,12 @@ function CustomerRowList({
     <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
       {rows.map(row => (
         <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
-          <span style={{ ...sBody, color: 'var(--ink)' }}>
+          <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
             {row.code} {'  '}
             <span style={{ color: 'var(--ink-2)' }}>{row.dealerName} - {row.customerType}</span>
+            <span style={{ ...sBodyB, fontSize: 11, color: 'var(--ink-2)', background: 'var(--bg-soft)', border: '1px solid var(--line)', borderRadius: 999, padding: '2px 8px', whiteSpace: 'nowrap' }}>
+              Country: {row.country}
+            </span>
           </span>
           <button
             className="eos-stroke-btn"
@@ -108,7 +111,7 @@ export default function CustomerGroupDetailPage() {
     return bySite && byType && byText;
   });
 
-  const toRow = (c: (typeof CUSTOMERS)[number]): CustomerRow => ({ id: c.id, code: toDealerCode(c), dealerName: c.dealerName, customerType: c.customerType });
+  const toRow = (c: (typeof CUSTOMERS)[number]): CustomerRow => ({ id: c.id, code: toDealerCode(c), dealerName: c.dealerName, customerType: c.customerType, country: c.country });
 
   const selectedRows: CustomerRow[] = CUSTOMERS.filter(c => selected.has(c.id)).map(toRow);
   const available = filtered.filter(c => !selected.has(c.id));
