@@ -209,13 +209,50 @@ export default function CatalogueAccessAdminPage() {
     return state.catalogueGroups.filter(group => catalogueGroupIds.has(group.id));
   }, [dealerCustomerGroups, state.assignments, state.catalogueGroups]);
 
-  const dealerCatalogues = useMemo(() => {
-    const catalogueIds = new Set(dealerCatalogueGroups.flatMap(group => group.catalogueIds));
-    return CATALOGUES.filter(c => catalogueIds.has(c.id));
+  const dealerCatalogueIdsFromGroups = useMemo(() => {
+    return new Set(dealerCatalogueGroups.flatMap(group => group.catalogueIds));
   }, [dealerCatalogueGroups]);
+
+  const dealerExcludedCatalogueIds = useMemo(() => {
+    const entry = state.dealerCatalogueExclusions.find(e => e.dealerId === selectedDealerId);
+    return new Set(entry?.catalogueIds ?? []);
+  }, [state.dealerCatalogueExclusions, selectedDealerId]);
+
+  const dealerCatalogues = useMemo(() => {
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && !dealerExcludedCatalogueIds.has(c.id));
+  }, [dealerCatalogueIdsFromGroups, dealerExcludedCatalogueIds]);
+
+  const dealerExcludedCatalogues = useMemo(() => {
+    return CATALOGUES.filter(c => dealerCatalogueIdsFromGroups.has(c.id) && dealerExcludedCatalogueIds.has(c.id));
+  }, [dealerCatalogueIdsFromGroups, dealerExcludedCatalogueIds]);
 
   const selectDealer = (dealerId: string) => {
     setSelectedDealerId(dealerId);
+  };
+
+  const excludeDealerCatalogue = (catalogueId: number) => {
+    if (!selectedDealerId) return;
+    const existing = state.dealerCatalogueExclusions.find(e => e.dealerId === selectedDealerId);
+    const nextExclusions = existing
+      ? state.dealerCatalogueExclusions.map(e => (e.dealerId === selectedDealerId
+        ? { ...e, catalogueIds: Array.from(new Set([...e.catalogueIds, catalogueId])) }
+        : e))
+      : [...state.dealerCatalogueExclusions, { dealerId: selectedDealerId, catalogueIds: [catalogueId] }];
+
+    saveState({ ...state, dealerCatalogueExclusions: nextExclusions });
+    setToast('Catalogue removed for this dealer only — the catalogue group is unchanged.');
+  };
+
+  const restoreDealerCatalogue = (catalogueId: number) => {
+    if (!selectedDealerId) return;
+    const nextExclusions = state.dealerCatalogueExclusions
+      .map(e => (e.dealerId === selectedDealerId
+        ? { ...e, catalogueIds: e.catalogueIds.filter(id => id !== catalogueId) }
+        : e))
+      .filter(e => e.catalogueIds.length > 0);
+
+    saveState({ ...state, dealerCatalogueExclusions: nextExclusions });
+    setToast('Catalogue restored for this dealer.');
   };
 
   const saveState = (next: typeof state) => {
@@ -671,19 +708,39 @@ export default function CatalogueAccessAdminPage() {
                         </div>
 
                         <div>
-                          <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                            Resolved Catalogues (all groups combined) · {dealerCatalogues.length}
+                          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6, gap: 8, flexWrap: 'wrap' }}>
+                            <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                              Resolved Catalogues (all groups combined) · {dealerCatalogues.length}
+                            </div>
+                            <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 11 }}>Removing here only affects this dealer</span>
                           </div>
                           <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 420, overflow: 'auto' }}>
                             {dealerCatalogues.map(c => (
-                              <div key={c.id} style={{ padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+                              <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
                                 <span style={{ ...sBody, color: 'var(--ink)' }}>{c.id} - {c.name}</span>
+                                <IconActionButton label="Remove" onClick={() => excludeDealerCatalogue(c.id)} icon={<IconTrash size={14} />} />
                               </div>
                             ))}
                             {dealerCatalogues.length === 0 && (
                               <div style={{ ...sBody, color: 'var(--ink-2)', padding: 14 }}>No catalogues assigned to this dealer.</div>
                             )}
                           </div>
+
+                          {dealerExcludedCatalogues.length > 0 && (
+                            <div style={{ marginTop: 16 }}>
+                              <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                                Excluded For This Dealer · {dealerExcludedCatalogues.length}
+                              </div>
+                              <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 200, overflow: 'auto' }}>
+                                {dealerExcludedCatalogues.map(c => (
+                                  <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
+                                    <span style={{ ...sBody, color: 'var(--ink-2)' }}>{c.id} - {c.name}</span>
+                                    <IconActionButton label="Restore" onClick={() => restoreDealerCatalogue(c.id)} icon={<IconPlus size={14} />} />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </>

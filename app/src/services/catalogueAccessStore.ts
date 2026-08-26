@@ -26,6 +26,7 @@ function defaultState(): CatalogueAccessState {
       { customerGroupId: 'cust-europe-dealers', catalogueGroupIds: ['cg-europe-seating', 'cg-knoll-europe'] },
       { customerGroupId: 'cust-apac-dealers', catalogueGroupIds: ['cg-apmea-seating'] },
     ],
+    dealerCatalogueExclusions: [],
   };
 }
 
@@ -50,6 +51,13 @@ function sanitize(state: CatalogueAccessState): CatalogueAccessState {
         customerGroupId: a.customerGroupId,
         catalogueGroupIds: Array.from(new Set(a.catalogueGroupIds.filter(id => validCatalogueGroupIds.has(id)))),
       })),
+    dealerCatalogueExclusions: (state.dealerCatalogueExclusions ?? [])
+      .filter(e => validCustomerIds.has(e.dealerId))
+      .map(e => ({
+        dealerId: e.dealerId,
+        catalogueIds: Array.from(new Set(e.catalogueIds.filter(id => validCatalogueIds.has(id)))),
+      }))
+      .filter(e => e.catalogueIds.length > 0),
   };
 }
 
