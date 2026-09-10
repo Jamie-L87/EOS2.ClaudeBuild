@@ -8,7 +8,6 @@ import { loadCatalogueAccessState, saveCatalogueAccessState } from '../../servic
 import {
   Chip,
   DetailBreadcrumb,
-  DetailTabStrip,
   PrimaryButton,
   SearchInput,
   StrokeButton,
@@ -18,7 +17,6 @@ const sBody = { ...t.body };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
 
-type Tab = 'details' | 'assign';
 type CustomerRow = { id: string; code: string; dealerName: string; customerType: string; country: string };
 
 const PAGE_SIZE = 80;
@@ -86,7 +84,6 @@ export default function CustomerGroupDetailPage() {
   const isNew = !id || id === 'new';
 
   const [navOpen, setNavOpen] = useState(false);
-  const [tab, setTab] = useState<Tab>('details');
   const [initialState] = useState(loadCatalogueAccessState);
   const existing = useMemo(
     () => (isNew ? null : initialState.customerGroups.find(g => g.id === id) ?? null),
@@ -135,7 +132,6 @@ export default function CustomerGroupDetailPage() {
     const trimmed = name.trim();
     if (!trimmed) {
       setError('Group name is required.');
-      setTab('details');
       return;
     }
 
@@ -157,7 +153,6 @@ export default function CustomerGroupDetailPage() {
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
         .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
-        .eos-detail-tab:hover[data-active="false"] { color: var(--ink); }
       `}</style>
 
       <TopNav onMenu={() => setNavOpen(true)} />
@@ -186,64 +181,51 @@ export default function CustomerGroupDetailPage() {
               </div>
             </header>
 
-            <DetailTabStrip
-              tabs={[
-                { id: 'details', label: 'Details' },
-                { id: 'assign', label: 'Assign Customers' },
-              ]}
-              active={tab}
-              onChange={setTab}
-            />
+            <section style={{ maxWidth: 480, marginTop: 24 }}>
+              <label style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Group Name</label>
+              <input
+                value={name}
+                onChange={e => { setName(e.target.value); setError(null); }}
+                style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
+              />
+              {error && <p style={{ ...sBody, color: 'var(--red)', marginTop: 10 }}>{error}</p>}
+            </section>
 
-            {tab === 'details' && (
-              <section style={{ maxWidth: 480 }}>
-                <label style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Group Name</label>
-                <input
-                  value={name}
-                  onChange={e => { setName(e.target.value); setError(null); }}
-                  style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
-                />
-                {error && <p style={{ ...sBody, color: 'var(--red)', marginTop: 10 }}>{error}</p>}
-              </section>
-            )}
+            <section style={{ marginTop: 32 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <SearchInput value={siteQuery} onChange={value => { setPage(1); setSiteQuery(value); }} placeholder="Search Site (* wildcard)" />
+                  <SearchInput value={typeQuery} onChange={value => { setPage(1); setTypeQuery(value); }} placeholder="Search dealer type" />
+                  <SearchInput value={search} onChange={value => { setPage(1); setSearch(value); }} placeholder="Search customers..." />
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Chip label={`Selected: ${selected.size} customers`} />
+                  <Chip label={`Available: ${available.length}`} />
+                </div>
+              </div>
 
-            {tab === 'assign' && (
-              <section>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <SearchInput value={siteQuery} onChange={value => { setPage(1); setSiteQuery(value); }} placeholder="Search Site (* wildcard)" />
-                    <SearchInput value={typeQuery} onChange={value => { setPage(1); setTypeQuery(value); }} placeholder="Search dealer type" />
-                    <SearchInput value={search} onChange={value => { setPage(1); setSearch(value); }} placeholder="Search customers..." />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                <div>
+                  <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                    Current Customers In Group
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Chip label={`Selected: ${selected.size} customers`} />
-                    <Chip label={`Available: ${available.length}`} />
+                  <CustomerRowList rows={selectedRows} emptyLabel="No customers currently in this group." actionLabel="Remove" onAction={removeCustomer} />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                      Available Customers To Add
+                    </div>
+                    <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Page {currentPage} of {totalPages}</span>
+                  </div>
+                  <CustomerRowList rows={availableRows} emptyLabel="No available customers match your filters." actionLabel="Add" onAction={addCustomer} />
+                  <div style={{ marginTop: 10, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                    <StrokeButton onClick={() => setPage(Math.max(1, currentPage - 1))}>Previous</StrokeButton>
+                    <StrokeButton onClick={() => setPage(Math.min(totalPages, currentPage + 1))}>Next</StrokeButton>
                   </div>
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                  <div>
-                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                      Current Customers In Group
-                    </div>
-                    <CustomerRowList rows={selectedRows} emptyLabel="No customers currently in this group." actionLabel="Remove" onAction={removeCustomer} />
-                  </div>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-                      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-                        Available Customers To Add
-                      </div>
-                      <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Page {currentPage} of {totalPages}</span>
-                    </div>
-                    <CustomerRowList rows={availableRows} emptyLabel="No available customers match your filters." actionLabel="Add" onAction={addCustomer} />
-                    <div style={{ marginTop: 10, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-                      <StrokeButton onClick={() => setPage(Math.max(1, currentPage - 1))}>Previous</StrokeButton>
-                      <StrokeButton onClick={() => setPage(Math.min(totalPages, currentPage + 1))}>Next</StrokeButton>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            )}
+              </div>
+            </section>
           </>
         )}
       </main>

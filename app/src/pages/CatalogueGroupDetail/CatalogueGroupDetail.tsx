@@ -8,7 +8,6 @@ import { loadCatalogueAccessState, saveCatalogueAccessState } from '../../servic
 import {
   Chip,
   DetailBreadcrumb,
-  DetailTabStrip,
   PrimaryButton,
   SearchInput,
   StrokeButton,
@@ -17,8 +16,6 @@ import {
 const sBody = { ...t.body };
 const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
-
-type Tab = 'details' | 'assign';
 
 function AccessDenied() {
   return (
@@ -101,7 +98,6 @@ export default function CatalogueGroupDetailPage() {
   const isNew = !id || id === 'new';
 
   const [navOpen, setNavOpen] = useState(false);
-  const [tab, setTab] = useState<Tab>('details');
   const [initialState] = useState(loadCatalogueAccessState);
   const existing = useMemo(
     () => (isNew ? null : initialState.catalogueGroups.find(g => g.id === id) ?? null),
@@ -152,7 +148,6 @@ export default function CatalogueGroupDetailPage() {
     const trimmed = name.trim();
     if (!trimmed) {
       setError('Group name is required.');
-      setTab('details');
       return;
     }
 
@@ -174,7 +169,6 @@ export default function CatalogueGroupDetailPage() {
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
         .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
-        .eos-detail-tab:hover[data-active="false"] { color: var(--ink); }
       `}</style>
 
       <TopNav onMenu={() => setNavOpen(true)} />
@@ -203,53 +197,40 @@ export default function CatalogueGroupDetailPage() {
               </div>
             </header>
 
-            <DetailTabStrip
-              tabs={[
-                { id: 'details', label: 'Details' },
-                { id: 'assign', label: 'Assign Catalogues' },
-              ]}
-              active={tab}
-              onChange={setTab}
-            />
+            <section style={{ maxWidth: 480, marginTop: 24 }}>
+              <label style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Group Name</label>
+              <input
+                value={name}
+                onChange={e => { setName(e.target.value); setError(null); }}
+                style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
+              />
+              {error && <p style={{ ...sBody, color: 'var(--red)', marginTop: 10 }}>{error}</p>}
+            </section>
 
-            {tab === 'details' && (
-              <section style={{ maxWidth: 480 }}>
-                <label style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Group Name</label>
-                <input
-                  value={name}
-                  onChange={e => { setName(e.target.value); setError(null); }}
-                  style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
-                />
-                {error && <p style={{ ...sBody, color: 'var(--red)', marginTop: 10 }}>{error}</p>}
-              </section>
-            )}
-
-            {tab === 'assign' && (
-              <section>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-                  <SearchInput value={search} onChange={setSearch} placeholder="Search catalogues... (* wildcard supported)" />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Chip label={`Selected: ${selected.size} catalogues`} />
-                    <Chip label={`Available: ${availableRows.length}`} />
-                  </div>
+            <section style={{ marginTop: 32 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+                <SearchInput value={search} onChange={setSearch} placeholder="Search catalogues... (* wildcard supported)" />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <Chip label={`Selected: ${selected.size} catalogues`} />
+                  <Chip label={`Available: ${availableRows.length}`} />
                 </div>
+              </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                  <div>
-                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                      Current Catalogues In Group
-                    </div>
-                    <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                <div>
+                  <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                    Current Catalogues In Group
                   </div>
-                  <div>
-                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                      Available Catalogues To Add
-                    </div>
-                    <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
-                  </div>
+                  <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
                 </div>
-              </section>
-            )}
+                <div>
+                  <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                    Available Catalogues To Add
+                  </div>
+                  <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
+                </div>
+              </div>
+            </section>
           </>
         )}
       </main>
