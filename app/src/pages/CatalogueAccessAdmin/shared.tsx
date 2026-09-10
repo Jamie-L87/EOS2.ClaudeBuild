@@ -28,46 +28,6 @@ export function DetailBreadcrumb({ crumbs }: { crumbs: Array<{ label: string; on
   );
 }
 
-export function DetailTabStrip<T extends string>({
-  tabs,
-  active,
-  onChange,
-}: {
-  tabs: Array<{ id: T; label: string }>;
-  active: T;
-  onChange: (tab: T) => void;
-}) {
-  return (
-    <div style={{ display: 'flex', borderBottom: '1px solid var(--line)', marginBottom: 24, marginTop: 8 }}>
-      {tabs.map(tab => {
-        const isActive = tab.id === active;
-        return (
-          <button
-            key={tab.id}
-            onClick={() => onChange(tab.id)}
-            className="eos-detail-tab"
-            data-active={isActive}
-            style={{
-              ...sLargeB,
-              border: 'none',
-              background: 'transparent',
-              cursor: 'pointer',
-              padding: '14px 24px',
-              color: isActive ? 'var(--brand)' : 'var(--ink-2)',
-              borderBottom: isActive ? '2px solid var(--brand)' : '2px solid transparent',
-              marginBottom: -1,
-              transition: 'color .15s ease, border-color .15s ease',
-              fontFamily: 'inherit',
-            }}
-          >
-            {tab.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 export function Chip({ label }: { label: string }) {
   return (
     <span
