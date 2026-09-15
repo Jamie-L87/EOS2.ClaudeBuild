@@ -1121,7 +1121,7 @@ const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: stri
   { id: 'json', label: 'JSON',  desc: 'Structured data / API',  ext: '.json' },
 ];
 
-function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExport, selectedContract, onContractChange }: {
+function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateArticleCode, onExplode, onCreateOrder, onExport, selectedContract, onContractChange, pricingDate, onPricingDateChange }: {
   items: BasketItem[];
   onRemove: (id: string) => void;
   onQtyChange: (id: string, q: number | string) => void;
@@ -1133,6 +1133,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   onExport: (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => void;
   selectedContract: Contract | null;
   onContractChange: (id: string) => void;
+  pricingDate: string;
+  onPricingDateChange: (date: string) => void;
 }) {
   const [saveMenuOpen, setSaveMenuOpen] = useState(false);
   const [exportPicker, setExportPicker] = useState<ExportFormat | null>(null);
@@ -1207,7 +1209,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         </button>
       </div>
 
-      <div style={{ padding: '12px 24px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ padding: '12px 24px', borderBottom: '1px solid var(--line)', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
         <label htmlFor="basket-contract" style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, whiteSpace: 'nowrap' as const }}>
           Contract
         </label>
@@ -1220,6 +1222,17 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           <option value="">No contract — list prices only</option>
           {CONTRACTS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
+
+        <label htmlFor="basket-pricing-date" style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6, whiteSpace: 'nowrap' as const, marginLeft: 12 }}>
+          Pricing Date
+        </label>
+        <input
+          id="basket-pricing-date"
+          type="date"
+          value={pricingDate}
+          onChange={e => onPricingDateChange(e.target.value)}
+          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+        />
       </div>
 
       <div style={{ overflowX: 'auto' }}>
@@ -1371,6 +1384,7 @@ export default function ImportPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [selectedContractId, setSelectedContractId] = useState('');
   const selectedContract = useMemo(() => CONTRACTS.find(c => c.id === selectedContractId) ?? null, [selectedContractId]);
+  const [pricingDate, setPricingDate] = useState(() => new Date().toISOString().slice(0, 10));
 
   const onParsed = useCallback(({ items, error, needsMapping, sheetData }: FileParseEvent) => {
     if (needsMapping && sheetData) { setFileError(null); setPendingSheet(sheetData); return; }
@@ -1391,6 +1405,7 @@ export default function ImportPage() {
       currency: basket.items[0]?.currency || 'EUR',
       orderPlaced: new Date().toISOString().slice(0, 10),
       reference: null, customer: null, purchaseOrder: null, contract: selectedContractId || null,
+      pricingDate: pricingDate || null,
       lines: basket.items.map((it, idx) => ({
         id: it.id, lineNo: idx + 1,
         articleCode: it.articleCode, featureString: it.featureString,
@@ -1405,7 +1420,7 @@ export default function ImportPage() {
     basket.clear();
     setToast(`Creating order ${draftOrderNo}…`);
     setTimeout(() => navigate(`/orders/${draftOrderNo}`, { state: { order } }), 600);
-  }, [basket, navigate]);
+  }, [basket, navigate, selectedContractId, pricingDate]);
 
   const onExport = useCallback(async (format: ExportFormat, extraFields: ExtraFieldKey[], expandSuper: boolean) => {
     const now = new Date();
@@ -1519,6 +1534,8 @@ export default function ImportPage() {
             onExport={onExport}
             selectedContract={selectedContract}
             onContractChange={setSelectedContractId}
+            pricingDate={pricingDate}
+            onPricingDateChange={setPricingDate}
           />
 
           {basket.items.length === 0 && !pendingSheet && (
