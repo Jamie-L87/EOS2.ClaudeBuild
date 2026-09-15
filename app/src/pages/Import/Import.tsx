@@ -15,6 +15,7 @@ import {
 } from '../../services/parsers';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import type { Contract } from '../../data/contracts';
+import { getPricedAsOf } from '../../data/priceChanges';
 
 type ExportFormat = 'obx' | 'csv' | 'xlsx' | 'json';
 import type { ParsedItem, SheetData, BasketItem, ExtraFieldKey } from '../../services/parsers';
@@ -713,13 +714,16 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount }: {
+function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount, pricedListPrice, priceDated, priceNote }: {
   item: BasketItem; lineNum: number | 'SP';
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
   onExplode: () => void;
   contractUnitPrice: number | null;
   contractDiscount: number | null;
+  pricedListPrice: number;
+  priceDated: boolean;
+  priceNote: string | null;
 }) {
   const [editing, setEditing] = useState(false);
   const [editVal, setEditVal] = useState('');
@@ -794,22 +798,22 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
               style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
           </div>
         </td>
-        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
-          {item.listPrice > 0 ? <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(item.listPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }} title={priceDated ? priceNote ?? 'Pricing date differs from today — figures shown may change' : undefined}>
+          {item.listPrice > 0 ? <span style={{ ...sBody, color: priceDated ? 'var(--red)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(pricedListPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           {contractDiscount !== null
             ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{contractDiscount}%</span>
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
-        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }} title={priceDated ? priceNote ?? 'Pricing date differs from today — figures shown may change' : undefined}>
           {item.listPrice > 0
-            ? <span style={{ ...sBody, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice ?? item.listPrice, item.currency)}</span>
+            ? <span style={{ ...sBody, color: priceDated ? 'var(--red)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(contractUnitPrice ?? pricedListPrice, item.currency)}</span>
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
-        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }} title={priceDated ? priceNote ?? 'Pricing date differs from today — figures shown may change' : undefined}>
           {item.listPrice > 0
-            ? <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice((contractUnitPrice ?? item.listPrice) * item.qty, item.currency)}</span>
+            ? <span style={{ ...sBodyB, color: priceDated ? 'var(--red)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice((contractUnitPrice ?? pricedListPrice) * item.qty, item.currency)}</span>
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
@@ -1166,8 +1170,12 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 
   if (!items.length) return null;
 
+  const todayISO    = new Date().toISOString().slice(0, 10);
+  const priceDated  = pricingDate !== todayISO;
+  const pricedItems = items.map(i => getPricedAsOf(i.productLine, i.listPrice, pricingDate, todayISO));
+
   const totalQty    = items.reduce((s, i) => s + i.qty, 0);
-  const grand       = items.reduce((s, i) => s + (i.listPrice * i.qty), 0);
+  const grand       = items.reduce((s, i, idx) => s + (pricedItems[idx].price * i.qty), 0);
   const passedCount = items.filter(i => i.validationStatus === 'passed').length;
   const failedCount = items.filter(i => i.validationStatus === 'failed').length;
   const pendingCount = items.filter(i => i.validationStatus === 'pending').length;
@@ -1177,7 +1185,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 
   const hasContract = selectedContract !== null;
   const contractPrices = hasContract
-    ? items.map(i => itemContractPrice(i, selectedContract!))
+    ? items.map((i, idx) => itemContractPrice({ ...i, listPrice: pricedItems[idx].price }, selectedContract!))
     : items.map(() => null as number | null);
   const contractDiscounts = hasContract
     ? items.map(i => {
@@ -1186,7 +1194,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         return plc ? getContractDiscount(selectedContract!, plc) : null;
       })
     : items.map(() => null as number | null);
-  const buyingTotal = items.reduce((s, i, idx) => s + (contractPrices[idx] ?? i.listPrice) * i.qty, 0);
+  const buyingTotal = items.reduce((s, i, idx) => s + (contractPrices[idx] ?? pricedItems[idx].price) * i.qty, 0);
 
   return (
     <>
@@ -1260,6 +1268,9 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 onExplode={() => onExplode(item.id)}
                 contractUnitPrice={contractPrices[i]}
                 contractDiscount={contractDiscounts[i]}
+                pricedListPrice={pricedItems[i].price}
+                priceDated={priceDated}
+                priceNote={pricedItems[i].note}
               />
             ))}
           </tbody>
