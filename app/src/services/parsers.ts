@@ -7,6 +7,8 @@ export interface ParsedItem {
   articleCode: string;
   featureString: string;
   qty: number;
+  filePrice?: number;
+  fileCurrency?: string | null;
 }
 
 export interface SheetData {
@@ -43,6 +45,8 @@ export interface BasketItem {
   longDescription?: string;
   unitListPrice?: number;
   unitBuyingPrice?: number;
+  filePrice?: number;
+  fileCurrency?: string | null;
   leadTime?: string;
   weightKg?: number;
   volumeLtrs?: number;
@@ -77,6 +81,24 @@ export function parseOBX(text: string): ParseResult {
 
   const items: ParsedItem[] = [];
 
+  // Real pCon.planner exports carry <itemPrice type="sale" currency="EUR" value="2249.0"/>
+  // (a 'purchase' type sibling holds HM's cost, not the dealer-facing price). EOS 2.0's own
+  // .eos round-trip export instead writes a plain <listPrice currency="...">2283</listPrice>.
+  function extractObxPrice(node: Element): { price: number; currency: string | null } | null {
+    const saleNodes = Array.from(node.children).filter(c => c.tagName === 'itemPrice' && c.getAttribute('type') === 'sale');
+    const saleNode = saleNodes.find(n => !n.getAttribute('pd')) ?? saleNodes[0];
+    if (saleNode) {
+      const value = parseFloat(saleNode.getAttribute('value') ?? '');
+      if (!isNaN(value)) return { price: value, currency: saleNode.getAttribute('currency') };
+    }
+    const listPriceNode = Array.from(node.children).find(c => c.tagName === 'listPrice');
+    if (listPriceNode) {
+      const value = parseFloat(listPriceNode.textContent?.trim() ?? '');
+      if (!isNaN(value)) return { price: value, currency: listPriceNode.getAttribute('currency') };
+    }
+    return null;
+  }
+
   function extract(node: Element) {
     const artNr = Array.from(node.children).find(c => c.tagName === 'artNr' && c.getAttribute('type') === 'final');
     if (artNr) {
@@ -97,7 +119,13 @@ export function parseOBX(text: string): ParseResult {
             if (!isNaN(tv) && tv > 0) qty = tv;
           }
         }
-        if (articleCode) items.push({ articleCode, featureString, qty });
+        if (articleCode) {
+          const filePrice = extractObxPrice(node);
+          items.push({
+            articleCode, featureString, qty,
+            ...(filePrice ? { filePrice: filePrice.price, fileCurrency: filePrice.currency } : {}),
+          });
+        }
       }
     }
     for (const c of Array.from(node.children)) {
@@ -118,15 +146,19 @@ export function parseSIF(text: string): ParseResult {
     return { items: [], error: 'Invalid SIF file: expected "SF=" on the first line.' };
   }
   const items: ParsedItem[] = [];
-  let code: string | null = null, feat = '', qty = 1;
+  let code: string | null = null, feat = '', qty = 1, filePrice: number | undefined;
   const flush = () => {
-    if (code) { items.push({ articleCode: code, featureString: feat, qty }); code = null; feat = ''; qty = 1; }
+    if (code) {
+      items.push({ articleCode: code, featureString: feat, qty, ...(filePrice !== undefined ? { filePrice } : {}) });
+      code = null; feat = ''; qty = 1; filePrice = undefined;
+    }
   };
   for (const line of lines) {
     if (line.startsWith('SF=') || line.startsWith('SL=')) { flush(); continue; }
     if (line.startsWith('PN=')) { flush(); code = line.slice(3).trim(); feat = ''; }
     else if (line.startsWith('ON=')) { feat += line.slice(3).trim(); }
     else if (line.startsWith('QT=')) { const v = parseInt(line.slice(3).trim(), 10); if (!isNaN(v) && v > 0) qty = v; }
+    else if (line.startsWith('PL=')) { const v = parseFloat(line.slice(3).trim()); if (!isNaN(v)) filePrice = v; }
   }
   flush();
   return { items };
@@ -157,6 +189,8 @@ const ARTICLE_EXCLUDE = [
 ];
 const QTY_KW    = ['qty', 'quantity', 'amount', 'units', 'count'];
 const FEAT_KW   = ['feature', 'config', 'option', 'spec', 'string'];
+const PRICE_KW  = ['unit price', 'list price', 'price'];
+const PRICE_EXCLUDE = ['total', 'discount', 'buying'];
 
 function parseLineItemsSheet(sheet: XLSX.WorkSheet): ParseResult {
   const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' }) as unknown[][];
@@ -169,7 +203,9 @@ function parseLineItemsSheet(sheet: XLSX.WorkSheet): ParseResult {
     const rawQty = row[2];
     const parsedQty = typeof rawQty === 'number' ? Math.round(rawQty) : parseInt(String(rawQty), 10);
     const qty = !isNaN(parsedQty) && parsedQty > 0 ? parsedQty : 1;
-    items.push({ articleCode, featureString, qty });
+    const rawPrice = row[3];
+    const parsedPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(String(rawPrice));
+    items.push({ articleCode, featureString, qty, ...(!isNaN(parsedPrice) ? { filePrice: parsedPrice } : {}) });
   }
   return { items };
 }
@@ -238,7 +274,7 @@ export function applyColumnMapping(
   for (const row of rows) {
     const rowArr = row as unknown[];
     if (rowArr.some(c => SUPER_COMPONENT_RE.test(String(c ?? '')))) continue;
-    let code = '', feat = '', qty = 1;
+    let code = '', feat = '', qty = 1, filePrice: number | undefined;
     for (const [colStr, role] of Object.entries(columnRoles)) {
       const idx = parseInt(colStr, 10);
       const cell = String(rowArr[idx] ?? '').trim();
@@ -250,8 +286,9 @@ export function applyColumnMapping(
       } else if (role === 'articleCode') code = cell;
       else if (role === 'featureString') feat = feat ? `${feat} ${cell}` : cell;
       else if (role === 'qty') { const n = parseFloat(cell); if (!isNaN(n) && n > 0) qty = Math.round(n); }
+      else if (role === 'listPrice') { const n = parseFloat(cell.replace(/[^0-9.-]/g, '')); if (!isNaN(n)) filePrice = n; }
     }
-    if (code.length >= 3) items.push({ articleCode: code, featureString: feat, qty });
+    if (code.length >= 3) items.push({ articleCode: code, featureString: feat, qty, ...(filePrice !== undefined ? { filePrice } : {}) });
   }
   return items;
 }
@@ -265,12 +302,15 @@ export function autoDetectColumns(
 
   for (let hRow = 0; hRow <= Math.min(2, rows.length - 2); hRow++) {
     const header = rows[hRow] as unknown[];
-    let articleCol = -1, featCol = -1, qtyCol = -1, articleScore = 0;
+    let articleCol = -1, featCol = -1, qtyCol = -1, priceCol = -1, articleScore = 0;
     for (let c = 0; c < header.length; c++) {
       const h = String(header[c] ?? '').toLowerCase().trim();
       if (!h) continue;
       if (QTY_KW.some(kw => h.includes(kw)))  { if (qtyCol  === -1) qtyCol  = c; continue; }
       if (FEAT_KW.some(kw => h.includes(kw))) { if (featCol === -1) featCol = c; continue; }
+      if (PRICE_KW.some(kw => h.includes(kw)) && !PRICE_EXCLUDE.some(kw => h.includes(kw))) {
+        if (priceCol === -1) priceCol = c; continue;
+      }
       if (ARTICLE_EXCLUDE.some(kw => h.includes(kw))) continue;
       const score = ARTICLE_STRONG.some(kw => h.includes(kw)) ? 3
                   : ARTICLE_WEAK.some(kw => h.includes(kw))   ? 1
@@ -299,6 +339,7 @@ export function autoDetectColumns(
       if (featCol !== -1) columnRoles[featCol] = 'featureString';
     }
     if (qtyCol !== -1) columnRoles[qtyCol] = 'qty';
+    if (priceCol !== -1) columnRoles[priceCol] = 'listPrice';
 
     const got = applyColumnMapping(sheetData, sheetIndex, hRow + 1, columnRoles);
     if (got.length > 0) return { skipRows: hRow + 1, columnRoles };

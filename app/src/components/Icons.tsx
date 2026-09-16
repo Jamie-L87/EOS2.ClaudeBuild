@@ -78,6 +78,7 @@ export const IconEllipsis = (p: IconProps) => (
     <circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none" />
   </Icon>
 );
+export const IconAlert      = (p: IconProps) => <Icon {...p}><path d="M12 9v4M12 16.5h.01M10.6 4.6L2.9 18a1.6 1.6 0 0 0 1.37 2.4h15.46a1.6 1.6 0 0 0 1.37-2.4L13.4 4.6a1.6 1.6 0 0 0-2.8 0z" /></Icon>;
 export const IconCheck      = (p: IconProps) => <Icon {...p}><path d="M5 12l5 5L20 7" /></Icon>;
 export const IconClose      = (p: IconProps) => <Icon {...p}><path d="M6 6l12 12M18 6L6 18" /></Icon>;
 export const IconArrowUp    = (p: IconProps) => <Icon {...p}><path d="M12 19V5M5 12l7-7 7 7" /></Icon>;
