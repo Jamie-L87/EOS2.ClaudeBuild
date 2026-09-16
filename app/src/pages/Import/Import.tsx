@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import type { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -1149,27 +1150,46 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
 /* ------------------------------------------------------------------ */
 /*  CLEAR BASKET CONFIRMATION                                          */
 /* ------------------------------------------------------------------ */
+const FLAME_PARTICLES = [
+  { left: '8%',  delay: '0ms',   rot: '-10deg' },
+  { left: '22%', delay: '60ms',  rot: '6deg'   },
+  { left: '38%', delay: '20ms',  rot: '-4deg'  },
+  { left: '54%', delay: '90ms',  rot: '10deg'  },
+  { left: '68%', delay: '40ms',  rot: '-8deg'  },
+  { left: '84%', delay: '110ms', rot: '5deg'   },
+];
+
 function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
+  const [burning, setBurning] = useState(false);
+
+  const handleYes = () => {
+    setBurning(true);
+    setTimeout(onConfirm, 650);
+  };
+
   return (
     <>
-      <div onClick={onCancel} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
-      <div style={{
+      <div onClick={burning ? undefined : onCancel} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      <div className={burning ? 'om-burn-box' : undefined} style={{
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
-        width: 420, maxWidth: 'calc(100vw - 32px)',
+        width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'visible',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
       }}>
+        {burning && FLAME_PARTICLES.map((f, i) => (
+          <span key={i} className="om-flame" style={{ left: f.left, animationDelay: f.delay, '--flame-rot': f.rot } as CSSProperties}>🔥</span>
+        ))}
         <div style={{ padding: '24px 24px 20px' }}>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
         </div>
-        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, opacity: burning ? 0.4 : 1, pointerEvents: burning ? 'none' : 'auto' }}>
           <button onClick={onCancel} className="om-stroke-btn"
             style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
             No
           </button>
-          <button onClick={onConfirm} className="om-danger-btn"
+          <button onClick={handleYes} className="om-danger-btn"
             style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--red)', background: 'var(--red)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
             Yes
           </button>
@@ -1575,6 +1595,18 @@ export default function ImportPage() {
         @keyframes menuPop { from { opacity: 0; transform: scale(.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
         .om-danger-btn:hover { background: #8A223B !important; border-color: #8A223B !important; }
+        @keyframes boxBurn {
+          0%   { transform: translate(-50%,-50%) scale(1);    filter: brightness(1) saturate(1);   box-shadow: var(--shadow-pop); }
+          55%  { transform: translate(-50%,-50%) scale(1.02); filter: brightness(1.3) saturate(1.8); box-shadow: 0 0 40px 6px rgba(226,45,0,0.55); }
+          100% { transform: translate(-50%,-50%) scale(0.82); filter: brightness(1.8) saturate(2.2); box-shadow: 0 0 60px 12px rgba(226,45,0,0.25); opacity: 0; }
+        }
+        @keyframes flameRise {
+          0%   { transform: translateY(0) scale(0.7) rotate(0deg);    opacity: 0; }
+          15%  { opacity: 1; }
+          100% { transform: translateY(-90px) scale(1.15) rotate(var(--flame-rot, 8deg)); opacity: 0; }
+        }
+        .om-burn-box { animation: boxBurn .65s ease-in forwards !important; }
+        .om-flame { position: absolute; bottom: -6px; font-size: 26px; line-height: 1; animation: flameRise .65s ease-out forwards; pointer-events: none; }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
