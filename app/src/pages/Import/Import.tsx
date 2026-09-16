@@ -1200,36 +1200,46 @@ function Ember({ x, y, delay }: { x: number; y: number; delay: number }) {
   return <div className="om-ember" style={{ position: 'absolute', left: x, bottom: y, animationDelay: `${delay}ms` }} />;
 }
 
-// A solid gradient wash sized exactly to the dialog guarantees full, gap-free
-// coverage; the tongue shapes on top of it give it a proper flame texture.
-function FireWash({ w, h }: { w: number; h: number }) {
-  return <div className="om-fire-wash" style={{ position: 'absolute', left: 0, bottom: 0, width: w, height: h }} />;
-}
+interface Tongue { x: number; y: number; w: number; h: number; delay: number; dur: number; rot: number; giant: boolean }
 
-// Every tongue's box overlaps the dialog's own rectangle (x clamped to
-// [-8%, 108%] of width) - none of them float off on their own out in the page.
-// A base band along the bottom edge plus a rim band near the top gives full
-// width x height coverage rather than just a fringe along the bottom.
-function buildTongues(w: number, h: number) {
-  const bands = [
-    { yFrac: -0.04, hFrac: 0.85, count: 7, delayBase: 0 },
-    { yFrac: 0.42,  hFrac: 0.75, count: 6, delayBase: 500 },
+// Randomised mosaic of flame tongues in three size classes, packed into
+// overlapping rows across the dialog's full width and height so there are no
+// gaps - every tongue is rooted somewhere on the box itself, nothing floats
+// off free-standing out on the page.
+function buildTongues(w: number, h: number): Tongue[] {
+  // Size multipliers are relative to each cell's own spacing, not an absolute
+  // fraction of the box - so overlap (and therefore gap-free coverage) holds
+  // regardless of how big or small the dialog itself measures out to.
+  const SIZE_MULT = [
+    { w: [1.4, 1.8], h: [2.0, 2.6] }, // small
+    { w: [1.8, 2.3], h: [2.6, 3.4] }, // medium
+    { w: [2.3, 2.9], h: [3.4, 4.4] }, // big
   ];
-  const tongues: { x: number; y: number; w: number; h: number; delay: number; dur: number; rot: number }[] = [];
-  bands.forEach((band, bi) => {
-    const slotW = w / (band.count - 0.6);
-    for (let i = 0; i < band.count; i++) {
+  const rand = (a: number, b: number) => a + Math.random() * (b - a);
+  const rows = 6;
+  const rowSpacing = h / (rows - 1);
+  const tongues: Tongue[] = [];
+  for (let r = 0; r < rows; r++) {
+    const rowFrac = r / (rows - 1);
+    const cols = 6 + Math.floor(Math.random() * 3);
+    const cellW = w / cols;
+    for (let c = 0; c < cols; c++) {
+      const size = SIZE_MULT[Math.floor(Math.random() * SIZE_MULT.length)];
+      const fw = cellW * rand(size.w[0], size.w[1]);
+      const fh = rowSpacing * rand(size.h[0], size.h[1]);
+      const baseX = cellW * (c + 0.5) - fw / 2 + rand(-cellW * 0.25, cellW * 0.25);
+      const baseY = h * rowFrac - fh * rand(0.3, 0.45);
       tongues.push({
-        x: (w / (band.count - 1)) * i - slotW / 2,
-        y: h * band.yFrac,
-        w: slotW * 1.15,
-        h: h * band.hFrac,
-        delay: band.delayBase + i * 80 + (bi === 1 ? 40 : 0),
-        dur: 800 + ((i + bi) % 3) * 90,
-        rot: i % 2 === 0 ? -5 : 6,
+        x: baseX,
+        y: Math.max(-h * 0.1, baseY),
+        w: fw, h: fh,
+        delay: Math.round(rand(0, 750)),
+        dur: Math.round(rand(700, 1200)),
+        rot: rand(-9, 9),
+        giant: Math.random() < 0.45,
       });
     }
-  });
+  }
   return tongues;
 }
 
@@ -1267,6 +1277,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
   const boxRef = useRef<HTMLDivElement>(null);
   const busy = phase !== 'idle';
   const burning = phase === 'burning';
+  const tongues = useMemo(() => (origin ? buildTongues(origin.w, origin.h) : []), [origin]);
 
   const handleYes = () => {
     const rect = boxRef.current?.getBoundingClientRect();
@@ -1286,9 +1297,8 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
       )}
       {burning && origin && (
         <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, width: origin.w, height: origin.h, zIndex: 302, pointerEvents: 'none', overflow: 'visible' }}>
-          <FireWash w={origin.w} h={origin.h} />
-          {buildTongues(origin.w, origin.h).map((f, i) => (
-            <Flame key={`t-${i}`} id={`cbft-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} giant />
+          {tongues.map((f, i) => (
+            <Flame key={`t-${i}`} id={`cbft-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} giant={f.giant} />
           ))}
           {buildEmbers(origin.w).map((e, i) => (
             <Ember key={`ember-${i}`} x={e.x} y={e.y} delay={e.delay} />
@@ -1793,20 +1803,6 @@ export default function ImportPage() {
           width: 10px; height: 10px; border-radius: 50%; pointer-events: none;
           background: radial-gradient(circle, #FFF3B0 0%, var(--brand) 55%, transparent 100%);
           animation: emberPulse 1300ms ease-in-out infinite;
-        }
-        @keyframes fireWashGrow {
-          0%   { opacity: 0;   transform: scaleY(0.05); }
-          10%  { opacity: 0.9; }
-          30%  { opacity: 1;   transform: scaleY(1); }
-          62%  { opacity: 1;   transform: scaleY(1); filter: saturate(1.3) brightness(1); }
-          80%  { opacity: 0.9; filter: saturate(0.8) brightness(0.75); }
-          92%  { opacity: 0.5; filter: saturate(0.5) brightness(0.5); }
-          100% { opacity: 0;   transform: scaleY(0.9); filter: saturate(0.4) brightness(0.4); }
-        }
-        .om-fire-wash {
-          border-radius: var(--radius); transform-origin: bottom; pointer-events: none;
-          background: linear-gradient(0deg, #FFF3B0 0%, #FFD166 14%, var(--brand) 42%, var(--brand-dark) 72%, var(--brand-darker) 100%);
-          animation: fireWashGrow 5s ease-in forwards;
         }
         @keyframes matchThrow {
           0%   { transform: translate(260px, -220px) rotate(-70deg); opacity: 0; }
