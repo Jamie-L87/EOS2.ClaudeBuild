@@ -1147,6 +1147,39 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
 }
 
 /* ------------------------------------------------------------------ */
+/*  CLEAR BASKET CONFIRMATION                                          */
+/* ------------------------------------------------------------------ */
+function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
+  return (
+    <>
+      <div onClick={onCancel} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      <div style={{
+        position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
+        zIndex: 301, background: '#fff', border: '2px solid var(--black)',
+        borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
+        width: 420, maxWidth: 'calc(100vw - 32px)',
+        animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
+      }}>
+        <div style={{ padding: '24px 24px 20px' }}>
+          <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
+          <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
+        </div>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+          <button onClick={onCancel} className="om-stroke-btn"
+            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+            No
+          </button>
+          <button onClick={onConfirm} className="om-danger-btn"
+            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--red)', background: 'var(--red)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+            Yes
+          </button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /*  BASKET TABLE                                                        */
 /* ------------------------------------------------------------------ */
 const EXPORT_FORMATS: { id: ExportFormat; label: string; desc: string; ext: string }[] = [
@@ -1173,6 +1206,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 }) {
   const [saveMenuOpen, setSaveMenuOpen] = useState(false);
   const [exportPicker, setExportPicker] = useState<ExportFormat | null>(null);
+  const [confirmClearOpen, setConfirmClearOpen] = useState(false);
   const saveMenuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!saveMenuOpen) return;
@@ -1251,7 +1285,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
             )}
           </div>
         </div>
-        <button onClick={onClear} className="om-link-btn"
+        <button onClick={() => setConfirmClearOpen(true)} className="om-link-btn"
           style={{ ...sBody, color: 'var(--ink-2)', border: 'none', background: 'transparent', cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 3, fontFamily: 'inherit' }}>
           Clear basket
         </button>
@@ -1342,7 +1376,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={onClear} className="om-stroke-btn" style={btnBase}>Clear Basket</button>
+          <button onClick={() => setConfirmClearOpen(true)} className="om-stroke-btn" style={btnBase}>Clear Basket</button>
           <div ref={saveMenuRef} style={{ position: 'relative' }}>
             {saveMenuOpen && (
               <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
@@ -1381,6 +1415,12 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         selectedContract={selectedContract}
         onConfirm={async (fields, expandSuper) => { const fmt = exportPicker; await onExport(fmt, fields, expandSuper); setExportPicker(null); }}
         onCancel={() => setExportPicker(null)}
+      />
+    )}
+    {confirmClearOpen && (
+      <ClearBasketConfirm
+        onConfirm={() => { onClear(); setConfirmClearOpen(false); }}
+        onCancel={() => setConfirmClearOpen(false)}
       />
     )}
     </>
@@ -1534,6 +1574,7 @@ export default function ImportPage() {
         .om-export-option:hover { background: var(--bg-soft) !important; }
         @keyframes menuPop { from { opacity: 0; transform: scale(.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
+        .om-danger-btn:hover { background: #8A223B !important; border-color: #8A223B !important; }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
