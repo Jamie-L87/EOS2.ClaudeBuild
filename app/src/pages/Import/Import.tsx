@@ -1150,13 +1150,12 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
 /* ------------------------------------------------------------------ */
 /*  CLEAR BASKET CONFIRMATION                                          */
 /* ------------------------------------------------------------------ */
-const FLAME_PARTICLES = [
-  { left: '8%',  delay: '0ms',   rot: '-10deg' },
-  { left: '22%', delay: '60ms',  rot: '6deg'   },
-  { left: '38%', delay: '20ms',  rot: '-4deg'  },
-  { left: '54%', delay: '90ms',  rot: '10deg'  },
-  { left: '68%', delay: '40ms',  rot: '-8deg'  },
-  { left: '84%', delay: '110ms', rot: '5deg'   },
+const FLAME_LAYERS = [
+  { size: 260, left: '-14%', bottom: '-18%', delay: '0ms',    hue: '0deg'   },
+  { size: 300, left: '-6%',  bottom: '-22%', delay: '250ms',  hue: '-6deg'  },
+  { size: 240, left: '2%',   bottom: '-14%', delay: '480ms',  hue: '8deg'   },
+  { size: 320, left: '-10%', bottom: '-26%', delay: '120ms',  hue: '-3deg'  },
+  { size: 200, left: '6%',   bottom: '-10%', delay: '620ms',  hue: '5deg'   },
 ];
 
 function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
@@ -1164,7 +1163,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
 
   const handleYes = () => {
     setBurning(true);
-    setTimeout(onConfirm, 650);
+    setTimeout(onConfirm, 5000);
   };
 
   return (
@@ -1174,17 +1173,24 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
-        width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'visible',
+        width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'hidden',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
       }}>
-        {burning && FLAME_PARTICLES.map((f, i) => (
-          <span key={i} className="om-flame" style={{ left: f.left, animationDelay: f.delay, '--flame-rot': f.rot } as CSSProperties}>🔥</span>
-        ))}
-        <div style={{ padding: '24px 24px 20px' }}>
+        {burning && (
+          <div style={{ position: 'absolute', inset: 0, zIndex: 5 }}>
+            {FLAME_LAYERS.map((f, i) => (
+              <div key={i} className="om-flame-blob" style={{
+                width: f.size, height: f.size, left: f.left, bottom: f.bottom,
+                animationDelay: f.delay, filter: `hue-rotate(${f.hue})`,
+              } as CSSProperties} />
+            ))}
+          </div>
+        )}
+        <div className={burning ? 'om-burn-content' : undefined} style={{ padding: '24px 24px 20px', position: 'relative', zIndex: 1 }}>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
         </div>
-        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, opacity: burning ? 0.4 : 1, pointerEvents: burning ? 'none' : 'auto' }}>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, position: 'relative', zIndex: 1, opacity: burning ? 0.4 : 1, pointerEvents: burning ? 'none' : 'auto' }}>
           <button onClick={onCancel} className="om-stroke-btn"
             style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
             No
@@ -1595,18 +1601,36 @@ export default function ImportPage() {
         @keyframes menuPop { from { opacity: 0; transform: scale(.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
         .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
         .om-danger-btn:hover { background: #8A223B !important; border-color: #8A223B !important; }
-        @keyframes boxBurn {
-          0%   { transform: translate(-50%,-50%) scale(1);    filter: brightness(1) saturate(1);   box-shadow: var(--shadow-pop); }
-          55%  { transform: translate(-50%,-50%) scale(1.02); filter: brightness(1.3) saturate(1.8); box-shadow: 0 0 40px 6px rgba(226,45,0,0.55); }
-          100% { transform: translate(-50%,-50%) scale(0.82); filter: brightness(1.8) saturate(2.2); box-shadow: 0 0 60px 12px rgba(226,45,0,0.25); opacity: 0; }
+        @keyframes boxBurn5s {
+          0%   { transform: translate(-50%,-50%) scale(1); filter: brightness(1) saturate(1);     box-shadow: var(--shadow-pop); }
+          15%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.05) saturate(1.3); box-shadow: 0 0 30px 6px rgba(226,45,0,0.35); }
+          45%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.15) saturate(1.7); box-shadow: 0 0 60px 16px rgba(226,45,0,0.6); }
+          75%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.3) saturate(2);    box-shadow: 0 0 85px 26px rgba(226,45,0,0.7); }
+          92%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+          100% { transform: translate(-50%,-50%) scale(0.9); filter: brightness(1.3) saturate(2); box-shadow: 0 0 40px 10px rgba(226,45,0,0.1); opacity: 0; }
         }
-        @keyframes flameRise {
-          0%   { transform: translateY(0) scale(0.7) rotate(0deg);    opacity: 0; }
-          15%  { opacity: 1; }
-          100% { transform: translateY(-90px) scale(1.15) rotate(var(--flame-rot, 8deg)); opacity: 0; }
+        @keyframes flameBlobGrow {
+          0%   { transform: scale(0.2) rotate(0deg);   border-radius: 45% 55% 60% 40% / 55% 45% 55% 45%; opacity: 0; }
+          10%  { opacity: 0.9; }
+          35%  { transform: scale(1.4) rotate(6deg);   border-radius: 40% 60% 45% 55% / 50% 50% 60% 40%; }
+          60%  { transform: scale(2.4) rotate(-4deg);  border-radius: 55% 45% 50% 60% / 45% 55% 40% 60%; opacity: 1; }
+          80%  { transform: scale(3.2) rotate(3deg);   border-radius: 48% 52% 55% 45% / 52% 48% 50% 50%; }
+          92%  { opacity: 0.5; }
+          100% { transform: scale(3.6) rotate(0deg);   opacity: 0; }
         }
-        .om-burn-box { animation: boxBurn .65s ease-in forwards !important; }
-        .om-flame { position: absolute; bottom: -6px; font-size: 26px; line-height: 1; animation: flameRise .65s ease-out forwards; pointer-events: none; }
+        @keyframes contentFade {
+          0%   { opacity: 1; }
+          25%  { opacity: 1; }
+          55%  { opacity: 0.12; }
+          100% { opacity: 0; }
+        }
+        .om-burn-box { animation: boxBurn5s 5s ease-in forwards !important; }
+        .om-burn-content { animation: contentFade 5s ease-in forwards; }
+        .om-flame-blob {
+          position: absolute; transform-origin: bottom left; pointer-events: none;
+          background: radial-gradient(circle at 35% 75%, #FFF6D6 0%, #FFD166 18%, var(--brand) 45%, var(--brand-dark) 68%, var(--brand-darker) 85%, transparent 100%);
+          animation: flameBlobGrow 5s ease-in forwards;
+        }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
