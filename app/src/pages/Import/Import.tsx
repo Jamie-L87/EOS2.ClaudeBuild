@@ -4,7 +4,7 @@ import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
 import {
   IconChevronRight, IconUpload, IconCheck, IconClose,
-  IconPlus, IconMinus, IconEdit, IconCopy, IconTrash,
+  IconPlus, IconMinus, IconEdit, IconCopy, IconTrash, IconAlert,
 } from '../../components/Icons';
 import { t, size } from '../../tokens';
 import {
@@ -66,6 +66,19 @@ function itemContractPrice(item: BasketItem, contract: Contract): number | null 
   const disc = getContractDiscount(contract, plc);
   if (disc === null) return null;
   return item.listPrice * (1 - disc / 100);
+}
+
+// Rounding tolerance only — a genuine mismatch (e.g. a stale price in the
+// imported file) is any difference beyond ordinary floating-point/rounding noise.
+const PRICE_MISMATCH_TOLERANCE = 0.01;
+
+interface PriceMismatch { fileValue: number; catalogValue: number }
+
+function getPriceMismatch(item: BasketItem): PriceMismatch | null {
+  if (item.filePrice === undefined || item.listPrice <= 0) return null;
+  if (item.fileCurrency && item.currency && item.fileCurrency !== item.currency) return null;
+  if (Math.abs(item.filePrice - item.listPrice) <= PRICE_MISMATCH_TOLERANCE) return null;
+  return { fileValue: item.filePrice, catalogValue: item.listPrice };
 }
 
 /* ------------------------------------------------------------------ */
@@ -374,6 +387,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
     { value: 'articleAndFeature', label: 'Code + Feature' },
     { value: 'featureString',   label: 'Feature String' },
     { value: 'qty',             label: 'Quantity' },
+    { value: 'listPrice',       label: 'List Price' },
   ];
 
   const btnBase = { ...sLargeB, height: 44, padding: '0 18px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' };
@@ -498,13 +512,15 @@ function useBasket() {
 
   const addItems = useCallback((incoming: ParsedItem[]) => {
     const newItems: BasketItem[] = incoming
-      .map(({ articleCode, featureString = '', qty = 1 }) => ({
+      .map(({ articleCode, featureString = '', qty = 1, filePrice, fileCurrency }) => ({
         id: `i-${Math.random().toString(36).slice(2, 9)}-${Date.now()}`,
         articleCode: articleCode.trim(),
         featureString: (featureString || '').trim(),
         qty: Math.max(1, parseInt(String(qty), 10) || 1),
         productName: null, productLine: null, listPrice: 0, currency: 'EUR',
         validationStatus: 'pending' as const, validationError: null,
+        ...(filePrice !== undefined ? { filePrice } : {}),
+        ...(fileCurrency ? { fileCurrency } : {}),
       }))
       .filter(i => i.articleCode);
 
@@ -714,7 +730,7 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
 /* ------------------------------------------------------------------ */
 const rowActionStyle = { width: 28, height: 28, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
-function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount, pricedListPrice, priceDated, priceNote }: {
+function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArticleCode, onExplode, contractUnitPrice, contractDiscount, pricedListPrice, priceDated, priceNote, priceMismatch }: {
   item: BasketItem; lineNum: number | 'SP';
   onRemove: () => void; onQtyChange: (q: number | string) => void;
   onCopy: () => void; onUpdateArticleCode: (code: string) => void;
@@ -724,6 +740,7 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
   pricedListPrice: number;
   priceDated: boolean;
   priceNote: string | null;
+  priceMismatch: PriceMismatch | null;
 }) {
   const [editing, setEditing] = useState(false);
   const [editVal, setEditVal] = useState('');
@@ -798,8 +815,18 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
               style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
           </div>
         </td>
-        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }} title={priceDated ? priceNote ?? 'Pricing date differs from today — figures shown may change' : undefined}>
-          {item.listPrice > 0 ? <span style={{ ...sBody, color: priceDated ? 'var(--red)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(pricedListPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
+            {priceMismatch && (
+              <span title={`Price mismatch: imported file shows ${formatPrice(priceMismatch.fileValue, item.currency)}, EOS shows ${formatPrice(priceMismatch.catalogValue, item.currency)}`}
+                style={{ display: 'inline-flex', color: 'var(--amber)', flexShrink: 0 }}>
+                <IconAlert size={15} stroke={1.8} />
+              </span>
+            )}
+            <span title={priceDated ? priceNote ?? 'Pricing date differs from today — figures shown may change' : undefined}>
+              {item.listPrice > 0 ? <span style={{ ...sBody, color: priceDated ? 'var(--red)' : 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{formatPrice(pricedListPrice, item.currency)}</span> : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+            </span>
+          </div>
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           {contractDiscount !== null
@@ -1173,6 +1200,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const todayISO    = new Date().toISOString().slice(0, 10);
   const priceDated  = pricingDate !== todayISO;
   const pricedItems = items.map(i => getPricedAsOf(i.productLine, i.listPrice, pricingDate, todayISO));
+  const priceMismatches = items.map(i => getPriceMismatch(i));
 
   const totalQty    = items.reduce((s, i) => s + i.qty, 0);
   const grand       = items.reduce((s, i, idx) => s + (pricedItems[idx].price * i.qty), 0);
@@ -1180,6 +1208,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const failedCount = items.filter(i => i.validationStatus === 'failed').length;
   const pendingCount = items.filter(i => i.validationStatus === 'pending').length;
   const superCount  = items.filter(i => i.isSuper).length;
+  const mismatchCount = priceMismatches.filter(Boolean).length;
   const canCreate   = passedCount > 0;
   const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
@@ -1209,6 +1238,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
             {passedCount  > 0 && <Chip label={`${passedCount} validated`}                                     color="green" />}
             {failedCount  > 0 && <Chip label={`${failedCount} not found`}                                     color="red" />}
             {pendingCount > 0 && <Chip label={`${pendingCount} validating…`}                                  color="amber" />}
+            {mismatchCount > 0 && <Chip label={`${mismatchCount} price mismatch${mismatchCount !== 1 ? 'es' : ''}`}        color="amber" />}
           </div>
         </div>
         <button onClick={onClear} className="om-link-btn"
@@ -1271,6 +1301,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
                 pricedListPrice={pricedItems[i].price}
                 priceDated={priceDated}
                 priceNote={pricedItems[i].note}
+                priceMismatch={priceMismatches[i]}
               />
             ))}
           </tbody>
