@@ -1170,14 +1170,14 @@ function FlameSVG({ gradId, tone }: { gradId: string; tone: 'outer' | 'inner' })
   );
 }
 
-function Flame({ id, x, y, w, h, delay, dur, rot = 0 }: { id: string; x: number; y: number; w: number; h: number; delay: number; dur: number; rot?: number }) {
+function Flame({ id, x, y, w, h, delay, dur, rot = 0, giant = false }: { id: string; x: number; y: number; w: number; h: number; delay: number; dur: number; rot?: number; giant?: boolean }) {
   return (
     <div className="om-flame-flicker" style={{
       position: 'absolute', left: x, bottom: y, width: w, height: h,
       transformOrigin: 'bottom center',
       '--rot': `${rot}deg`, '--dur': `${dur}ms`,
     } as CSSProperties}>
-      <div className="om-flame-grow" style={{ position: 'absolute', inset: 0, transformOrigin: 'bottom center', animationDelay: `${delay}ms` }}>
+      <div className={giant ? 'om-flame-grow-giant' : 'om-flame-grow'} style={{ position: 'absolute', inset: 0, transformOrigin: 'bottom center', animationDelay: `${delay}ms` }}>
         <FlameSVG gradId={`${id}-o`} tone="outer" />
         <div style={{ position: 'absolute', left: '20%', bottom: '4%', width: '58%', height: '58%' }}>
           <FlameSVG gradId={`${id}-i`} tone="inner" />
@@ -1185,6 +1185,19 @@ function Flame({ id, x, y, w, h, delay, dur, rot = 0 }: { id: string; x: number;
       </div>
     </div>
   );
+}
+
+function Smoke({ x, y, size, delay, dur }: { x: number; y: number; size: number; delay: number; dur: number }) {
+  return (
+    <div className="om-smoke" style={{
+      position: 'absolute', left: x, bottom: y, width: size, height: size,
+      animationDelay: `${delay}ms`, animationDuration: `${dur}ms`,
+    }} />
+  );
+}
+
+function Ember({ x, y, delay }: { x: number; y: number; delay: number }) {
+  return <div className="om-ember" style={{ position: 'absolute', left: x, bottom: y, animationDelay: `${delay}ms` }} />;
 }
 
 // Anchored on the dialog's bottom-left corner (0,0 = that corner). Negative x/y
@@ -1200,14 +1213,45 @@ const FLAME_CONFIGS = [
   { x: -70,  y: -40,  w: 110, h: 180, delay: 400,  dur: 1000, rot: -1 },
 ];
 
+// Spread evenly across the dialog's measured width so, staggered a beat after
+// the corner flames ignite, they climb tall enough to engulf the whole box.
+function buildGiantFlames(w: number, h: number) {
+  const count = 6;
+  const slotW = w / (count - 1.4);
+  return Array.from({ length: count }, (_, i) => ({
+    x: (w / (count - 1)) * i - slotW / 2,
+    y: -h * 0.06,
+    w: slotW,
+    h: h * 1.25,
+    delay: 900 + i * 90,
+    dur: 800 + (i % 3) * 90,
+    rot: i % 2 === 0 ? -5 : 6,
+  }));
+}
+
+function buildSmoke(w: number, h: number) {
+  return [
+    { x: w * 0.1,  y: h * 0.5, size: 70,  delay: 1400, dur: 3200 },
+    { x: w * 0.35, y: h * 0.7, size: 90,  delay: 2000, dur: 3400 },
+    { x: w * 0.6,  y: h * 0.55, size: 80, delay: 1700, dur: 3300 },
+    { x: w * 0.8,  y: h * 0.65, size: 65, delay: 2500, dur: 3000 },
+    { x: w * 0.45, y: h * 0.4, size: 100, delay: 3000, dur: 3400 },
+    { x: w * 0.2,  y: h * 0.6, size: 75,  delay: 3400, dur: 3200 },
+  ];
+}
+
+function buildEmbers(w: number) {
+  return [0.05, 0.2, 0.38, 0.55, 0.72, 0.9].map((f, i) => ({ x: w * f, y: -4 - (i % 3) * 3, delay: i * 180 }));
+}
+
 function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   const [burning, setBurning] = useState(false);
-  const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null);
+  const [origin, setOrigin] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const boxRef = useRef<HTMLDivElement>(null);
 
   const handleYes = () => {
     const rect = boxRef.current?.getBoundingClientRect();
-    if (rect) setOrigin({ x: rect.left, y: window.innerHeight - rect.bottom });
+    if (rect) setOrigin({ x: rect.left, y: window.innerHeight - rect.bottom, w: rect.width, h: rect.height });
     setBurning(true);
     setTimeout(onConfirm, 5000);
   };
@@ -1218,7 +1262,16 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
       {burning && origin && (
         <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, zIndex: 302, pointerEvents: 'none' }}>
           {FLAME_CONFIGS.map((f, i) => (
-            <Flame key={i} id={`cbf-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} />
+            <Flame key={`fg-${i}`} id={`cbf-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} />
+          ))}
+          {buildGiantFlames(origin.w, origin.h).map((f, i) => (
+            <Flame key={`giant-${i}`} id={`cbfg-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} giant />
+          ))}
+          {buildEmbers(origin.w).map((e, i) => (
+            <Ember key={`ember-${i}`} x={e.x} y={e.y} delay={e.delay} />
+          ))}
+          {buildSmoke(origin.w, origin.h).map((s, i) => (
+            <Smoke key={`smoke-${i}`} x={s.x} y={s.y} size={s.size} delay={s.delay} dur={s.dur} />
           ))}
         </div>
       )}
@@ -1229,7 +1282,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
         width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'hidden',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
       }}>
-        <div style={{ padding: '24px 24px 20px', position: 'relative', zIndex: 1 }}>
+        <div className={burning ? 'om-burn-content' : undefined} style={{ padding: '24px 24px 20px', position: 'relative', zIndex: 1 }}>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
         </div>
@@ -1645,18 +1698,28 @@ export default function ImportPage() {
         .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
         .om-danger-btn:hover { background: #8A223B !important; border-color: #8A223B !important; }
         @keyframes boxBurn5s {
-          0%   { transform: translate(-50%,-50%) scale(1); filter: brightness(1) saturate(1);     box-shadow: var(--shadow-pop); }
-          15%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.05) saturate(1.3); box-shadow: 0 0 30px 6px rgba(226,45,0,0.35); }
-          45%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.15) saturate(1.7); box-shadow: 0 0 60px 16px rgba(226,45,0,0.6); }
-          75%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.3) saturate(2);    box-shadow: 0 0 85px 26px rgba(226,45,0,0.7); }
-          92%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-          100% { transform: translate(-50%,-50%) scale(0.9); filter: brightness(1.3) saturate(2); box-shadow: 0 0 40px 10px rgba(226,45,0,0.1); opacity: 0; }
+          0%   { transform: translate(-50%,-50%) scale(1); filter: brightness(1) saturate(1);      box-shadow: var(--shadow-pop); }
+          15%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.05) saturate(1.3);  box-shadow: 0 0 30px 6px rgba(226,45,0,0.35); }
+          40%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.15) saturate(1.7);  box-shadow: 0 0 60px 16px rgba(226,45,0,0.6); }
+          62%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.3) saturate(2);     box-shadow: 0 0 95px 30px rgba(226,45,0,0.8); }
+          80%  { transform: translate(-50%,-50%) scale(1); filter: brightness(0.8) saturate(1);     box-shadow: 0 0 55px 16px rgba(120,20,10,0.55); }
+          92%  { transform: translate(-50%,-50%) scale(1); filter: brightness(0.55) saturate(0.6);  box-shadow: 0 0 28px 8px rgba(60,10,5,0.35); opacity: 1; }
+          100% { transform: translate(-50%,-50%) scale(0.88); filter: brightness(0.4) saturate(0.4); box-shadow: none; opacity: 0; }
         }
         .om-burn-box { animation: boxBurn5s 5s ease-in forwards !important; }
+        @keyframes contentChar {
+          0%   { opacity: 1; filter: none; }
+          45%  { opacity: 1; filter: none; }
+          65%  { opacity: 0.35; filter: brightness(0.5) sepia(0.4); }
+          85%  { opacity: 0.08; }
+          100% { opacity: 0; }
+        }
+        .om-burn-content { animation: contentChar 5s ease-in forwards; }
         @keyframes backdropGlow {
           0%   { background: rgba(9,9,9,0.32); }
-          35%  { background: rgba(70,12,0,0.5); }
-          70%  { background: rgba(30,5,0,0.65); }
+          30%  { background: rgba(80,14,0,0.5); }
+          60%  { background: rgba(90,20,5,0.6); }
+          85%  { background: rgba(35,25,25,0.68); }
           100% { background: rgba(9,9,9,0.32); }
         }
         .om-burn-backdrop { animation: backdropGlow 5s ease-in forwards; }
@@ -1674,8 +1737,40 @@ export default function ImportPage() {
           82%  { transform: scaleY(1.05) scaleX(0.95); opacity: 1; }
           100% { transform: scaleY(0.6) scaleX(0.55); opacity: 0; }
         }
+        @keyframes flameGrowGiant {
+          0%   { transform: scaleY(0.05) scaleX(0.3); opacity: 0; }
+          15%  { opacity: 1; }
+          45%  { transform: scaleY(1) scaleX(1); }
+          70%  { transform: scaleY(1.1) scaleX(1.03); opacity: 1; }
+          100% { transform: scaleY(0.45) scaleX(0.55); opacity: 0; }
+        }
         .om-flame-flicker { animation: flameSway var(--dur, 900ms) ease-in-out infinite; }
         .om-flame-grow { animation: flameGrow 4.6s ease-in forwards; }
+        .om-flame-grow-giant { animation: flameGrowGiant 3.4s ease-in forwards; }
+        @keyframes smokeRise {
+          0%   { transform: translateY(0) scale(0.5); opacity: 0; }
+          12%  { opacity: 0.55; }
+          65%  { transform: translateY(-90px) scale(1.4); opacity: 0.5; }
+          100% { transform: translateY(-190px) scale(2.1); opacity: 0; }
+        }
+        .om-smoke {
+          border-radius: 50%; pointer-events: none;
+          background: radial-gradient(circle, rgba(100,100,100,0.85) 0%, rgba(70,70,70,0.5) 55%, transparent 80%);
+          filter: blur(5px);
+          animation: smokeRise 3.2s ease-out forwards;
+        }
+        @keyframes emberPulse {
+          0%   { opacity: 0; transform: scale(0.5); }
+          15%  { opacity: 1; transform: scale(1); }
+          45%  { opacity: 0.55; transform: scale(0.8); }
+          70%  { opacity: 1; transform: scale(1.1); }
+          100% { opacity: 0; transform: scale(0.6); }
+        }
+        .om-ember {
+          width: 10px; height: 10px; border-radius: 50%; pointer-events: none;
+          background: radial-gradient(circle, #FFF3B0 0%, var(--brand) 55%, transparent 100%);
+          animation: emberPulse 1300ms ease-in-out infinite;
+        }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
