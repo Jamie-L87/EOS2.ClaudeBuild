@@ -663,7 +663,11 @@ function Chip({ label, color, title }: { label: string; color?: 'green' | 'red' 
   };
   const c = color ? colorMap[color] : { bg: 'var(--line)', fg: 'var(--ink-2)' };
   return (
-    <span title={title} style={{ ...sBodyB, color: c.fg, background: c.bg, padding: '4px 10px', borderRadius: 999 }}>{label}</span>
+    <span title={title} style={{ ...sBodyB, color: c.fg, background: c.bg, padding: '4px 10px', borderRadius: 999 }}>
+      {title
+        ? <span style={{ textDecoration: 'underline dotted', textDecorationColor: c.fg, textUnderlineOffset: 3 }}>{label}</span>
+        : label}
+    </span>
   );
 }
 
