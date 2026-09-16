@@ -654,7 +654,7 @@ function useBasket() {
 /* ------------------------------------------------------------------ */
 /*  CHIP                                                                */
 /* ------------------------------------------------------------------ */
-function Chip({ label, color }: { label: string; color?: 'green' | 'red' | 'amber' | 'blue' }) {
+function Chip({ label, color, title }: { label: string; color?: 'green' | 'red' | 'amber' | 'blue'; title?: string }) {
   const colorMap = {
     green: { bg: 'var(--green-soft)', fg: 'var(--green)' },
     red:   { bg: 'var(--red-soft)',   fg: 'var(--red)'   },
@@ -663,7 +663,7 @@ function Chip({ label, color }: { label: string; color?: 'green' | 'red' | 'ambe
   };
   const c = color ? colorMap[color] : { bg: 'var(--line)', fg: 'var(--ink-2)' };
   return (
-    <span style={{ ...sBodyB, color: c.fg, background: c.bg, padding: '4px 10px', borderRadius: 999 }}>{label}</span>
+    <span title={title} style={{ ...sBodyB, color: c.fg, background: c.bg, padding: '4px 10px', borderRadius: 999 }}>{label}</span>
   );
 }
 
@@ -1238,7 +1238,13 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
             {passedCount  > 0 && <Chip label={`${passedCount} validated`}                                     color="green" />}
             {failedCount  > 0 && <Chip label={`${failedCount} not found`}                                     color="red" />}
             {pendingCount > 0 && <Chip label={`${pendingCount} validating…`}                                  color="amber" />}
-            {mismatchCount > 0 && <Chip label={`${mismatchCount} price mismatch${mismatchCount !== 1 ? 'es' : ''}`}        color="amber" />}
+            {mismatchCount > 0 && (
+              <Chip
+                label={`${mismatchCount} price${mismatchCount !== 1 ? 's' : ''} to review`}
+                color="amber"
+                title="The imported file's price differs from EOS's list price for one or more items — EOS's price is what will be used. See the flagged row(s) below for details."
+              />
+            )}
           </div>
         </div>
         <button onClick={onClear} className="om-link-btn"
