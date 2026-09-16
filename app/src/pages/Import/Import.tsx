@@ -1200,33 +1200,37 @@ function Ember({ x, y, delay }: { x: number; y: number; delay: number }) {
   return <div className="om-ember" style={{ position: 'absolute', left: x, bottom: y, animationDelay: `${delay}ms` }} />;
 }
 
-// Anchored on the dialog's bottom-left corner (0,0 = that corner). Negative x/y
-// spill left and up onto the page behind the dialog; small positive x values
-// lick up over the dialog's own bottom-left edge.
-const FLAME_CONFIGS = [
-  { x: -170, y: -10,  w: 90,  h: 140, delay: 0,    dur: 900, rot: -6 },
-  { x: -110, y: -20,  w: 130, h: 200, delay: 120,  dur: 1000, rot: -3 },
-  { x: -40,  y: -30,  w: 160, h: 250, delay: 60,   dur: 950, rot: 2  },
-  { x: 30,   y: -20,  w: 120, h: 190, delay: 200,  dur: 1050, rot: 5 },
-  { x: -220, y: -5,   w: 70,  h: 110, delay: 260,  dur: 880, rot: -9 },
-  { x: 90,   y: -15,  w: 80,  h: 130, delay: 320,  dur: 920, rot: 8  },
-  { x: -70,  y: -40,  w: 110, h: 180, delay: 400,  dur: 1000, rot: -1 },
-];
+// A solid gradient wash sized exactly to the dialog guarantees full, gap-free
+// coverage; the tongue shapes on top of it give it a proper flame texture.
+function FireWash({ w, h }: { w: number; h: number }) {
+  return <div className="om-fire-wash" style={{ position: 'absolute', left: 0, bottom: 0, width: w, height: h }} />;
+}
 
-// Spread evenly across the dialog's measured width so, staggered a beat after
-// the corner flames ignite, they climb tall enough to engulf the whole box.
-function buildGiantFlames(w: number, h: number) {
-  const count = 6;
-  const slotW = w / (count - 1.4);
-  return Array.from({ length: count }, (_, i) => ({
-    x: (w / (count - 1)) * i - slotW / 2,
-    y: -h * 0.06,
-    w: slotW,
-    h: h * 1.25,
-    delay: 900 + i * 90,
-    dur: 800 + (i % 3) * 90,
-    rot: i % 2 === 0 ? -5 : 6,
-  }));
+// Every tongue's box overlaps the dialog's own rectangle (x clamped to
+// [-8%, 108%] of width) - none of them float off on their own out in the page.
+// A base band along the bottom edge plus a rim band near the top gives full
+// width x height coverage rather than just a fringe along the bottom.
+function buildTongues(w: number, h: number) {
+  const bands = [
+    { yFrac: -0.04, hFrac: 0.85, count: 7, delayBase: 0 },
+    { yFrac: 0.42,  hFrac: 0.75, count: 6, delayBase: 500 },
+  ];
+  const tongues: { x: number; y: number; w: number; h: number; delay: number; dur: number; rot: number }[] = [];
+  bands.forEach((band, bi) => {
+    const slotW = w / (band.count - 0.6);
+    for (let i = 0; i < band.count; i++) {
+      tongues.push({
+        x: (w / (band.count - 1)) * i - slotW / 2,
+        y: h * band.yFrac,
+        w: slotW * 1.15,
+        h: h * band.hFrac,
+        delay: band.delayBase + i * 80 + (bi === 1 ? 40 : 0),
+        dur: 800 + ((i + bi) % 3) * 90,
+        rot: i % 2 === 0 ? -5 : 6,
+      });
+    }
+  });
+  return tongues;
 }
 
 function buildSmoke(w: number, h: number) {
@@ -1244,28 +1248,47 @@ function buildEmbers(w: number) {
   return [0.05, 0.2, 0.38, 0.55, 0.72, 0.9].map((f, i) => ({ x: w * f, y: -4 - (i % 3) * 3, delay: i * 180 }));
 }
 
+// A lit match, thrown in from off-screen and tumbling end-over-end before it
+// lands on the dialog - the spark that starts the whole thing.
+function Match({ w, h }: { w: number; h: number }) {
+  return (
+    <div className="om-match-throw" style={{ position: 'absolute', left: w / 2 - 6, bottom: h / 2 - 30 }}>
+      <svg width="12" height="60" viewBox="0 0 12 60">
+        <rect x="4" y="16" width="4" height="42" rx="2" fill="#B08355" />
+        <ellipse className="om-match-head" cx="6" cy="10" rx="6" ry="9" fill="var(--brand)" />
+      </svg>
+    </div>
+  );
+}
+
 function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
-  const [burning, setBurning] = useState(false);
+  const [phase, setPhase] = useState<'idle' | 'match' | 'burning'>('idle');
   const [origin, setOrigin] = useState<{ x: number; y: number; w: number; h: number } | null>(null);
   const boxRef = useRef<HTMLDivElement>(null);
+  const busy = phase !== 'idle';
+  const burning = phase === 'burning';
 
   const handleYes = () => {
     const rect = boxRef.current?.getBoundingClientRect();
     if (rect) setOrigin({ x: rect.left, y: window.innerHeight - rect.bottom, w: rect.width, h: rect.height });
-    setBurning(true);
-    setTimeout(onConfirm, 5000);
+    setPhase('match');
+    setTimeout(() => setPhase('burning'), 550);
+    setTimeout(onConfirm, 550 + 5000);
   };
 
   return (
     <>
-      <div onClick={burning ? undefined : onCancel} className={burning ? 'om-burn-backdrop' : undefined} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      <div onClick={busy ? undefined : onCancel} className={burning ? 'om-burn-backdrop' : undefined} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      {phase === 'match' && origin && (
+        <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, width: origin.w, height: origin.h, zIndex: 302, pointerEvents: 'none' }}>
+          <Match w={origin.w} h={origin.h} />
+        </div>
+      )}
       {burning && origin && (
-        <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, zIndex: 302, pointerEvents: 'none' }}>
-          {FLAME_CONFIGS.map((f, i) => (
-            <Flame key={`fg-${i}`} id={`cbf-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} />
-          ))}
-          {buildGiantFlames(origin.w, origin.h).map((f, i) => (
-            <Flame key={`giant-${i}`} id={`cbfg-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} giant />
+        <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, width: origin.w, height: origin.h, zIndex: 302, pointerEvents: 'none', overflow: 'visible' }}>
+          <FireWash w={origin.w} h={origin.h} />
+          {buildTongues(origin.w, origin.h).map((f, i) => (
+            <Flame key={`t-${i}`} id={`cbft-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} giant />
           ))}
           {buildEmbers(origin.w).map((e, i) => (
             <Ember key={`ember-${i}`} x={e.x} y={e.y} delay={e.delay} />
@@ -1286,7 +1309,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
         </div>
-        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, position: 'relative', zIndex: 1, opacity: burning ? 0.4 : 1, pointerEvents: burning ? 'none' : 'auto' }}>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, position: 'relative', zIndex: 1, opacity: busy ? 0.4 : 1, pointerEvents: busy ? 'none' : 'auto' }}>
           <button onClick={onCancel} className="om-stroke-btn"
             style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
             No
@@ -1771,6 +1794,33 @@ export default function ImportPage() {
           background: radial-gradient(circle, #FFF3B0 0%, var(--brand) 55%, transparent 100%);
           animation: emberPulse 1300ms ease-in-out infinite;
         }
+        @keyframes fireWashGrow {
+          0%   { opacity: 0;   transform: scaleY(0.05); }
+          10%  { opacity: 0.9; }
+          30%  { opacity: 1;   transform: scaleY(1); }
+          62%  { opacity: 1;   transform: scaleY(1); filter: saturate(1.3) brightness(1); }
+          80%  { opacity: 0.9; filter: saturate(0.8) brightness(0.75); }
+          92%  { opacity: 0.5; filter: saturate(0.5) brightness(0.5); }
+          100% { opacity: 0;   transform: scaleY(0.9); filter: saturate(0.4) brightness(0.4); }
+        }
+        .om-fire-wash {
+          border-radius: var(--radius); transform-origin: bottom; pointer-events: none;
+          background: linear-gradient(0deg, #FFF3B0 0%, #FFD166 14%, var(--brand) 42%, var(--brand-dark) 72%, var(--brand-darker) 100%);
+          animation: fireWashGrow 5s ease-in forwards;
+        }
+        @keyframes matchThrow {
+          0%   { transform: translate(260px, -220px) rotate(-70deg); opacity: 0; }
+          12%  { opacity: 1; }
+          90%  { transform: translate(4px, -4px) rotate(300deg); opacity: 1; }
+          100% { transform: translate(0,0) rotate(320deg); opacity: 0; }
+        }
+        @keyframes matchHeadGlow {
+          0%   { filter: drop-shadow(0 0 0px #FFD166); }
+          50%  { filter: drop-shadow(0 0 2px #FFD166); }
+          100% { filter: drop-shadow(0 0 10px #FFD166) brightness(1.6); }
+        }
+        .om-match-throw { animation: matchThrow 550ms ease-in forwards; }
+        .om-match-head { animation: matchHeadGlow 550ms ease-in forwards; transform-origin: center; }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
