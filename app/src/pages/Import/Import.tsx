@@ -1150,43 +1150,86 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
 /* ------------------------------------------------------------------ */
 /*  CLEAR BASKET CONFIRMATION                                          */
 /* ------------------------------------------------------------------ */
-const FLAME_LAYERS = [
-  { size: 260, left: '-14%', bottom: '-18%', delay: '0ms',    hue: '0deg'   },
-  { size: 300, left: '-6%',  bottom: '-22%', delay: '250ms',  hue: '-6deg'  },
-  { size: 240, left: '2%',   bottom: '-14%', delay: '480ms',  hue: '8deg'   },
-  { size: 320, left: '-10%', bottom: '-26%', delay: '120ms',  hue: '-3deg'  },
-  { size: 200, left: '6%',   bottom: '-10%', delay: '620ms',  hue: '5deg'   },
+// Hand-drawn flame silhouette: bulgy body tapering to a leaning point, with a
+// notch on one side so it reads as a flickering tongue rather than a blob.
+const FLAME_PATH = 'M32 94C15 83 7 64 12 47 C16 58 23 61 25 53 C19 39 25 18 37 2 C32 25 47 27 45 45 C55 52 59 67 49 81 C43 90 36 94 32 94Z';
+
+function FlameSVG({ gradId, tone }: { gradId: string; tone: 'outer' | 'inner' }) {
+  const stops = tone === 'outer'
+    ? [['0%', '#FFD166'], ['35%', 'var(--brand)'], ['75%', 'var(--brand-dark)'], ['100%', 'var(--brand-darker)']]
+    : [['0%', '#FFFBEA'], ['45%', '#FFD166'], ['100%', 'var(--brand)']];
+  return (
+    <svg viewBox="0 0 64 96" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+      <defs>
+        <linearGradient id={gradId} x1="0" y1="1" x2="0" y2="0">
+          {stops.map(([off, col]) => <stop key={off} offset={off} stopColor={col} />)}
+        </linearGradient>
+      </defs>
+      <path d={FLAME_PATH} fill={`url(#${gradId})`} />
+    </svg>
+  );
+}
+
+function Flame({ id, x, y, w, h, delay, dur, rot = 0 }: { id: string; x: number; y: number; w: number; h: number; delay: number; dur: number; rot?: number }) {
+  return (
+    <div className="om-flame-flicker" style={{
+      position: 'absolute', left: x, bottom: y, width: w, height: h,
+      transformOrigin: 'bottom center',
+      '--rot': `${rot}deg`, '--dur': `${dur}ms`,
+    } as CSSProperties}>
+      <div className="om-flame-grow" style={{ position: 'absolute', inset: 0, transformOrigin: 'bottom center', animationDelay: `${delay}ms` }}>
+        <FlameSVG gradId={`${id}-o`} tone="outer" />
+        <div style={{ position: 'absolute', left: '20%', bottom: '4%', width: '58%', height: '58%' }}>
+          <FlameSVG gradId={`${id}-i`} tone="inner" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Anchored on the dialog's bottom-left corner (0,0 = that corner). Negative x/y
+// spill left and up onto the page behind the dialog; small positive x values
+// lick up over the dialog's own bottom-left edge.
+const FLAME_CONFIGS = [
+  { x: -170, y: -10,  w: 90,  h: 140, delay: 0,    dur: 900, rot: -6 },
+  { x: -110, y: -20,  w: 130, h: 200, delay: 120,  dur: 1000, rot: -3 },
+  { x: -40,  y: -30,  w: 160, h: 250, delay: 60,   dur: 950, rot: 2  },
+  { x: 30,   y: -20,  w: 120, h: 190, delay: 200,  dur: 1050, rot: 5 },
+  { x: -220, y: -5,   w: 70,  h: 110, delay: 260,  dur: 880, rot: -9 },
+  { x: 90,   y: -15,  w: 80,  h: 130, delay: 320,  dur: 920, rot: 8  },
+  { x: -70,  y: -40,  w: 110, h: 180, delay: 400,  dur: 1000, rot: -1 },
 ];
 
 function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; onCancel: () => void }) {
   const [burning, setBurning] = useState(false);
+  const [origin, setOrigin] = useState<{ x: number; y: number } | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
 
   const handleYes = () => {
+    const rect = boxRef.current?.getBoundingClientRect();
+    if (rect) setOrigin({ x: rect.left, y: window.innerHeight - rect.bottom });
     setBurning(true);
     setTimeout(onConfirm, 5000);
   };
 
   return (
     <>
-      <div onClick={burning ? undefined : onCancel} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
-      <div className={burning ? 'om-burn-box' : undefined} style={{
+      <div onClick={burning ? undefined : onCancel} className={burning ? 'om-burn-backdrop' : undefined} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      {burning && origin && (
+        <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, zIndex: 302, pointerEvents: 'none' }}>
+          {FLAME_CONFIGS.map((f, i) => (
+            <Flame key={i} id={`cbf-${i}`} x={f.x} y={f.y} w={f.w} h={f.h} delay={f.delay} dur={f.dur} rot={f.rot} />
+          ))}
+        </div>
+      )}
+      <div ref={boxRef} className={burning ? 'om-burn-box' : undefined} style={{
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
         zIndex: 301, background: '#fff', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
         width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'hidden',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
       }}>
-        {burning && (
-          <div style={{ position: 'absolute', inset: 0, zIndex: 5 }}>
-            {FLAME_LAYERS.map((f, i) => (
-              <div key={i} className="om-flame-blob" style={{
-                width: f.size, height: f.size, left: f.left, bottom: f.bottom,
-                animationDelay: f.delay, filter: `hue-rotate(${f.hue})`,
-              } as CSSProperties} />
-            ))}
-          </div>
-        )}
-        <div className={burning ? 'om-burn-content' : undefined} style={{ padding: '24px 24px 20px', position: 'relative', zIndex: 1 }}>
+        <div style={{ padding: '24px 24px 20px', position: 'relative', zIndex: 1 }}>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 8 }}>Clear Basket</div>
           <div style={{ ...sBody, color: 'var(--ink-2)' }}>Are you sure you want to clear your basket? This can't be undone.</div>
         </div>
@@ -1609,28 +1652,30 @@ export default function ImportPage() {
           92%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
           100% { transform: translate(-50%,-50%) scale(0.9); filter: brightness(1.3) saturate(2); box-shadow: 0 0 40px 10px rgba(226,45,0,0.1); opacity: 0; }
         }
-        @keyframes flameBlobGrow {
-          0%   { transform: scale(0.2) rotate(0deg);   border-radius: 45% 55% 60% 40% / 55% 45% 55% 45%; opacity: 0; }
-          10%  { opacity: 0.9; }
-          35%  { transform: scale(1.4) rotate(6deg);   border-radius: 40% 60% 45% 55% / 50% 50% 60% 40%; }
-          60%  { transform: scale(2.4) rotate(-4deg);  border-radius: 55% 45% 50% 60% / 45% 55% 40% 60%; opacity: 1; }
-          80%  { transform: scale(3.2) rotate(3deg);   border-radius: 48% 52% 55% 45% / 52% 48% 50% 50%; }
-          92%  { opacity: 0.5; }
-          100% { transform: scale(3.6) rotate(0deg);   opacity: 0; }
-        }
-        @keyframes contentFade {
-          0%   { opacity: 1; }
-          25%  { opacity: 1; }
-          55%  { opacity: 0.12; }
-          100% { opacity: 0; }
-        }
         .om-burn-box { animation: boxBurn5s 5s ease-in forwards !important; }
-        .om-burn-content { animation: contentFade 5s ease-in forwards; }
-        .om-flame-blob {
-          position: absolute; transform-origin: bottom left; pointer-events: none;
-          background: radial-gradient(circle at 35% 75%, #FFF6D6 0%, #FFD166 18%, var(--brand) 45%, var(--brand-dark) 68%, var(--brand-darker) 85%, transparent 100%);
-          animation: flameBlobGrow 5s ease-in forwards;
+        @keyframes backdropGlow {
+          0%   { background: rgba(9,9,9,0.32); }
+          35%  { background: rgba(70,12,0,0.5); }
+          70%  { background: rgba(30,5,0,0.65); }
+          100% { background: rgba(9,9,9,0.32); }
         }
+        .om-burn-backdrop { animation: backdropGlow 5s ease-in forwards; }
+        @keyframes flameSway {
+          0%   { transform: rotate(var(--rot, 0deg)); }
+          25%  { transform: rotate(calc(var(--rot, 0deg) + 6deg)) scaleX(0.94); }
+          50%  { transform: rotate(calc(var(--rot, 0deg) - 5deg)); }
+          75%  { transform: rotate(calc(var(--rot, 0deg) + 4deg)) scaleX(1.05); }
+          100% { transform: rotate(var(--rot, 0deg)); }
+        }
+        @keyframes flameGrow {
+          0%   { transform: scaleY(0.08) scaleX(0.4); opacity: 0; }
+          12%  { opacity: 1; }
+          40%  { transform: scaleY(1) scaleX(1); }
+          82%  { transform: scaleY(1.05) scaleX(0.95); opacity: 1; }
+          100% { transform: scaleY(0.6) scaleX(0.55); opacity: 0; }
+        }
+        .om-flame-flicker { animation: flameSway var(--dur, 900ms) ease-in-out infinite; }
+        .om-flame-grow { animation: flameGrow 4.6s ease-in forwards; }
         .om-link-btn:hover { color: var(--brand) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
