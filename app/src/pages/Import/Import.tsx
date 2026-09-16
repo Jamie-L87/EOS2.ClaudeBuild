@@ -1342,7 +1342,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
-          <button onClick={onClear} className="om-stroke-btn" style={btnBase}>Cancel</button>
+          <button onClick={onClear} className="om-stroke-btn" style={btnBase}>Clear Basket</button>
           <div ref={saveMenuRef} style={{ position: 'relative' }}>
             {saveMenuOpen && (
               <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
