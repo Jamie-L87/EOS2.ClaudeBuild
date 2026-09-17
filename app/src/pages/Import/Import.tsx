@@ -807,7 +807,16 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
         </td>
         <td style={{ padding: '12px 18px', verticalAlign: 'middle' }}>
           {status === 'pending' && <span style={{ ...sBody, color: 'var(--ink-3)' }}>Looking up…</span>}
-          {status === 'passed'  && <span style={{ ...sBody, color: 'var(--ink)' }}>{item.productName || '—'}</span>}
+          {status === 'passed'  && (
+            <div>
+              <span style={{ ...sBody, color: 'var(--ink)' }}>{item.productName || '—'}</span>
+              {item.productLine && PRODUCT_LINE_PLCS[item.productLine] && (
+                <span style={{ display: 'block', fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", fontSize: 11, color: 'var(--ink-2)', marginTop: 2 }}>
+                  {PRODUCT_LINE_PLCS[item.productLine].plc}
+                </span>
+              )}
+            </div>
+          )}
           {status === 'failed'  && <span style={{ ...sBodyB, color: 'var(--red)' }}>Not found</span>}
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
