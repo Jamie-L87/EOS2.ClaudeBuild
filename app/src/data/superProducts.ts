@@ -15,6 +15,7 @@ export interface SuperChild {
 export interface SuperBomEntry {
   productName: string;
   productLine: string;
+  plc: string;
   currency: string;
   children: Omit<SuperChild, 'id' | 'qtyShipped'>[];
 }
@@ -23,6 +24,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'UPXSGA4NN22PPNU.0814RAM': {
     productName: 'Atlas Sit-to-Stand Desk',
     productLine: 'ATLAS',
+    plc: 'FR-UP',
     currency: 'GBP',
     children: [
       { articleCode: 'UPTAPNN.0814RAM', featureString: 'X1', productCode: 'FR-UP-TP', shortDescription: 'Primary WorkTop / no switch / no access',                              qty: 1, listPrice: 89.68,  finishOptions: ['X1','X2','U1','98'], editableFinish: true  },
@@ -41,6 +43,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'UPXSGB6NN22PPNU.1014RAM': {
     productName: 'Atlas Sit-to-Stand Desk · 1400×800',
     productLine: 'ATLAS',
+    plc: 'FR-UP',
     currency: 'GBP',
     children: [
       { articleCode: 'UPTAPNN.1014RAM', featureString: 'X1', productCode: 'FR-UP-TP', shortDescription: 'Primary WorkTop 1400×800 / no switch',                            qty: 1, listPrice: 112.40, finishOptions: ['X1','X2','U1','98'], editableFinish: true  },
@@ -58,6 +61,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'RY3XTDSBNU.G0812SM': {
     productName: 'Ratio Desk / Single with Tray / Electric (650–1250) / SBN / UK',
     productLine: 'RATIO',
+    plc: 'FR-RA',
     currency: 'GBP',
     children: [
       { articleCode: 'RY3ULESC4.',   featureString: '91', productCode: 'FR-RA-US', shortDescription: 'SS Connecting Legs / adj (650–1250mm)',      qty: 1, listPrice: 234.46, finishOptions: ['91'], editableFinish: true  },
@@ -75,6 +79,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'DWE36AT4YSNBNUN.0812S4MG': {
     productName: 'Nevi SS Desk / Basic switch / UK',
     productLine: 'NEVI',
+    plc: 'FR-ID',
     currency: 'GBP',
     children: [
       { articleCode: 'DWE3UFR.08G',       featureString: '98',    productCode: 'FR-ID-US', shortDescription: 'SS Feet + hardware pack - Rectangular',    qty: 1, listPrice:  42.18, finishOptions: ['98'],    editableFinish: true  },
@@ -90,6 +95,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'MEXXAW.0909S4MG': {
     productName: 'Civic Table Round / Work height 740mm',
     productLine: 'CIVIC',
+    plc: 'FR-CI',
     currency: 'GBP',
     children: [
       { articleCode: 'METAS.09S4M',  featureString: 'NN X1 X1', productCode: 'FR-CI-TP', shortDescription: 'Civic Round Worktop / single top',            qty: 1, listPrice: 109.82, finishOptions: ['NN X1 X1'], editableFinish: true },
@@ -102,6 +108,7 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   'PEP200.SEMNNUNMNN': {
     productName: 'Bay Work Pod - Pro',
     productLine: 'BAY_WORK_POD',
+    plc: 'FR-TM',
     currency: 'GBP',
     children: [
       { articleCode: 'RY3UCP.U',     featureString: '',      productCode: 'FR-RA-US', shortDescription: 'Mains Cable',                       qty: 1, listPrice:    8.36                                                    },
@@ -130,6 +137,7 @@ export function lookupSuper(articleCode: string) {
     isSuper: true,
     productName: def.productName,
     productLine: def.productLine,
+    plc: def.plc,
     currency: def.currency,
     children,
     listPrice: def.children.reduce((s, c) => s + (c.listPrice ?? 0) * (c.qty ?? 1), 0),

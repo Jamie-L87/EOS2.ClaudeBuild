@@ -543,6 +543,7 @@ function useBasket() {
               isSuper: !!result.isSuper,
               superChildren: result.superChildren || null,
               ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
+              ...(result.plc ? { plc: result.plc } : {}),
             };
           }));
         });
@@ -602,6 +603,7 @@ function useBasket() {
               isSuper: !!result.isSuper,
               superChildren: result.superChildren || null,
               ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
+              ...(result.plc ? { plc: result.plc } : {}),
             };
           }));
         });
@@ -624,6 +626,7 @@ function useBasket() {
         qty: (c.qty || 1) * parent.qty,
         productName: c.shortDescription,
         productLine: parent.productLine,
+        plc: c.productCode,
         listPrice: c.listPrice || 0,
         currency: c.currency || parent.currency,
         validationStatus: 'passed' as const,
@@ -699,7 +702,7 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
       <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         <thead>
           <tr style={{ background: 'var(--bg-soft)' }}>
-            {['Component Item', 'Feature String', 'Short Description', 'Product Code', 'Quantity', 'Total Price'].map((h, i) => (
+            {['Component Item', 'Feature String', 'Short Description', 'PLC', 'Quantity', 'Total Price'].map((h, i) => (
               <th key={h} style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, padding: '10px 12px', textAlign: i >= 4 ? 'center' : 'left', whiteSpace: 'nowrap' }}>{h}</th>
             ))}
           </tr>
@@ -713,7 +716,7 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
                 <td style={{ padding: '10px 12px', verticalAlign: 'middle' }}><span style={{ ...sBodyB, color: 'var(--ink)' }}>{c.articleCode}</span></td>
                 <td style={{ padding: '10px 12px', verticalAlign: 'middle' }}><span style={{ ...sBody, color: 'var(--ink-2)', fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", fontSize: 12 }}>{c.featureString || '—'}</span></td>
                 <td style={{ padding: '10px 12px', verticalAlign: 'middle' }}><span style={{ ...sBody, color: 'var(--ink)' }}>{c.shortDescription}</span></td>
-                <td style={{ padding: '10px 12px', verticalAlign: 'middle' }}><span style={{ ...sBody, color: 'var(--ink-2)' }}>{c.productCode}</span></td>
+                <td style={{ padding: '10px 12px', verticalAlign: 'middle' }}><span style={{ ...sBody, color: 'var(--ink-2)', fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", fontSize: 12 }}>{c.productCode}</span></td>
                 <td style={{ padding: '10px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
                   <span style={{ ...sBodyB, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{effQty}</span>
                   {parentQty > 1 && <span style={{ ...sBody, color: 'var(--ink-3)', marginLeft: 6, fontSize: 11 }}>({c.qty} × {parentQty})</span>}
@@ -810,9 +813,9 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
           {status === 'passed'  && (
             <div>
               <span style={{ ...sBody, color: 'var(--ink)' }}>{item.productName || '—'}</span>
-              {item.productLine && PRODUCT_LINE_PLCS[item.productLine] && (
+              {item.plc && (
                 <span style={{ display: 'block', fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace", fontSize: 11, color: 'var(--ink-2)', marginTop: 2 }}>
-                  {PRODUCT_LINE_PLCS[item.productLine].plc}
+                  {item.plc}
                 </span>
               )}
             </div>

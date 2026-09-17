@@ -7,6 +7,7 @@ export interface ValidationResult {
   isSuper?: boolean;
   productName: string | null;
   productLine: string | null;
+  plc?: string | null;
   price: number | null;
   currency: string | null;
   superChildren?: SuperChild[];
@@ -24,6 +25,7 @@ export function validateItem(articleCode: string, featureString: string): Valida
       isSuper: true,
       productName: sup.productName,
       productLine: sup.productLine,
+      plc: sup.plc,
       price: sup.listPrice,
       currency: sup.currency,
       superChildren: sup.children,
