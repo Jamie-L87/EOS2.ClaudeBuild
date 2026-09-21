@@ -3,6 +3,8 @@ import { validateItem } from './validation';
 import type { ValidationResult } from './validation';
 import type { SuperChild } from '../data/superProducts';
 
+export const MAX_QTY = 99999;
+
 export interface ParsedItem {
   articleCode: string;
   featureString: string;
@@ -34,6 +36,7 @@ export interface BasketItem {
   currency: string;
   validationStatus: 'pending' | 'passed' | 'failed';
   validationError: string | null;
+  qtyCapped?: boolean;
   isSuper?: boolean;
   superChildren?: SuperChild[] | null;
   superExpanded?: boolean;   // set on parent when expanded for export

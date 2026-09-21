@@ -12,7 +12,7 @@ import {
   parseOBX, parseSIF, parseTextInput, parseXLSX, parseCSV,
   applyColumnMapping, autoDetectColumns, validateBasketItems,
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
-  expandSuperItems, EXTRA_EXPORT_FIELDS,
+  expandSuperItems, EXTRA_EXPORT_FIELDS, MAX_QTY,
 } from '../../services/parsers';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import type { Contract } from '../../data/contracts';
@@ -46,7 +46,8 @@ function hashCode(s: string): number {
 function mockEnrich(articleCode: string, listPrice: number, productLine: string | null, productName: string | null) {
   const h = hashCode(articleCode);
   const plcMeta = productLine ? PRODUCT_LINE_PLCS[productLine] : null;
-  const leadTimes = ['4–6 weeks', '6–8 weeks', '8–10 weeks', '10–12 weeks', '12–14 weeks'];
+  // Lead time is always a fixed number of working days (1 week = 5 working days), never a range or weeks.
+  const leadTimes = ['5 days', '10 days', '15 days', '20 days', '25 days', '30 days', '40 days', '50 days'];
   const countries = ['Netherlands', 'Germany', 'Italy', 'United States'];
   return {
     plc: plcMeta?.plc ?? '',
@@ -513,16 +514,20 @@ function useBasket() {
 
   const addItems = useCallback((incoming: ParsedItem[]) => {
     const newItems: BasketItem[] = incoming
-      .map(({ articleCode, featureString = '', qty = 1, filePrice, fileCurrency }) => ({
-        id: `i-${Math.random().toString(36).slice(2, 9)}-${Date.now()}`,
-        articleCode: articleCode.trim(),
-        featureString: (featureString || '').trim(),
-        qty: Math.max(1, parseInt(String(qty), 10) || 1),
-        productName: null, productLine: null, listPrice: 0, currency: 'EUR',
-        validationStatus: 'pending' as const, validationError: null,
-        ...(filePrice !== undefined ? { filePrice } : {}),
-        ...(fileCurrency ? { fileCurrency } : {}),
-      }))
+      .map(({ articleCode, featureString = '', qty = 1, filePrice, fileCurrency }) => {
+        const parsedQty = parseInt(String(qty), 10) || 1;
+        return {
+          id: `i-${Math.random().toString(36).slice(2, 9)}-${Date.now()}`,
+          articleCode: articleCode.trim(),
+          featureString: (featureString || '').trim(),
+          qty: Math.min(MAX_QTY, Math.max(1, parsedQty)),
+          qtyCapped: parsedQty > MAX_QTY,
+          productName: null, productLine: null, listPrice: 0, currency: 'EUR',
+          validationStatus: 'pending' as const, validationError: null,
+          ...(filePrice !== undefined ? { filePrice } : {}),
+          ...(fileCurrency ? { fileCurrency } : {}),
+        };
+      })
       .filter(i => i.articleCode);
 
     setItems(prev => {
@@ -559,8 +564,9 @@ function useBasket() {
   }), []);
 
   const updateQty = useCallback((id: string, qty: number | string) => {
-    const v = Math.max(1, parseInt(String(qty), 10) || 1);
-    setItems(p => p.map(i => i.id === id ? { ...i, qty: v } : i));
+    const parsed = parseInt(String(qty), 10) || 1;
+    const v = Math.min(MAX_QTY, Math.max(1, parsed));
+    setItems(p => p.map(i => i.id === id ? { ...i, qty: v, qtyCapped: parsed > MAX_QTY } : i));
   }, []);
 
   const copyItem = useCallback((id: string) => setItems(p => {
@@ -822,15 +828,23 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
           )}
           {status === 'failed'  && <span style={{ ...sBodyB, color: 'var(--red)' }}>Not found</span>}
         </td>
+        <td style={{ padding: '12px 18px', verticalAlign: 'middle' }}>
+          {status === 'passed' && item.leadTime
+            ? <span style={{ ...sBody, color: 'var(--ink-2)' }}>{item.leadTime}</span>
+            : <span style={{ color: 'var(--ink-3)' }}>—</span>}
+        </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
             <button onClick={() => onQtyChange(item.qty - 1)} disabled={item.qty <= 1}
               style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
-            <input value={item.qty} type="number" min={1} onChange={(e) => onQtyChange(e.target.value)}
+            <input value={item.qty} type="number" min={1} max={MAX_QTY} maxLength={5} onChange={(e) => onQtyChange(e.target.value)}
               style={{ width: 50, height: 32, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', MozAppearance: 'textfield' as const }} aria-label="Quantity" />
-            <button onClick={() => onQtyChange(item.qty + 1)}
+            <button onClick={() => onQtyChange(item.qty + 1)} disabled={item.qty >= MAX_QTY}
               style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
           </div>
+          {item.qtyCapped && (
+            <div style={{ ...sBody, fontSize: 11, color: 'var(--amber)', marginTop: 4, maxWidth: 90 }}>Quantity cannot exceed 99,999</div>
+          )}
         </td>
         <td style={{ padding: '12px 18px', verticalAlign: 'middle', textAlign: 'right' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6 }}>
@@ -874,7 +888,7 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
       </tr>
       {isSuper && expanded && (
         <tr>
-          <td colSpan={9} style={{ padding: 0, background: 'var(--blue-soft)' }}>
+          <td colSpan={10} style={{ padding: 0, background: 'var(--blue-soft)' }}>
             <SuperChildrenTable parent={item} />
           </td>
         </tr>
@@ -1491,6 +1505,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>#</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Article Code</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Product Name</th>
+              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Lead Time</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
               <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Discount</th>
