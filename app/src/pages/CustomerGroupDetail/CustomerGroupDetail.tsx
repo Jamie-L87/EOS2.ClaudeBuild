@@ -126,6 +126,12 @@ export default function CustomerGroupDetailPage() {
     return next;
   });
 
+  const addAllFiltered = () => setSelected(prev => {
+    const next = new Set(prev);
+    available.forEach(c => next.add(c.id));
+    return next;
+  });
+
   const backToList = () => navigate('/admin/catalogue-access', { state: { section: 'customer-groups' } });
 
   const handleSave = () => {
@@ -216,7 +222,28 @@ export default function CustomerGroupDetailPage() {
                     <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
                       Available Customers To Add
                     </div>
-                    <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Page {currentPage} of {totalPages}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <span style={{ ...sBody, color: 'var(--ink-2)', fontSize: 12 }}>Page {currentPage} of {totalPages}</span>
+                      <button
+                        className="eos-stroke-btn"
+                        onClick={addAllFiltered}
+                        disabled={available.length === 0}
+                        style={{
+                          ...sBodyB,
+                          height: 28,
+                          border: '1px solid var(--ink)',
+                          borderRadius: 'var(--radius)',
+                          background: 'var(--bg)',
+                          color: 'var(--ink)',
+                          padding: '0 10px',
+                          cursor: available.length === 0 ? 'not-allowed' : 'pointer',
+                          opacity: available.length === 0 ? 0.5 : 1,
+                          fontFamily: 'inherit',
+                        }}
+                      >
+                        Add All ({available.length})
+                      </button>
+                    </div>
                   </div>
                   <CustomerRowList rows={availableRows} emptyLabel="No available customers match your filters." actionLabel="Add" onAction={addCustomer} />
                   <div style={{ marginTop: 10, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>

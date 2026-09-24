@@ -127,6 +127,11 @@ export default function CatalogueGroupDetailPage() {
     next.delete(cid);
     return next;
   });
+  const addAllFiltered = () => setSelected(prev => {
+    const next = new Set(prev);
+    availableRows.forEach(row => next.add(row.id));
+    return next;
+  });
 
   const setCatalogueGoLive = (catalogueId: number, date: string | null) => {
     setGoLiveDates(prev => {
@@ -224,8 +229,29 @@ export default function CatalogueGroupDetailPage() {
                   <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
                 </div>
                 <div>
-                  <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                    Available Catalogues To Add
+                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
+                      Available Catalogues To Add
+                    </div>
+                    <button
+                      className="eos-stroke-btn"
+                      onClick={addAllFiltered}
+                      disabled={availableRows.length === 0}
+                      style={{
+                        ...sBodyB,
+                        height: 28,
+                        border: '1px solid var(--ink)',
+                        borderRadius: 'var(--radius)',
+                        background: 'var(--bg)',
+                        color: 'var(--ink)',
+                        padding: '0 10px',
+                        cursor: availableRows.length === 0 ? 'not-allowed' : 'pointer',
+                        opacity: availableRows.length === 0 ? 0.5 : 1,
+                        fontFamily: 'inherit',
+                      }}
+                    >
+                      Add All ({availableRows.length})
+                    </button>
                   </div>
                   <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
                 </div>
