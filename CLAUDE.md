@@ -8,6 +8,8 @@ EOS Cloud is a CPQ (Configure, Price, Quote) tool built in-house for Herman Mill
 
 **Product Owner:** Jamie Ladd (Jamie_ladd@millerknoll.com)
 
+**Domain & architecture reference:** for business logic, domain concepts (super products, PLC codes, catalogue access, import formats), and known quirks that live in the code rather than in this file, see [DOMAIN_REFERENCE.md](DOMAIN_REFERENCE.md).
+
 ---
 
 ## Technology stack
