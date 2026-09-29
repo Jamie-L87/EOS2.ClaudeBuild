@@ -13,7 +13,6 @@ interface TopNavProps {
   basketCount?: number;
 }
 
-const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 const sBody   = { ...t.body };
 
@@ -123,7 +122,7 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
                 ref={dealerInputRef}
                 id="dealer-combobox"
                 className="eos-dealer-input"
-                style={{ ...sLargeB, ...styles.dealerInput }}
+                style={{ ...styles.dealerText, ...styles.dealerInput }}
                 value={dealerInput}
                 onFocus={(e) => { setDealerEdited(false); e.currentTarget.select(); }}
                 onChange={(e) => { setDealerInput(e.target.value); setDealerEdited(true); }}
@@ -281,14 +280,11 @@ const styles = {
   dealerInput: {
     flex: 1,
     minWidth: 0,
-    maxWidth: 300,
     height: '100%',
     border: 'none',
     outline: 'none',
     background: 'transparent',
     padding: 0,
-    color: '#000',
-    letterSpacing: '0.01em',
     overflow: 'hidden',
     whiteSpace: 'nowrap' as const,
     textOverflow: 'ellipsis',
