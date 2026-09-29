@@ -50,6 +50,14 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
   const [dealerMenuOpen, setDealerMenuOpen] = useState(false);
   const [dealerEdited, setDealerEdited] = useState(false);
   const dealerMenuRef = useRef<HTMLDivElement>(null);
+  const dealerInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (dealerMenuOpen) {
+      dealerInputRef.current?.focus();
+      dealerInputRef.current?.select();
+    }
+  }, [dealerMenuOpen]);
 
   const closeDealerMenu = (pick: CustomerRecord | null) => {
     const next = pick ?? selectedDealer;
@@ -90,19 +98,36 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
 
       <div style={styles.rightGroup}>
         <div ref={dealerMenuRef} style={{ position: 'relative' }}>
-          <div style={{ ...styles.dealerInputWrap, ...(dealerMenuOpen ? styles.dealerInputWrapFocused : null) }}>
-            <input
-              className="eos-dealer-input"
-              style={{ ...sLargeB, ...styles.dealerInput }}
-              value={dealerInput}
-              onFocus={(e) => { setDealerMenuOpen(true); setDealerEdited(false); e.currentTarget.select(); }}
-              onChange={(e) => { setDealerInput(e.target.value); setDealerEdited(true); }}
-              onKeyDown={(e) => { if (e.key === 'Escape') closeDealerMenu(null); }}
+          {dealerMenuOpen ? (
+            <div style={{ ...styles.dealerTrigger, ...styles.dealerTriggerOpen, ...styles.dealerTriggerFocused }}>
+              <input
+                ref={dealerInputRef}
+                className="eos-dealer-input"
+                style={{ ...sLargeB, ...styles.dealerInput }}
+                value={dealerInput}
+                onFocus={(e) => { setDealerEdited(false); e.currentTarget.select(); }}
+                onChange={(e) => { setDealerInput(e.target.value); setDealerEdited(true); }}
+                onKeyDown={(e) => { if (e.key === 'Escape') closeDealerMenu(null); }}
+                aria-haspopup="listbox"
+                aria-expanded={dealerMenuOpen}
+              />
+              <span style={styles.dealerChevron}><IconChevronDown size={16} /></span>
+            </div>
+          ) : (
+            <button
+              className="eos-dealer-trigger-closed"
+              style={{ ...styles.dealerTrigger, ...styles.dealerTriggerClosed }}
+              onClick={() => setDealerMenuOpen(true)}
               aria-haspopup="listbox"
-              aria-expanded={dealerMenuOpen}
-            />
-            <span style={styles.dealerChevron}><IconChevronDown size={16} /></span>
-          </div>
+              aria-expanded={false}
+            >
+              <span style={styles.dealerStackText}>
+                <span style={{ ...sLargeB, color: '#000', ...styles.dealerStackName }}>{selectedDealer.dealerName}</span>
+                <span style={{ ...sBody, color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)}</span>
+              </span>
+              <span style={{ ...styles.dealerChevron, ...styles.dealerChevronClosed }}><IconChevronDown size={16} /></span>
+            </button>
+          )}
           {dealerMenuOpen && (
             <div style={styles.dealerMenu} role="listbox">
               <div style={styles.dealerList}>
@@ -195,12 +220,11 @@ const styles = {
     cursor: 'pointer',
     transition: 'background .15s ease, color .15s ease, border-color .15s ease',
   },
-  dealerInputWrap: {
+  dealerTrigger: {
     position: 'relative' as const,
     display: 'flex',
     alignItems: 'center',
     width: 300,
-    height: size.hit,
     borderWidth: 2,
     borderStyle: 'solid',
     borderColor: 'var(--ink)',
@@ -209,7 +233,17 @@ const styles = {
     transition: 'border-color .15s ease, box-shadow .15s ease',
     boxShadow: '0 0 0 0 rgba(226,45,0,0)',
   },
-  dealerInputWrapFocused: {
+  dealerTriggerOpen: {
+    height: size.hit,
+  },
+  dealerTriggerClosed: {
+    minHeight: size.hit,
+    padding: '6px 0',
+    cursor: 'pointer',
+    textAlign: 'left' as const,
+    font: 'inherit',
+  },
+  dealerTriggerFocused: {
     borderColor: 'var(--brand)',
     boxShadow: '0 0 0 4px rgba(226,45,0,0.08)',
   },
@@ -226,6 +260,19 @@ const styles = {
     whiteSpace: 'nowrap' as const,
     textOverflow: 'ellipsis',
   },
+  dealerStackText: {
+    flex: 1,
+    minWidth: 0,
+    padding: '0 8px 0 14px',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 2,
+  },
+  dealerStackName: {
+    lineHeight: 1.25,
+    whiteSpace: 'normal' as const,
+    overflowWrap: 'break-word' as const,
+  },
   dealerChevron: {
     flexShrink: 0,
     width: 32,
@@ -235,6 +282,10 @@ const styles = {
     justifyContent: 'center',
     color: 'var(--ink)',
     pointerEvents: 'none' as const,
+  },
+  dealerChevronClosed: {
+    height: 22,
+    marginTop: 12,
   },
   dealerMenu: {
     position: 'absolute' as const,
