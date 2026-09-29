@@ -5,6 +5,8 @@ import {
   IconMenu, IconChevronDown,
   IconMail, IconHelp, IconBasket,
 } from './Icons';
+import { CUSTOMERS, toDealerCode, customerSearchText, wildcardIncludes } from '../data/catalogueAccess';
+import type { CustomerRecord } from '../data/catalogueAccess';
 
 interface TopNavProps {
   onMenu: () => void;
@@ -14,31 +16,17 @@ interface TopNavProps {
 const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 const sBody   = { ...t.body };
+const sBodyB  = { ...t.bodyB };
 
-interface DealerOption {
-  name: string;
-  site: string;
-  dealerNum: string;
-  currency: 'GBP' | 'EUR' | 'INR' | 'JPY' | 'USD';
-}
+// Real dealers switch between customer accounts here, so only customerType
+// 'Dealer' is listed (not Retailer/Shop) — reuses the same mock customer
+// data as Catalogue Access Admin rather than a separate hardcoded list.
+const DEALER_CUSTOMERS: CustomerRecord[] = CUSTOMERS
+  .filter(c => c.customerType === 'Dealer')
+  .sort((a, b) => a.dealerName.localeCompare(b.dealerName));
 
-// Names researched from Herman Miller / MillerKnoll's public dealer network;
-// dealer numbers and currencies are fictional, deliberately varied in length.
-const DEALERS: DealerOption[] = [
-  { name: 'Tsunami Axis Ltd',                site: 'UK', dealerNum: 'DK066080',  currency: 'GBP' },
-  { name: 'K2 Space Ltd',                    site: 'UK', dealerNum: 'KS20194',   currency: 'GBP' },
-  { name: 'Heering Office B.V.',             site: 'NL', dealerNum: 'HO8873',    currency: 'EUR' },
-  { name: 'InteriorWorks Amsterdam',         site: 'NL', dealerNum: 'IW551209',  currency: 'EUR' },
-  { name: 'Aarts & Co Amsterdam',            site: 'NL', dealerNum: 'AC42',      currency: 'EUR' },
-  { name: 'Benhar Office Interiors',         site: 'US', dealerNum: 'BN77410',   currency: 'USD' },
-  { name: 'Miles Treaster & Associates',     site: 'US', dealerNum: 'MT2091',    currency: 'USD' },
-  { name: 'Workrite India Pvt Ltd',          site: 'IN', dealerNum: 'WI3300871', currency: 'INR' },
-  { name: 'Inscape Modern Private Limited',  site: 'IN', dealerNum: 'IM56',      currency: 'INR' },
-  { name: 'Chair Co., Ltd',                  site: 'JP', dealerNum: 'CC910244',  currency: 'JPY' },
-];
-
-function dealerCode(d: DealerOption): string {
-  return `${d.site}-${d.dealerNum}-${d.currency}`;
+function dealerLabel(c: CustomerRecord): string {
+  return `${c.dealerName}: ${toDealerCode(c)}`;
 }
 
 function readBasketCount(): number {
@@ -56,17 +44,33 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const basketCount = basketCountProp ?? readBasketCount();
-  const [dealer, setDealer] = useState<DealerOption>(DEALERS[0]);
+
+  const [selectedDealer, setSelectedDealer] = useState<CustomerRecord>(DEALER_CUSTOMERS[0]);
+  const [dealerInput, setDealerInput] = useState(dealerLabel(DEALER_CUSTOMERS[0]));
   const [dealerMenuOpen, setDealerMenuOpen] = useState(false);
+  const [dealerEdited, setDealerEdited] = useState(false);
   const dealerMenuRef = useRef<HTMLDivElement>(null);
+
+  const closeDealerMenu = (pick: CustomerRecord | null) => {
+    const next = pick ?? selectedDealer;
+    setSelectedDealer(next);
+    setDealerInput(dealerLabel(next));
+    setDealerMenuOpen(false);
+    setDealerEdited(false);
+  };
+
+  const filteredDealers = dealerEdited
+    ? DEALER_CUSTOMERS.filter(c => wildcardIncludes(customerSearchText(c), dealerInput))
+    : DEALER_CUSTOMERS;
 
   useEffect(() => {
     if (!dealerMenuOpen) return;
     const off = (e: MouseEvent) => {
-      if (!dealerMenuRef.current?.contains(e.target as Node)) setDealerMenuOpen(false);
+      if (!dealerMenuRef.current?.contains(e.target as Node)) closeDealerMenu(null);
     };
     document.addEventListener('mousedown', off);
     return () => document.removeEventListener('mousedown', off);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dealerMenuOpen]);
 
   return (
@@ -86,30 +90,44 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
 
       <div style={styles.rightGroup}>
         <div ref={dealerMenuRef} style={{ position: 'relative' }}>
-          <button
-            className="om-account-btn"
-            style={styles.accountBtn}
-            aria-haspopup="menu"
-            aria-expanded={dealerMenuOpen}
-            onClick={() => setDealerMenuOpen(o => !o)}
-          >
-            <span style={{ ...sLargeB, color: '#000' }}>{dealer.name}: {dealerCode(dealer)}</span>
-            <span style={styles.iconBox}><IconChevronDown size={16} /></span>
-          </button>
+          <div style={{ ...styles.dealerInputWrap, ...(dealerMenuOpen ? styles.dealerInputWrapFocused : null) }}>
+            <input
+              className="eos-dealer-input"
+              style={{ ...sLargeB, ...styles.dealerInput }}
+              value={dealerInput}
+              onFocus={(e) => { setDealerMenuOpen(true); setDealerEdited(false); e.currentTarget.select(); }}
+              onChange={(e) => { setDealerInput(e.target.value); setDealerEdited(true); }}
+              onKeyDown={(e) => { if (e.key === 'Escape') closeDealerMenu(null); }}
+              aria-haspopup="listbox"
+              aria-expanded={dealerMenuOpen}
+            />
+            <span style={styles.dealerChevron}><IconChevronDown size={16} /></span>
+          </div>
           {dealerMenuOpen && (
-            <div style={styles.dealerMenu} role="menu">
-              {DEALERS.map(d => (
-                <button
-                  key={dealerCode(d)}
-                  role="menuitem"
-                  className="eos-dealer-item"
-                  style={styles.dealerMenuItem}
-                  onClick={() => { setDealer(d); setDealerMenuOpen(false); }}
-                >
-                  <span style={{ ...sLargeM, color: 'var(--ink)' }}>{d.name}</span>
-                  <span style={{ ...sBody, color: 'var(--ink-2)' }}>{dealerCode(d)}</span>
-                </button>
-              ))}
+            <div style={styles.dealerMenu} role="listbox">
+              <div style={styles.dealerList}>
+                {filteredDealers.length === 0 && (
+                  <div style={{ ...sBody, color: 'var(--ink-3)', padding: '10px 14px' }}>No dealers match "{dealerInput}"</div>
+                )}
+                {filteredDealers.map(d => {
+                  const isSelected = d.id === selectedDealer.id;
+                  return (
+                    <button
+                      key={d.id}
+                      role="option"
+                      aria-selected={isSelected}
+                      className={isSelected ? undefined : 'eos-dealer-item'}
+                      style={{
+                        ...styles.dealerMenuItem,
+                        ...(isSelected ? { ...sBodyB, background: 'var(--ink)', color: '#fff' } : { ...sBody, color: 'var(--ink)' }),
+                      }}
+                      onClick={() => closeDealerMenu(d)}
+                    >
+                      {dealerLabel(d)}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
@@ -177,42 +195,77 @@ const styles = {
     cursor: 'pointer',
     transition: 'background .15s ease, color .15s ease, border-color .15s ease',
   },
-  accountBtn: {
+  dealerInputWrap: {
+    position: 'relative' as const,
     display: 'flex',
     alignItems: 'center',
-    gap: 0,
+    width: 300,
+    height: size.hit,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderColor: 'var(--ink)',
+    borderRadius: 'var(--radius)',
+    background: '#fff',
+    transition: 'border-color .15s ease, box-shadow .15s ease',
+    boxShadow: '0 0 0 0 rgba(226,45,0,0)',
+  },
+  dealerInputWrapFocused: {
+    borderColor: 'var(--brand)',
+    boxShadow: '0 0 0 4px rgba(226,45,0,0.08)',
+  },
+  dealerInput: {
+    flex: 1,
+    minWidth: 0,
+    height: '100%',
     border: 'none',
+    outline: 'none',
     background: 'transparent',
-    cursor: 'pointer',
-    padding: 0,
+    padding: '0 8px 0 14px',
+    color: '#000',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap' as const,
+    textOverflow: 'ellipsis',
+  },
+  dealerChevron: {
+    flexShrink: 0,
+    width: 32,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'var(--ink)',
+    pointerEvents: 'none' as const,
   },
   dealerMenu: {
     position: 'absolute' as const,
     top: '100%',
-    right: 0,
+    left: 0,
     marginTop: 8,
-    minWidth: 280,
-    maxWidth: 360,
+    width: 380,
     background: '#fff',
     border: '2px solid #000',
     borderRadius: 'var(--radius)',
-    padding: '6px 4px',
     boxShadow: 'var(--shadow-pop)',
     zIndex: 40,
     animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
+    overflow: 'hidden',
+  },
+  dealerList: {
+    maxHeight: 320,
+    overflowY: 'auto' as const,
+    padding: '6px 4px',
   },
   dealerMenuItem: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'flex-start',
-    gap: 2,
+    display: 'block',
     width: '100%',
-    padding: '8px 12px',
+    padding: '9px 14px',
     border: 'none',
     background: 'transparent',
     cursor: 'pointer',
     borderRadius: 'calc(var(--radius) - 2px)',
     textAlign: 'left' as const,
+    whiteSpace: 'normal' as const,
+    lineHeight: 1.3,
   },
   iconBtn: {
     position: 'relative' as const,
