@@ -351,6 +351,13 @@ export function autoDetectColumns(
 }
 
 /* ========================== Exports ========================== */
+// Currency is always included as a standard export column (alongside Article
+// Code/Qty), not an optional EXTRA_EXPORT_FIELDS toggle — same fallback used
+// across OBX/CSV/XLSX so the value never diverges between formats.
+function resolveCurrency(item: BasketItem): string {
+  return item.currency || 'GBP';
+}
+
 function resolveExtraField(item: BasketItem, key: ExtraFieldKey): string | number {
   if (key === 'totalPrice') {
     const buying = item.unitBuyingPrice ?? item.listPrice;
@@ -368,7 +375,7 @@ export function exportOBX(items: BasketItem[]): string {
     lines.push('    <bskArticle>');
     lines.push(`      <artNr type="final">${artNr}</artNr>`);
     lines.push(`      <quantity>${item.qty}</quantity>`);
-    lines.push(`      <listPrice currency="${item.currency || 'GBP'}">${item.listPrice}</listPrice>`);
+    lines.push(`      <listPrice currency="${resolveCurrency(item)}">${item.listPrice}</listPrice>`);
     lines.push('    </bskArticle>');
   }
   lines.push('  </items>', '</cutBuffer>');
@@ -382,10 +389,11 @@ function csvCell(val: string | number): string {
 
 export function exportCSV(items: BasketItem[], extraFields: ExtraFieldKey[] = []): string {
   const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
-  const header = ['Article Code', 'Qty', ...extraLabels];
+  const header = ['Article Code', 'Qty', 'Currency', ...extraLabels];
   const rows = items.map(i => [
     i.superParentCode ? `  └ ${i.articleCode}` : i.articleCode,
     i.qty,
+    resolveCurrency(i),
     ...extraFields.map(k => resolveExtraField(i, k)),
   ]);
   return [header, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
@@ -429,7 +437,7 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
   const ws = wb.addWorksheet('Line_Details');
 
   // ── Column widths ──────────────────────────────────────────────────
-  const stdColWidths = [5, 42, 8];
+  const stdColWidths = [5, 42, 8, 10];
   const extraColWidths = extraFields.map(k => EXTRA_COL_META[k]?.width ?? 18);
   ws.columns = [...stdColWidths, ...extraColWidths].map((width, i) => ({ key: `c${i}`, width }));
 
@@ -444,12 +452,12 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
   const COMP_BG  = 'FFF3F5F5'; // Blue-5  — component rows
 
   type HAlign = 'left' | 'right' | 'center';
-  const stdAligns: HAlign[] = ['center', 'left', 'center'];
+  const stdAligns: HAlign[] = ['center', 'left', 'center', 'center'];
   const extraAligns: HAlign[] = extraFields.map(k => EXTRA_COL_META[k]?.align ?? 'left');
   const colAligns = [...stdAligns, ...extraAligns];
 
   const extraLabels = extraFields.map(k => EXTRA_EXPORT_FIELDS.find(f => f.key === k)!.label);
-  const headers = ['#', 'Article Code', 'Qty', ...extraLabels];
+  const headers = ['#', 'Article Code', 'Qty', 'Currency', ...extraLabels];
 
   // ── Header row ─────────────────────────────────────────────────────
   const hRow = ws.addRow(headers);
@@ -469,7 +477,7 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
     const isComp   = !!item.superParentCode;
     const articleCodeDisplay = isComp ? `  └ ${item.articleCode}` : item.articleCode;
     const values: (string | number)[] = [
-      i + 1, articleCodeDisplay, item.qty,
+      i + 1, articleCodeDisplay, item.qty, resolveCurrency(item),
       ...extraFields.map(k => resolveExtraField(item, k)),
     ];
     const row = ws.addRow(values);
@@ -480,7 +488,7 @@ export async function exportXLSXBlob(items: BasketItem[], extraFields: ExtraFiel
       cell.alignment = { vertical: 'middle', horizontal: colAligns[col - 1] ?? 'left' };
       cell.border    = dataBorder;
       if (rowBg) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rowBg } };
-      const extraIdx = col - 4; // 0-based index into extraFields
+      const extraIdx = col - 5; // 0-based index into extraFields (# / Article Code / Qty / Currency precede)
       if (col === 3) cell.numFmt = '0'; // Qty
       else if (extraIdx >= 0 && extraFields[extraIdx]) {
         const fmt = EXTRA_COL_META[extraFields[extraIdx]]?.numFmt;

@@ -900,7 +900,7 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
 /* ------------------------------------------------------------------ */
 /*  EXPORT FIELD PICKER                                                 */
 /* ------------------------------------------------------------------ */
-const STANDARD_EXPORT_FIELDS = ['Article Code', 'Qty'];
+const STANDARD_EXPORT_FIELDS = ['Article Code', 'Qty', 'Currency'];
 const CONTRACT_ONLY_FIELDS = new Set<ExtraFieldKey>(['discountPct', 'unitBuyingPrice']);
 
 function fmtPreviewValue(key: ExtraFieldKey, item: BasketItem, currency: string): string {
@@ -1461,7 +1461,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
               <Chip
                 label={`${mismatchCount} price${mismatchCount !== 1 ? 's' : ''} to review`}
                 color="amber"
-                title="The imported file's price differs from EOS's list price for one or more items — EOS's price is what will be used. See the flagged row(s) below for details."
+                title={`${mismatchCount} imported price${mismatchCount !== 1 ? 's' : ''} ${mismatchCount !== 1 ? "don't" : "doesn't"} match EOS's list price. EOS's price will be used — see flagged row${mismatchCount !== 1 ? 's' : ''} below.`}
               />
             )}
           </div>
