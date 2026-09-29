@@ -17,7 +17,12 @@ const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 const sBody   = { ...t.body };
 
-const DEALER_TRIGGER_WIDTH = 280;
+// The trigger reserves ~66px for its chevron/padding vs. ~32px for a plain
+// dropdown row, so at equal box widths a name that fits one line in the row
+// wraps to two lines once it's the selected value shown in the trigger.
+// Widened past that ~34px gap so a row's line-wrap point is never narrower
+// than the trigger's.
+const DEALER_TRIGGER_WIDTH = 320;
 
 // A handful of longer, realistically-styled names (the naming conventions
 // mirror real dealer records — "for General Trading & Contracting", legacy
