@@ -17,12 +17,27 @@ const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 const sBody   = { ...t.body };
 
+const DEALER_TRIGGER_WIDTH = 280;
+
+// A handful of longer, realistically-styled names (the naming conventions
+// mirror real dealer records — "for General Trading & Contracting", legacy
+// "do not use" accounts, "(Euro Trading Account)" suffixes) so the dropdown's
+// line-wrap behaviour has something to show. The synthetic "Word Word Ltd"
+// generator below never produces anything long enough to wrap on its own.
+const LONG_NAME_DEALERS: CustomerRecord[] = [
+  { id: 'SG-F079999', site: 'SG', dealerNum: 'F079999', currency: 'USD', dealerName: 'Meridian Engineering for General Trading & Contracting Company', customerType: 'Dealer', country: 'SG' },
+  { id: 'UK-D066999', site: 'UK', dealerNum: 'D066999', currency: 'GBP', dealerName: 'Southgate Broadstock Workplace Solutions - Legacy Account Do Not Use', customerType: 'Dealer', country: 'GB' },
+  { id: 'NL-F069999', site: 'NL', dealerNum: 'F069999', currency: 'EUR', dealerName: 'M R Bridge Interiors Limited (Euro Trading Account)', customerType: 'Dealer', country: 'NL' },
+  { id: 'IN-F103999', site: 'IN', dealerNum: 'F103999', currency: 'INR', dealerName: 'Evergreen Harbor Business Furnishings Private Limited', customerType: 'Dealer', country: 'IN' },
+];
+
 // Real dealers switch between customer accounts here, so only customerType
 // 'Dealer' is listed (not Retailer/Shop) — reuses the same mock customer
 // data as Catalogue Access Admin rather than a separate hardcoded list.
-const DEALER_CUSTOMERS: CustomerRecord[] = CUSTOMERS
-  .filter(c => c.customerType === 'Dealer')
-  .sort((a, b) => a.dealerName.localeCompare(b.dealerName));
+const DEALER_CUSTOMERS: CustomerRecord[] = [
+  ...CUSTOMERS.filter(c => c.customerType === 'Dealer'),
+  ...LONG_NAME_DEALERS,
+].sort((a, b) => a.dealerName.localeCompare(b.dealerName));
 
 function dealerLabel(c: CustomerRecord): string {
   return `${c.dealerName}: ${toDealerCode(c)}`;
@@ -124,9 +139,8 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
               aria-expanded={false}
               aria-controls="dealer-listbox"
             >
-              <span style={styles.dealerStackText}>
-                <span style={{ ...sLargeB, color: '#000', ...styles.dealerStackName }}>{selectedDealer.dealerName}</span>
-                <span style={{ ...sBody, color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)}</span>
+              <span style={styles.dealerClosedText}>
+                <span style={styles.dealerText}>{dealerLabel(selectedDealer)}</span>
               </span>
               <span style={{ ...styles.dealerChevron, ...styles.dealerChevronClosed }}><IconChevronDown size={20} /></span>
             </button>
@@ -149,11 +163,11 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
                       style={{
                         ...styles.dealerMenuItem,
                         borderBottom: isLast ? 'none' : '1px solid var(--line)',
-                        ...(isSelected ? { background: 'var(--ink)', color: '#fff' } : { color: '#334155' }),
+                        background: isSelected ? 'var(--ink)' : 'transparent',
                       }}
                       onClick={() => closeDealerMenu(d)}
                     >
-                      <span style={styles.dealerMenuItemText}>{dealerLabel(d)}</span>
+                      <span style={{ ...styles.dealerText, ...(isSelected ? { color: '#fff' } : null) }}>{dealerLabel(d)}</span>
                     </button>
                   );
                 })}
@@ -236,7 +250,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    width: 280,
+    width: DEALER_TRIGGER_WIDTH,
     paddingLeft: 16,
     paddingRight: 6,
     borderWidth: 1,
@@ -274,15 +288,19 @@ const styles = {
     whiteSpace: 'nowrap' as const,
     textOverflow: 'ellipsis',
   },
-  dealerStackText: {
+  dealerClosedText: {
     flex: 1,
     minWidth: 0,
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: 2,
   },
-  dealerStackName: {
-    lineHeight: 1.25,
+  // Shared with the dropdown rows below — the closed trigger shows the
+  // selected dealer with exactly the same typography as its row in the
+  // list (no bold name / grey code split), so it wraps instead of
+  // truncating rather than looking like a different piece of UI.
+  dealerText: {
+    display: 'block',
+    fontSize: 13,
+    lineHeight: 1.2,
+    color: '#334155',
     whiteSpace: 'normal' as const,
     overflowWrap: 'break-word' as const,
   },
@@ -308,7 +326,7 @@ const styles = {
     top: '100%',
     right: 0,
     marginTop: 4,
-    width: 360,
+    width: DEALER_TRIGGER_WIDTH,
     background: '#fff',
     border: '1px solid var(--line)',
     borderRadius: 6,
@@ -327,16 +345,9 @@ const styles = {
     width: '100%',
     padding: '10px 16px',
     border: 'none',
-    background: 'transparent',
     cursor: 'pointer',
     textAlign: 'left' as const,
-    fontSize: 13,
     transition: 'background-color .15s ease',
-  },
-  dealerMenuItemText: {
-    display: 'block',
-    lineHeight: 1.2,
-    whiteSpace: 'normal' as const,
   },
   iconBtn: {
     position: 'relative' as const,
