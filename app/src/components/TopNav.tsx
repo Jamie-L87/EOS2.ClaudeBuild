@@ -16,7 +16,6 @@ interface TopNavProps {
 const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 const sBody   = { ...t.body };
-const sBodyB  = { ...t.bodyB };
 
 // Real dealers switch between customer accounts here, so only customerType
 // 'Dealer' is listed (not Retailer/Shop) — reuses the same mock customer
@@ -99,43 +98,48 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
       <div style={styles.rightGroup}>
         <div ref={dealerMenuRef} style={{ position: 'relative' }}>
           {dealerMenuOpen ? (
-            <div style={{ ...styles.dealerTrigger, ...styles.dealerTriggerOpen, ...styles.dealerTriggerFocused }}>
+            <div className="eos-dealer-trigger" style={{ ...styles.dealerTrigger, ...styles.dealerTriggerOpen, ...styles.dealerTriggerActive }}>
               <input
                 ref={dealerInputRef}
+                id="dealer-combobox"
                 className="eos-dealer-input"
                 style={{ ...sLargeB, ...styles.dealerInput }}
                 value={dealerInput}
                 onFocus={(e) => { setDealerEdited(false); e.currentTarget.select(); }}
                 onChange={(e) => { setDealerInput(e.target.value); setDealerEdited(true); }}
                 onKeyDown={(e) => { if (e.key === 'Escape') closeDealerMenu(null); }}
-                aria-haspopup="listbox"
+                role="combobox"
                 aria-expanded={dealerMenuOpen}
+                aria-autocomplete="list"
+                aria-controls="dealer-listbox"
               />
-              <span style={styles.dealerChevron}><IconChevronDown size={16} /></span>
+              <span style={{ ...styles.dealerChevron, ...styles.dealerChevronRotated }}><IconChevronDown size={20} /></span>
             </div>
           ) : (
             <button
-              className="eos-dealer-trigger-closed"
+              className="eos-dealer-trigger eos-dealer-trigger-closed"
               style={{ ...styles.dealerTrigger, ...styles.dealerTriggerClosed }}
               onClick={() => setDealerMenuOpen(true)}
               aria-haspopup="listbox"
               aria-expanded={false}
+              aria-controls="dealer-listbox"
             >
               <span style={styles.dealerStackText}>
                 <span style={{ ...sLargeB, color: '#000', ...styles.dealerStackName }}>{selectedDealer.dealerName}</span>
                 <span style={{ ...sBody, color: 'var(--ink-2)' }}>{toDealerCode(selectedDealer)}</span>
               </span>
-              <span style={{ ...styles.dealerChevron, ...styles.dealerChevronClosed }}><IconChevronDown size={16} /></span>
+              <span style={{ ...styles.dealerChevron, ...styles.dealerChevronClosed }}><IconChevronDown size={20} /></span>
             </button>
           )}
           {dealerMenuOpen && (
-            <div style={styles.dealerMenu} role="listbox">
+            <div style={styles.dealerMenu} role="listbox" id="dealer-listbox">
               <div style={styles.dealerList}>
                 {filteredDealers.length === 0 && (
-                  <div style={{ ...sBody, color: 'var(--ink-3)', padding: '10px 14px' }}>No dealers match "{dealerInput}"</div>
+                  <div style={{ ...sBody, color: 'var(--ink-3)', padding: '10px 16px' }}>No dealers match "{dealerInput}"</div>
                 )}
-                {filteredDealers.map(d => {
+                {filteredDealers.map((d, i) => {
                   const isSelected = d.id === selectedDealer.id;
+                  const isLast = i === filteredDealers.length - 1;
                   return (
                     <button
                       key={d.id}
@@ -144,11 +148,12 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
                       className={isSelected ? undefined : 'eos-dealer-item'}
                       style={{
                         ...styles.dealerMenuItem,
-                        ...(isSelected ? { ...sBodyB, background: 'var(--ink)', color: '#fff' } : { ...sBody, color: 'var(--ink)' }),
+                        borderBottom: isLast ? 'none' : '1px solid var(--line)',
+                        ...(isSelected ? { background: 'var(--ink)', color: '#fff' } : { color: '#334155' }),
                       }}
                       onClick={() => closeDealerMenu(d)}
                     >
-                      {dealerLabel(d)}
+                      <span style={styles.dealerMenuItemText}>{dealerLabel(d)}</span>
                     </button>
                   );
                 })}
@@ -167,7 +172,8 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
         <div style={styles.avatar} title="Me">ME</div>
       </div>
       <style>{`
-        .eos-dealer-item:hover { background: var(--line); }
+        .eos-dealer-trigger:hover { border-color: #cbd5e1; }
+        .eos-dealer-item:hover { background: var(--bg-soft); }
       `}</style>
     </header>
   );
@@ -220,42 +226,50 @@ const styles = {
     cursor: 'pointer',
     transition: 'background .15s ease, color .15s ease, border-color .15s ease',
   },
+  // Chrome (colors/spacing/radius/shadow/hover) matches the dev build 1:1,
+  // pulled from a live DevTools inspection — see PR notes. The two-line
+  // stacked closed state is our own addition on top of that chrome: the dev
+  // build uses a single-line input with a placeholder, which still
+  // truncates long names the same way ours used to.
   dealerTrigger: {
     position: 'relative' as const,
     display: 'flex',
     alignItems: 'center',
-    width: 300,
-    borderWidth: 2,
+    gap: 8,
+    width: 280,
+    paddingLeft: 16,
+    paddingRight: 6,
+    borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--ink)',
-    borderRadius: 'var(--radius)',
+    borderColor: 'transparent',
+    borderRadius: 6,
     background: '#fff',
-    transition: 'border-color .15s ease, box-shadow .15s ease',
-    boxShadow: '0 0 0 0 rgba(226,45,0,0)',
+    transition: 'border-color .15s ease',
   },
   dealerTriggerOpen: {
     height: size.hit,
   },
   dealerTriggerClosed: {
     minHeight: size.hit,
-    padding: '6px 0',
+    padding: '6px 6px 6px 16px',
     cursor: 'pointer',
     textAlign: 'left' as const,
     font: 'inherit',
   },
-  dealerTriggerFocused: {
-    borderColor: 'var(--brand)',
-    boxShadow: '0 0 0 4px rgba(226,45,0,0.08)',
+  dealerTriggerActive: {
+    borderColor: '#cbd5e1',
   },
   dealerInput: {
     flex: 1,
     minWidth: 0,
+    maxWidth: 300,
     height: '100%',
     border: 'none',
     outline: 'none',
     background: 'transparent',
-    padding: '0 8px 0 14px',
+    padding: 0,
     color: '#000',
+    letterSpacing: '0.01em',
     overflow: 'hidden',
     whiteSpace: 'nowrap' as const,
     textOverflow: 'ellipsis',
@@ -263,7 +277,6 @@ const styles = {
   dealerStackText: {
     flex: 1,
     minWidth: 0,
-    padding: '0 8px 0 14px',
     display: 'flex',
     flexDirection: 'column' as const,
     gap: 2,
@@ -275,48 +288,55 @@ const styles = {
   },
   dealerChevron: {
     flexShrink: 0,
-    width: 32,
-    height: '100%',
+    width: 36,
+    height: 36,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     color: 'var(--ink)',
     pointerEvents: 'none' as const,
+    transition: 'transform .15s ease',
+  },
+  dealerChevronRotated: {
+    transform: 'rotate(180deg)',
   },
   dealerChevronClosed: {
-    height: 22,
-    marginTop: 12,
+    alignSelf: 'flex-start' as const,
   },
   dealerMenu: {
     position: 'absolute' as const,
     top: '100%',
-    left: 0,
-    marginTop: 8,
-    width: 380,
+    right: 0,
+    marginTop: 4,
+    width: 360,
     background: '#fff',
-    border: '2px solid #000',
-    borderRadius: 'var(--radius)',
-    boxShadow: 'var(--shadow-pop)',
-    zIndex: 40,
-    animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
+    border: '1px solid var(--line)',
+    borderRadius: 6,
+    boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
+    zIndex: 60,
     overflow: 'hidden',
   },
   dealerList: {
-    maxHeight: 320,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    maxHeight: 288,
     overflowY: 'auto' as const,
-    padding: '6px 4px',
   },
   dealerMenuItem: {
     display: 'block',
     width: '100%',
-    padding: '9px 14px',
+    padding: '10px 16px',
     border: 'none',
     background: 'transparent',
     cursor: 'pointer',
-    borderRadius: 'calc(var(--radius) - 2px)',
     textAlign: 'left' as const,
+    fontSize: 13,
+    transition: 'background-color .15s ease',
+  },
+  dealerMenuItemText: {
+    display: 'block',
+    lineHeight: 1.2,
     whiteSpace: 'normal' as const,
-    lineHeight: 1.3,
   },
   iconBtn: {
     position: 'relative' as const,
