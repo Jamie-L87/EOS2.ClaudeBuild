@@ -9,6 +9,7 @@ import OrderDetailPage from './pages/OrderDetail/OrderDetail';
 import CatalogueAccessAdminPage from './pages/CatalogueAccessAdmin/CatalogueAccessAdmin';
 import CatalogueGroupDetailPage from './pages/CatalogueGroupDetail/CatalogueGroupDetail';
 import CustomerGroupDetailPage from './pages/CustomerGroupDetail/CustomerGroupDetail';
+import NotificationManagerPage from './pages/NotificationManager/NotificationManager';
 
 const router = createBrowserRouter([
   { path: '/',           element: <ImportPage /> },
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
   { path: '/admin/catalogue-access', element: <CatalogueAccessAdminPage /> },
   { path: '/admin/catalogue-access/catalogue-groups/:id', element: <CatalogueGroupDetailPage /> },
   { path: '/admin/catalogue-access/customer-groups/:id', element: <CustomerGroupDetailPage /> },
+  { path: '/admin/notifications', element: <NotificationManagerPage /> },
 ]);
 
 createRoot(document.getElementById('root')!).render(
