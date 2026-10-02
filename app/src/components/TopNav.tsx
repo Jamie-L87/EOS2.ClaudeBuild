@@ -7,6 +7,8 @@ import {
 } from './Icons';
 import { CUSTOMERS, toDealerCode, customerSearchText, wildcardIncludes } from '../data/catalogueAccess';
 import type { CustomerRecord } from '../data/catalogueAccess';
+import NotificationsModal from './NotificationsModal';
+import { NOTIFICATIONS_CHANGED_EVENT, countUnreadNotifications, setViewerSite } from '../services/notificationsStore';
 
 interface TopNavProps {
   onMenu: () => void;
@@ -69,6 +71,19 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
   const [dealerEdited, setDealerEdited] = useState(false);
   const dealerMenuRef = useRef<HTMLDivElement>(null);
   const dealerInputRef = useRef<HTMLInputElement>(null);
+
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(countUnreadNotifications);
+
+  useEffect(() => {
+    const refresh = () => setUnreadCount(countUnreadNotifications());
+    window.addEventListener(NOTIFICATIONS_CHANGED_EVENT, refresh);
+    return () => window.removeEventListener(NOTIFICATIONS_CHANGED_EVENT, refresh);
+  }, []);
+
+  // Notifications are targeted by dealer site, so follow the selected dealer.
+  // Declared after the listener above so the event it fires updates the badge.
+  useEffect(() => { setViewerSite(selectedDealer.site); }, [selectedDealer.site]);
 
   useEffect(() => {
     if (dealerMenuOpen) {
@@ -180,15 +195,21 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
           )}
         </div>
         <span style={styles.pinV} />
-        <button className="om-iconplus" style={styles.iconBtn} aria-label="Mail">
+        <button
+          className="om-iconplus"
+          style={styles.iconBtn}
+          aria-label={unreadCount > 0 ? `Notifications — ${unreadCount} unread` : 'Notifications'}
+          onClick={() => setNotificationsOpen(true)}
+        >
           <IconMail size={20} stroke={1.6} />
-          <span style={styles.badge}>3</span>
+          {unreadCount > 0 && <span style={styles.badge}>{unreadCount > 99 ? '99+' : unreadCount}</span>}
         </button>
         <button className="om-iconplus" style={styles.iconBtn} aria-label="Help">
           <IconHelp size={20} stroke={1.6} />
         </button>
         <div style={styles.avatar} title="Me">ME</div>
       </div>
+      <NotificationsModal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
       <style>{`
         .eos-dealer-trigger:hover { border-color: #cbd5e1; }
         .eos-dealer-item:hover { background: var(--bg-soft); }
