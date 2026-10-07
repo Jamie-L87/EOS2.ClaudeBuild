@@ -1503,8 +1503,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       {contractDateWarning && (
         <div role="status" style={{ ...sBody, padding: '12px 24px', background: 'var(--amber-soft)', color: 'var(--yellow-60)', borderBottom: '1px solid var(--line)' }}>
           {contractDateWarning.kind === 'before-start'
-            ? `Contract starts after the pricing date ${formatDisplayDate(contractDateWarning.date)}. Discounts will still apply in the basket and show in exports.`
-            : `Contract ended before the pricing date ${formatDisplayDate(contractDateWarning.date)}. Discounts will still apply in the basket and show in exports.`}
+            ? `Contract starts (${formatDisplayDate(contractDateWarning.date)}) after the pricing date. Discounts will still apply in the basket and show in exports.`
+            : `Contract expired (${formatDisplayDate(contractDateWarning.date)}) before the pricing date. Discounts will still apply in the basket and show in exports.`}
         </div>
       )}
 
