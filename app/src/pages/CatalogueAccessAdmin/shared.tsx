@@ -1,5 +1,5 @@
-import { Fragment } from 'react';
-import { IconChevronRight, IconClose, IconSearch } from '../../components/Icons';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { IconCalendar, IconChevronRight, IconClose, IconSearch } from '../../components/Icons';
 import { color, radius, shadow, t } from '../../tokens';
 
 const sBody = { ...t.body };
@@ -204,5 +204,69 @@ export function ConfirmDialog({
         </div>
       </div>
     </>
+  );
+}
+
+/** ISO (YYYY-MM-DD) -> DD/MM/YYYY. Returns the input unchanged if it is not an ISO date. */
+export function formatDisplayDate(iso: string | undefined | null): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso ?? '');
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : (iso ?? '');
+}
+
+function parseDisplayDate(text: string): string | null {
+  const m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(text.trim());
+  if (!m) return null;
+  const [d, mo, y] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const dt = new Date(y, mo - 1, d);
+  if (dt.getFullYear() !== y || dt.getMonth() !== mo - 1 || dt.getDate() !== d) return null;
+  return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+
+/** Text date field that always shows DD/MM/YYYY (native date inputs follow the browser locale). Value is ISO. */
+/** Text date field that always shows DD/MM/YYYY (native date inputs follow the browser locale), with a calendar picker. Value is ISO. */
+export function DateInput({ value, onChange, style }: { value: string; onChange: (iso: string) => void; style?: React.CSSProperties }) {
+  const [text, setText] = useState(formatDisplayDate(value));
+  const [invalid, setInvalid] = useState(false);
+  const pickerRef = useRef<HTMLInputElement>(null);
+  useEffect(() => { setText(formatDisplayDate(value)); setInvalid(false); }, [value]);
+
+  return (
+    <span style={{ position: 'relative', display: 'inline-flex' }}>
+      <input
+        type="text"
+        inputMode="numeric"
+        placeholder="DD/MM/YYYY"
+        value={text}
+        aria-invalid={invalid}
+        onChange={e => {
+          const next = e.target.value;
+          setText(next);
+          if (next.trim() === '') { setInvalid(false); onChange(''); return; }
+          const iso = parseDisplayDate(next);
+          setInvalid(iso === null);
+          if (iso) onChange(iso);
+        }}
+        onBlur={() => { setText(formatDisplayDate(value)); setInvalid(false); }}
+        style={{ ...style, width: 128, paddingRight: 30, ...(invalid ? { borderColor: 'var(--red)' } : null) }}
+      />
+      <button
+        type="button"
+        aria-label="Open calendar"
+        onMouseDown={e => e.preventDefault()}
+        onClick={() => pickerRef.current?.showPicker?.()}
+        style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', border: 'none', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', padding: 0 }}
+      >
+        <IconCalendar size={14} />
+      </button>
+      <input
+        ref={pickerRef}
+        type="date"
+        tabIndex={-1}
+        aria-hidden
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        style={{ position: 'absolute', right: 0, bottom: 0, width: 0, height: 0, opacity: 0, pointerEvents: 'none', border: 0, padding: 0 }}
+      />
+    </span>
   );
 }

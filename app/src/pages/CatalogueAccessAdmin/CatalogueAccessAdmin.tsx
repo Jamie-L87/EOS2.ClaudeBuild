@@ -30,6 +30,8 @@ import {
 import {
   Chip,
   ConfirmDialog,
+  DateInput,
+  formatDisplayDate,
   IconActionButton,
   PrimaryButton,
   SearchInput,
@@ -704,10 +706,9 @@ export default function CatalogueAccessAdminPage() {
                           </div>
                           <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                             <span style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>Preview As Of</span>
-                            <input
-                              type="date"
+                            <DateInput
                               value={dealerAsOfDate}
-                              onChange={e => setDealerAsOfDate(e.target.value)}
+                              onChange={setDealerAsOfDate}
                               style={{ ...sBody, height: 38, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 10px', fontFamily: 'inherit' }}
                             />
                           </label>
@@ -783,7 +784,7 @@ export default function CatalogueAccessAdminPage() {
                                 {dealerPendingCatalogues.map(c => (
                                   <div key={c.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
                                     <span style={{ ...sBody, color: 'var(--ink)' }}>{c.id} - {c.name}</span>
-                                    <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)' }}>Live from {catalogueGoLiveById.get(c.id)}</span>
+                                    <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)' }}>Live from {formatDisplayDate(catalogueGoLiveById.get(c.id))}</span>
                                   </div>
                                 ))}
                               </div>

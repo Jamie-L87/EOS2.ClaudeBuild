@@ -7,7 +7,9 @@ import { CATALOGUES, isCatalogueLive, uid, wildcardIncludes } from '../../data/c
 import { loadCatalogueAccessState, saveCatalogueAccessState } from '../../services/catalogueAccessStore';
 import {
   Chip,
+  DateInput,
   DetailBreadcrumb,
+  formatDisplayDate,
   PrimaryButton,
   SearchInput,
   StrokeButton,
@@ -51,17 +53,16 @@ function RowList({
               {row.id} - {row.name}
               {pending && (
                 <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)', background: 'var(--amber-soft)', border: '1px solid var(--amber)', borderRadius: 999, padding: '2px 8px', whiteSpace: 'nowrap' }}>
-                  Live from {row.goLiveDate}
+                  Live from {formatDisplayDate(row.goLiveDate)}
                 </span>
               )}
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4 }}>Go-Live</span>
-                <input
-                  type="date"
+                <DateInput
                   value={row.goLiveDate ?? ''}
-                  onChange={e => onSetGoLiveDate(row.id, e.target.value || null)}
+                  onChange={iso => onSetGoLiveDate(row.id, iso || null)}
                   style={{ ...sBody, height: 30, border: '1px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 6px', fontFamily: 'inherit', fontSize: 12 }}
                 />
               </label>
