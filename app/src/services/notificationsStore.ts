@@ -1,4 +1,4 @@
-import { audienceSites, defaultNotifications, isNotificationActive, type NotificationRecord } from '../data/notifications';
+import { audienceSites, defaultNotifications, isNotificationActive, languageForSite, notificationLanguage, type NotificationRecord } from '../data/notifications';
 
 const NOTIFICATIONS_KEY = 'eos-notifications-admin:v1';
 const USER_STATE_KEY = 'eos-notifications-user-state:v1';
@@ -82,11 +82,12 @@ function targetsSite(n: NotificationRecord, site: string | null): boolean {
   return sites.length === 0 || (site !== null && sites.includes(site));
 }
 
-/** What the selected dealer sees: within the display window and targeted at their site, newest first. */
+/** What the selected dealer sees: within the display window, targeted at their site and written in their language, newest first. */
 export function loadVisibleNotifications(): NotificationRecord[] {
   const site = getViewerSite();
+  const language = languageForSite(site);
   return loadNotifications()
-    .filter(n => isNotificationActive(n) && targetsSite(n, site))
+    .filter(n => isNotificationActive(n) && targetsSite(n, site) && notificationLanguage(n) === language)
     .sort((a, b) => b.displayDate.localeCompare(a.displayDate));
 }
 
