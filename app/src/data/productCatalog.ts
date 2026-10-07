@@ -93,4 +93,15 @@ export const PRODUCT_CATALOG: CatalogItem[] = [
   { articleCode: 'NOMMO2LR',         productLine: 'MIMO',         productName: 'MIMO',         featureString: 'R00 1HA01',                    price: 4906,  currency: 'EUR' },
   { articleCode: 'NOMMO3LBR',        productLine: 'MIMO',         productName: 'MIMO',         featureString: 'R00 1HA01',                    price: 6200,  currency: 'EUR' },
   { articleCode: 'NOMMOT05',         productLine: 'MIMO',         productName: 'MIMO',         featureString: 'R00 OAK',                      price: 1465,  currency: 'EUR' },
+  // From Product Data/sample-valid.obx (prices are mock)
+  { articleCode: 'AER1C30DW',        productLine: 'AERON',        productName: 'AERON',        featureString: 'ALP G1 G1 G1 BB BK',           price: 2410,  currency: 'EUR' },
+  { articleCode: 'AER1A18',          productLine: 'AERON',        productName: 'AERON',        featureString: '',                             price: 1895,  currency: 'EUR' },
+  { articleCode: 'AER1B25DW',        productLine: 'AERON',        productName: 'AERON',        featureString: 'ALP',                          price: 2350,  currency: 'EUR' },
+  { articleCode: 'MIR2B33DW',        productLine: 'MIRRA',        productName: 'MIRRA',        featureString: 'ALP G1 G1 G1 BB BK',           price: 1320,  currency: 'EUR' },
+  { articleCode: 'MIR2C40',          productLine: 'MIRRA',        productName: 'MIRRA',        featureString: '',                             price: 1395,  currency: 'EUR' },
+  { articleCode: 'MIR2A25',          productLine: 'MIRRA',        productName: 'MIRRA',        featureString: '',                             price: 1210,  currency: 'EUR' },
+  { articleCode: 'MIR2B35DW',        productLine: 'MIRRA',        productName: 'MIRRA',        featureString: 'G1',                           price: 1345,  currency: 'EUR' },
+  { articleCode: 'CEL1A11DW',        productLine: 'CELLE',        productName: 'CELLE',        featureString: 'ALP G1',                       price: 745,   currency: 'EUR' },
+  { articleCode: 'CEL1B22DW',        productLine: 'CELLE',        productName: 'CELLE',        featureString: '',                             price: 890,   currency: 'EUR' },
+  { articleCode: 'CEL1C33DW',        productLine: 'CELLE',        productName: 'CELLE',        featureString: 'ALP G1 BB',                    price: 965,   currency: 'EUR' },
 ];

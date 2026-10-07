@@ -45,6 +45,8 @@ export interface Contract {
   id: string;
   name: string;
   currency: string;
+  validFrom?: string; // ISO date, inclusive
+  validTo?: string;   // ISO date, inclusive
   lines: ContractLine[];
 }
 
@@ -56,6 +58,8 @@ export const CONTRACTS: Contract[] = [
     id: 'standard-2025',
     name: 'Standard Dealer 2025',
     currency: 'GBP',
+    validFrom: '2025-01-01',
+    validTo: '2026-12-31',
     lines: [
       { plc: 'SE-EF',    productName: 'Aeron',        discount: 56 },
       { plc: 'WC',       productName: 'Caper',        discount: 51 },
@@ -85,6 +89,8 @@ export const CONTRACTS: Contract[] = [
     id: 'preferred-2025',
     name: 'Preferred Partner 2025',
     currency: 'USD',
+    validFrom: '2026-01-01',
+    validTo: '2027-12-31',
     lines: [
       { plc: 'SE-EF',    productName: 'Aeron',        discount: 66 },
       { plc: 'WC',       productName: 'Caper',        discount: 61 },
@@ -119,6 +125,17 @@ export const CONTRACTS: Contract[] = [
 /** Look up the discount for a given PLC within a contract. Returns null if not found. */
 export function getContractDiscount(contract: Contract, plc: string): number | null {
   return contract.lines.find(l => l.plc === plc)?.discount ?? null;
+}
+
+/** Warning when the pricing date falls outside the contract's validity window. Discounts are still applied. */
+export function getContractDateWarning(
+  contract: Contract | null,
+  pricingDate: string,
+): { kind: 'before-start' | 'after-expiry'; date: string } | null {
+  if (!contract || !pricingDate) return null;
+  if (contract.validFrom && pricingDate < contract.validFrom) return { kind: 'before-start', date: contract.validFrom };
+  if (contract.validTo && pricingDate > contract.validTo) return { kind: 'after-expiry', date: contract.validTo };
+  return null;
 }
 
 /** Get a Contract by id. */
