@@ -14,7 +14,8 @@ import {
   exportOBX, exportCSV, exportJSON, exportXLSXBlob,
   expandSuperItems, EXTRA_EXPORT_FIELDS, MAX_QTY,
 } from '../../services/parsers';
-import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
+import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount, getContractDateWarning } from '../../data/contracts';
+import { formatDisplayDate } from '../CatalogueAccessAdmin/shared';
 import type { Contract } from '../../data/contracts';
 import { getPricedAsOf } from '../../data/priceChanges';
 
@@ -1432,6 +1433,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
   const hasContract = selectedContract !== null;
+  const contractDateWarning = getContractDateWarning(selectedContract, pricingDate);
   const contractPrices = hasContract
     ? items.map((i, idx) => itemContractPrice({ ...i, listPrice: pricedItems[idx].price }, selectedContract!))
     : items.map(() => null as number | null);
@@ -1497,6 +1499,14 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
         />
       </div>
+
+      {contractDateWarning && (
+        <div role="status" style={{ ...sBody, padding: '12px 24px', background: 'var(--amber-soft)', color: 'var(--yellow-60)', borderBottom: '1px solid var(--line)' }}>
+          {contractDateWarning.kind === 'before-start'
+            ? `Contract starts after the pricing date ${formatDisplayDate(contractDateWarning.date)}. Discounts will still apply in the basket and show in exports.`
+            : `Contract ended before the pricing date ${formatDisplayDate(contractDateWarning.date)}. Discounts will still apply in the basket and show in exports.`}
+        </div>
+      )}
 
       <div style={{ overflowX: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
