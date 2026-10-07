@@ -9,6 +9,9 @@ import {
   audienceLabel,
   audienceSites,
   NOTIFICATION_CATEGORIES,
+  NOTIFICATION_LANGUAGES,
+  DEFAULT_NOTIFICATION_LANGUAGE,
+  notificationLanguage,
   type NotificationCategory,
   type NotificationRecord,
 } from '../../data/notifications';
@@ -41,6 +44,7 @@ interface Draft {
   id: string | null;
   category: NotificationCategory;
   audience: string[];
+  language: string;
   header: string;
   bodyFormat: 'text' | 'html';
   body: string;
@@ -51,7 +55,7 @@ interface Draft {
 function emptyDraft(): Draft {
   const exp = new Date();
   exp.setDate(exp.getDate() + 14);
-  return { id: null, category: 'info', audience: [], header: '', bodyFormat: 'text', body: '', displayDate: today(), expiryDate: exp.toISOString().slice(0, 10) };
+  return { id: null, category: 'info', audience: [], language: DEFAULT_NOTIFICATION_LANGUAGE, header: '', bodyFormat: 'text', body: '', displayDate: today(), expiryDate: exp.toISOString().slice(0, 10) };
 }
 
 const labelStyle = { ...sBodyB, color: 'var(--ink-2)', textTransform: 'uppercase' as const, letterSpacing: 0.6, fontSize: 11, display: 'block', marginBottom: 6 };
@@ -187,6 +191,17 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
               />
             </div>
             <div>
+              <label htmlFor="notif-language" style={labelStyle}>Language</label>
+              <select id="notif-language" style={inputStyle} value={draft.language} onChange={e => set('language', e.target.value)}>
+                {Object.entries(NOTIFICATION_LANGUAGES).map(([code, name]) => (
+                  <option key={code} value={code}>{name}</option>
+                ))}
+              </select>
+              <p style={{ ...sBody, fontSize: 12, color: 'var(--ink-2)', margin: '6px 0 0' }}>
+                Only dealers whose language is {NOTIFICATION_LANGUAGES[draft.language]} will see this. Create a separate notification for each language.
+              </p>
+            </div>
+            <div>
               <label htmlFor="notif-header" style={labelStyle}>Header</label>
               <input id="notif-header" style={inputStyle} value={draft.header} onChange={e => set('header', e.target.value)} maxLength={120} />
             </div>
@@ -249,6 +264,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
                 id: 'preview',
                 category: draft.category,
                 audience: draft.audience,
+                language: draft.language,
                 header: draft.header || 'Header',
                 bodyFormat: draft.bodyFormat,
                 body: draft.body || 'Your message will appear here.',
@@ -306,6 +322,7 @@ export default function NotificationManagerPage() {
       id: d.id ?? uid('notif'),
       category: d.category,
       audience: d.audience,
+      language: d.language,
       header: d.header.trim(),
       bodyFormat: d.bodyFormat,
       body: d.body,
@@ -365,6 +382,7 @@ export default function NotificationManagerPage() {
                   <tr>
                     <th style={th}>Header</th>
                     <th style={th}>Urgency</th>
+                    <th style={th}>Language</th>
                     <th style={th}>Audience</th>
                     <th style={th}>Status</th>
                     <th style={th}>Display</th>
@@ -374,7 +392,7 @@ export default function NotificationManagerPage() {
                 </thead>
                 <tbody>
                   {rows.length === 0 && (
-                    <tr><td colSpan={7} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No notifications.</td></tr>
+                    <tr><td colSpan={8} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No notifications.</td></tr>
                   )}
                   {rows.map(n => {
                     const status = statusOf(n);
@@ -382,6 +400,7 @@ export default function NotificationManagerPage() {
                       <tr key={n.id} className="eos-row">
                         <td style={{ ...td, ...sBodyB }}>{n.header}</td>
                         <td style={td}><CategoryTag category={n.category} /></td>
+                        <td style={td}>{NOTIFICATION_LANGUAGES[notificationLanguage(n)] ?? notificationLanguage(n)}</td>
                         <td style={td}>{audienceLabel(n)}</td>
                         <td style={td}>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: STATUS_COLOR[status].fg }}>
@@ -393,7 +412,7 @@ export default function NotificationManagerPage() {
                         <td style={td}>{n.expiryDate}</td>
                         <td style={{ ...td, textAlign: 'right' }}>
                           <span style={{ display: 'inline-flex', gap: 8 }}>
-                            <IconActionButton label="Edit" icon={<IconEdit size={14} />} onClick={() => setEditing({ ...n, audience: audienceSites(n) })} />
+                            <IconActionButton label="Edit" icon={<IconEdit size={14} />} onClick={() => setEditing({ ...n, audience: audienceSites(n), language: notificationLanguage(n) })} />
                             <IconActionButton label="Delete" icon={<IconTrash size={14} />} onClick={() => setConfirmDelete(n)} />
                           </span>
                         </td>

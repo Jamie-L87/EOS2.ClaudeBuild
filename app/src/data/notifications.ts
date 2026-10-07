@@ -15,6 +15,38 @@ export const NOTIFICATION_SITES: Record<string, string> = {
   SG: 'Singapore',
 };
 
+/** Languages a notification can be written in. */
+export const NOTIFICATION_LANGUAGES: Record<string, string> = {
+  en: 'English',
+  fr: 'French',
+  de: 'German',
+  nl: 'Dutch',
+  es: 'Spanish',
+  it: 'Italian',
+  pt: 'Portuguese',
+  zh: 'Chinese',
+  ja: 'Japanese',
+};
+
+export const DEFAULT_NOTIFICATION_LANGUAGE = 'en';
+
+/**
+ * Stand-in for a per-user language preference: the prototype has no profile
+ * settings, so the viewer's language follows the selected dealer's site.
+ */
+export const SITE_LANGUAGE: Record<string, string> = {
+  NL: 'nl', FR: 'fr', DE: 'de', ES: 'es', IT: 'it', JP: 'ja',
+};
+
+export function languageForSite(site: string | null): string {
+  return (site && SITE_LANGUAGE[site]) || DEFAULT_NOTIFICATION_LANGUAGE;
+}
+
+/** Records saved before language support have no language and are English. */
+export function notificationLanguage(n: Pick<NotificationRecord, 'language'>): string {
+  return n.language ?? DEFAULT_NOTIFICATION_LANGUAGE;
+}
+
 /**
  * Sites a notification is targeted at; empty = all dealers. Records saved
  * before multi-site targeting hold a single site string (or 'all') instead.
@@ -36,6 +68,8 @@ export interface NotificationRecord {
   category: NotificationCategory;
   /** Target sites; empty or missing = all dealers (see audienceSites) */
   audience?: string[];
+  /** Language code the message is written in (see NOTIFICATION_LANGUAGES); missing = English */
+  language?: string;
   header: string;
   bodyFormat: 'text' | 'html';
   body: string;
@@ -75,6 +109,30 @@ export function defaultNotifications(): NotificationRecord[] {
       header: 'Q1 price list now available',
       bodyFormat: 'html',
       body: '<p>The updated Q1 price list is now live for all dealers. <strong>List prices in the basket will reflect the new figures automatically</strong> for any items added after today.</p><p>See the Import page for details.</p>',
+      displayDate: daysFromToday(-3),
+      expiryDate: daysFromToday(11),
+      createdAt: daysFromToday(-3),
+    },
+    {
+      id: 'notif-price-update-fr',
+      category: 'info',
+      audience: ['FR'],
+      language: 'fr',
+      header: 'La liste de prix du T1 est disponible',
+      bodyFormat: 'text',
+      body: 'La liste de prix mise à jour du T1 est désormais en ligne. Les prix catalogue du panier reflètent automatiquement les nouveaux montants pour tout article ajouté à partir d\'aujourd\'hui.',
+      displayDate: daysFromToday(-3),
+      expiryDate: daysFromToday(11),
+      createdAt: daysFromToday(-3),
+    },
+    {
+      id: 'notif-price-update-de',
+      category: 'info',
+      audience: ['DE'],
+      language: 'de',
+      header: 'Die Preisliste für Q1 ist verfügbar',
+      bodyFormat: 'text',
+      body: 'Die aktualisierte Preisliste für Q1 ist jetzt online. Die Listenpreise im Warenkorb spiegeln die neuen Werte automatisch für alle ab heute hinzugefügten Artikel wider.',
       displayDate: daysFromToday(-3),
       expiryDate: daysFromToday(11),
       createdAt: daysFromToday(-3),
