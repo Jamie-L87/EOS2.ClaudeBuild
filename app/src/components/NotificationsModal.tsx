@@ -3,6 +3,7 @@ import { IconClose } from './Icons';
 import NotificationCard, { NotificationBodyStyles } from './NotificationCard';
 import {
   NOTIFICATIONS_CHANGED_EVENT,
+  getViewerLanguage,
   loadReadIds,
   loadVisibleNotifications,
   markAllNotificationsRead,
@@ -53,6 +54,7 @@ export default function NotificationsModal({ open, onClose }: { open: boolean; o
 
   const notifications = loadVisibleNotifications();
   const readIds = loadReadIds();
+  const language = getViewerLanguage();
   const unreadIds = notifications.filter(n => !readIds.has(n.id)).map(n => n.id);
 
   return (
@@ -111,6 +113,7 @@ export default function NotificationsModal({ open, onClose }: { open: boolean; o
               <NotificationCard
                 key={n.id}
                 notification={n}
+                language={language}
                 unread={unread}
                 actions={
                   <button
