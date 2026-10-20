@@ -42,9 +42,35 @@ export function languageForSite(site: string | null): string {
   return (site && SITE_LANGUAGE[site]) || DEFAULT_NOTIFICATION_LANGUAGE;
 }
 
-/** Records saved before language support have no language and are English. */
-export function notificationLanguage(n: Pick<NotificationRecord, 'language'>): string {
-  return n.language ?? DEFAULT_NOTIFICATION_LANGUAGE;
+export interface NotificationTranslation {
+  header: string;
+  body: string;
+}
+
+/**
+ * Content for a language, falling back to English when that translation is
+ * missing or empty. English is required, so there is always something to show.
+ */
+export function localizedContent(n: Pick<NotificationRecord, 'translations'>, language: string): NotificationTranslation {
+  const wanted = n.translations[language];
+  if (wanted && wanted.header.trim() && wanted.body.trim()) return wanted;
+  return n.translations[DEFAULT_NOTIFICATION_LANGUAGE] ?? { header: '', body: '' };
+}
+
+/** Language codes that have a translation written, English first. */
+export function translatedLanguages(n: Pick<NotificationRecord, 'translations'>): string[] {
+  const codes = Object.keys(n.translations).filter(c => n.translations[c].header.trim() && n.translations[c].body.trim());
+  return codes.sort((a, b) => (a === DEFAULT_NOTIFICATION_LANGUAGE ? -1 : b === DEFAULT_NOTIFICATION_LANGUAGE ? 1 : 0));
+}
+
+/**
+ * Upgrades records saved before translations existed: they held a single
+ * header/body (plus an optional language) directly on the record.
+ */
+export function normalizeNotification(raw: NotificationRecord & { header?: string; body?: string; language?: string }): NotificationRecord {
+  if (raw.translations) return raw;
+  const { header, body, language, ...rest } = raw;
+  return { ...rest, translations: { [language ?? DEFAULT_NOTIFICATION_LANGUAGE]: { header: header ?? '', body: body ?? '' } } };
 }
 
 /**
@@ -68,11 +94,9 @@ export interface NotificationRecord {
   category: NotificationCategory;
   /** Target sites; empty or missing = all dealers (see audienceSites) */
   audience?: string[];
-  /** Language code the message is written in (see NOTIFICATION_LANGUAGES); missing = English */
-  language?: string;
-  header: string;
+  /** Header and body per language code (see NOTIFICATION_LANGUAGES); English is required and is the fallback */
+  translations: Record<string, NotificationTranslation>;
   bodyFormat: 'text' | 'html';
-  body: string;
   /** ISO date (YYYY-MM-DD) — notification becomes active on this date */
   displayDate: string;
   /** ISO date (YYYY-MM-DD) — notification stops being active after this date */
@@ -106,33 +130,21 @@ export function defaultNotifications(): NotificationRecord[] {
     {
       id: 'notif-price-update',
       category: 'info',
-      header: 'Q1 price list now available',
+      translations: {
+        en: {
+          header: 'Q1 price list now available',
+          body: '<p>The updated Q1 price list is now live for all dealers. <strong>List prices in the basket will reflect the new figures automatically</strong> for any items added after today.</p><p>See the Import page for details.</p>',
+        },
+        fr: {
+          header: 'La liste de prix du T1 est disponible',
+          body: '<p>La liste de prix mise à jour du T1 est désormais en ligne. <strong>Les prix catalogue du panier reflètent automatiquement les nouveaux montants</strong> pour tout article ajouté à partir d\'aujourd\'hui.</p>',
+        },
+        de: {
+          header: 'Die Preisliste für Q1 ist verfügbar',
+          body: '<p>Die aktualisierte Preisliste für Q1 ist jetzt online. <strong>Die Listenpreise im Warenkorb spiegeln die neuen Werte automatisch wider</strong> für alle ab heute hinzugefügten Artikel.</p>',
+        },
+      },
       bodyFormat: 'html',
-      body: '<p>The updated Q1 price list is now live for all dealers. <strong>List prices in the basket will reflect the new figures automatically</strong> for any items added after today.</p><p>See the Import page for details.</p>',
-      displayDate: daysFromToday(-3),
-      expiryDate: daysFromToday(11),
-      createdAt: daysFromToday(-3),
-    },
-    {
-      id: 'notif-price-update-fr',
-      category: 'info',
-      audience: ['FR'],
-      language: 'fr',
-      header: 'La liste de prix du T1 est disponible',
-      bodyFormat: 'text',
-      body: 'La liste de prix mise à jour du T1 est désormais en ligne. Les prix catalogue du panier reflètent automatiquement les nouveaux montants pour tout article ajouté à partir d\'aujourd\'hui.',
-      displayDate: daysFromToday(-3),
-      expiryDate: daysFromToday(11),
-      createdAt: daysFromToday(-3),
-    },
-    {
-      id: 'notif-price-update-de',
-      category: 'info',
-      audience: ['DE'],
-      language: 'de',
-      header: 'Die Preisliste für Q1 ist verfügbar',
-      bodyFormat: 'text',
-      body: 'Die aktualisierte Preisliste für Q1 ist jetzt online. Die Listenpreise im Warenkorb spiegeln die neuen Werte automatisch für alle ab heute hinzugefügten Artikel wider.',
       displayDate: daysFromToday(-3),
       expiryDate: daysFromToday(11),
       createdAt: daysFromToday(-3),
@@ -141,9 +153,13 @@ export function defaultNotifications(): NotificationRecord[] {
       id: 'notif-maintenance',
       category: 'warning',
       audience: ['UK'],
-      header: 'Scheduled maintenance this weekend',
+      translations: {
+        en: {
+          header: 'Scheduled maintenance this weekend',
+          body: 'EOS Cloud will be unavailable Saturday 02:00-04:00 GMT for scheduled maintenance. Please submit any time-sensitive orders before then.',
+        },
+      },
       bodyFormat: 'text',
-      body: 'EOS Cloud will be unavailable Saturday 02:00-04:00 GMT for scheduled maintenance. Please submit any time-sensitive orders before then.',
       displayDate: daysFromToday(-1),
       expiryDate: daysFromToday(4),
       createdAt: daysFromToday(-1),
@@ -151,9 +167,13 @@ export function defaultNotifications(): NotificationRecord[] {
     {
       id: 'notif-pdm-outage',
       category: 'error',
-      header: 'Product validation degraded',
+      translations: {
+        en: {
+          header: 'Product validation degraded',
+          body: '<p><strong>Article code validation against PDM is currently slow or failing intermittently.</strong> Items may stay in a "validating" state longer than usual.</p><p>We are aware of the issue and working on it — no action needed on your part.</p>',
+        },
+      },
       bodyFormat: 'html',
-      body: '<p><strong>Article code validation against PDM is currently slow or failing intermittently.</strong> Items may stay in a "validating" state longer than usual.</p><p>We are aware of the issue and working on it — no action needed on your part.</p>',
       displayDate: daysFromToday(-1),
       expiryDate: daysFromToday(2),
       createdAt: daysFromToday(-1),
@@ -161,9 +181,13 @@ export function defaultNotifications(): NotificationRecord[] {
     {
       id: 'notif-lead-time-column',
       category: 'info',
-      header: 'New: Lead Time column in the basket',
+      translations: {
+        en: {
+          header: 'New: Lead Time column in the basket',
+          body: 'You can now see estimated lead time per item directly in the basket table, and include it as an export column.',
+        },
+      },
       bodyFormat: 'text',
-      body: 'You can now see estimated lead time per item directly in the basket table, and include it as an export column.',
       displayDate: daysFromToday(-10),
       expiryDate: daysFromToday(-2),
       createdAt: daysFromToday(-10),
@@ -172,9 +196,13 @@ export function defaultNotifications(): NotificationRecord[] {
       id: 'notif-holiday-hours',
       category: 'warning',
       audience: ['NL'],
-      header: 'Holiday order cut-off dates',
+      translations: {
+        en: {
+          header: 'Holiday order cut-off dates',
+          body: '<p>To guarantee delivery before the holidays, orders for the following catalogues must be submitted by the dates below:</p><ul><li>Herman Miller Seating UK — 12th</li><li>Desking Core — 15th</li><li>Storage — 18th</li></ul>',
+        },
+      },
       bodyFormat: 'html',
-      body: '<p>To guarantee delivery before the holidays, orders for the following catalogues must be submitted by the dates below:</p><ul><li>Herman Miller Seating UK — 12th</li><li>Desking Core — 15th</li><li>Storage — 18th</li></ul>',
       displayDate: daysFromToday(-20),
       expiryDate: daysFromToday(-15),
       createdAt: daysFromToday(-20),

@@ -1,4 +1,4 @@
-import { audienceSites, defaultNotifications, isNotificationActive, languageForSite, notificationLanguage, type NotificationRecord } from '../data/notifications';
+import { audienceSites, defaultNotifications, isNotificationActive, languageForSite, normalizeNotification, type NotificationRecord } from '../data/notifications';
 
 const NOTIFICATIONS_KEY = 'eos-notifications-admin:v1';
 const USER_STATE_KEY = 'eos-notifications-user-state:v1';
@@ -15,7 +15,7 @@ export function loadNotifications(): NotificationRecord[] {
   try {
     const raw = localStorage.getItem(NOTIFICATIONS_KEY);
     if (!raw) return defaultNotifications();
-    return JSON.parse(raw) as NotificationRecord[];
+    return (JSON.parse(raw) as NotificationRecord[]).map(normalizeNotification);
   } catch {
     return defaultNotifications();
   }
@@ -82,16 +82,20 @@ function targetsSite(n: NotificationRecord, site: string | null): boolean {
   return sites.length === 0 || (site !== null && sites.includes(site));
 }
 
-/** What the selected dealer sees: within the display window, targeted at their site and written in their language, newest first. */
+/** What the selected dealer sees: within the display window and targeted at their site, newest first. Language is resolved at render time (see localizedContent). */
 export function loadVisibleNotifications(): NotificationRecord[] {
   const site = getViewerSite();
-  const language = languageForSite(site);
   return loadNotifications()
-    .filter(n => isNotificationActive(n) && targetsSite(n, site) && notificationLanguage(n) === language)
+    .filter(n => isNotificationActive(n) && targetsSite(n, site))
     .sort((a, b) => b.displayDate.localeCompare(a.displayDate));
 }
 
 export function countUnreadNotifications(): number {
   const read = loadReadIds();
   return loadVisibleNotifications().filter(n => !read.has(n.id)).length;
+}
+
+/** Language the selected dealer reads notifications in (stand-in for a user preference). */
+export function getViewerLanguage(): string {
+  return languageForSite(getViewerSite());
 }

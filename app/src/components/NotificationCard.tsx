@@ -1,4 +1,4 @@
-import { NOTIFICATION_CATEGORIES, type NotificationRecord } from '../data/notifications';
+import { DEFAULT_NOTIFICATION_LANGUAGE, NOTIFICATION_CATEGORIES, localizedContent, type NotificationRecord } from '../data/notifications';
 import { t } from '../tokens';
 
 const sBody = { ...t.body };
@@ -24,7 +24,7 @@ function sanitizeHtml(html: string): string {
   return doc.body.innerHTML;
 }
 
-export function NotificationBody({ notification }: { notification: Pick<NotificationRecord, 'bodyFormat' | 'body'> }) {
+export function NotificationBody({ notification }: { notification: { bodyFormat: NotificationRecord['bodyFormat']; body: string } }) {
   if (notification.bodyFormat === 'html') {
     return (
       <div
@@ -62,14 +62,18 @@ export function CategoryTag({ category }: { category: NotificationRecord['catego
 /** Banner-style card using the styleguide's Info / Warning / Error notification colours. */
 export default function NotificationCard({
   notification,
+  language = DEFAULT_NOTIFICATION_LANGUAGE,
   unread,
   actions,
 }: {
   notification: NotificationRecord;
+  /** Language to show; falls back to English if there is no translation */
+  language?: string;
   unread?: boolean;
   actions?: React.ReactNode;
 }) {
   const c = NOTIFICATION_CATEGORIES[notification.category];
+  const content = localizedContent(notification, language);
   return (
     <article
       style={{
@@ -88,8 +92,8 @@ export default function NotificationCard({
         <CategoryTag category={notification.category} />
         <span style={{ ...sBody, fontSize: 12, marginLeft: 'auto', opacity: 0.8 }}>{notification.displayDate}</span>
       </div>
-      <h3 style={{ ...t.largeB, margin: 0, color: c.fg }}>{notification.header}</h3>
-      <NotificationBody notification={notification} />
+      <h3 style={{ ...t.largeB, margin: 0, color: c.fg }}>{content.header}</h3>
+      <NotificationBody notification={{ bodyFormat: notification.bodyFormat, body: content.body }} />
       {actions && <div style={{ display: 'flex', gap: 16, marginTop: 4 }}>{actions}</div>}
     </article>
   );
