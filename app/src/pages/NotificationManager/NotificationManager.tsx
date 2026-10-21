@@ -191,8 +191,8 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
           </button>
         </div>
 
-        <div style={{ padding: 20, flex: 1, minHeight: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 24 }}>
-          <div style={{ display: 'grid', gap: 16, alignContent: 'start', overflowY: 'auto', minHeight: 0, paddingRight: 4 }}>
+        <div style={{ padding: 20, overflowY: 'auto', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 24 }}>
+          <div style={{ display: 'grid', gap: 16, alignContent: 'start' }}>
             <div>
               <span style={labelStyle}>Urgency</span>
               <SegButtons
@@ -276,7 +276,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
             </div>
           </div>
 
-          <div style={{ overflowY: 'auto', minHeight: 0, paddingRight: 4 }}>
+          <div style={{ alignContent: 'start' }}>
             <span style={labelStyle}>Previews (as dealers see them)</span>
             <div style={{ display: 'grid', gap: 20 }}>
               {previewLangs.map(code => (
