@@ -72,45 +72,27 @@ const inputStyle = {
   background: color.bg,
 };
 
-function AudienceChip({ label, title, active, onClick, onRemove, removeLabel }: { label: string; title?: string; active: boolean; onClick: () => void; onRemove?: () => void; removeLabel?: string }) {
+function AudienceChip({ label, title, active, onClick }: { label: string; title?: string; active: boolean; onClick: () => void }) {
   return (
-    <span style={{ position: 'relative', display: 'inline-flex' }}>
-      <button
-        type="button"
-        title={title}
-        aria-pressed={active}
-        onClick={onClick}
-        style={{
-          ...sBodyB,
-          height: 36,
-          padding: onRemove ? '0 34px 0 14px' : '0 14px',
-          border: `2px solid ${active ? 'var(--brand)' : 'var(--ink)'}`,
-          borderRadius: radius,
-          background: active ? 'var(--brand)' : color.bg,
-          color: active ? color.bg : 'var(--ink)',
-          cursor: 'pointer',
-          fontFamily: 'inherit',
-        }}
-      >
-        {label}
-      </button>
-      {onRemove && (
-        <button
-          type="button"
-          aria-label={removeLabel ?? 'Remove'}
-          title={removeLabel ?? 'Remove'}
-          onClick={onRemove}
-          style={{
-            position: 'absolute', top: 0, right: 0, width: 32, height: 36,
-            border: 'none', background: 'transparent', cursor: 'pointer', padding: 0,
-            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-            color: active ? color.bg : 'var(--ink-2)',
-          }}
-        >
-          <IconClose size={12} />
-        </button>
-      )}
-    </span>
+    <button
+      type="button"
+      title={title}
+      aria-pressed={active}
+      onClick={onClick}
+      style={{
+        ...sBodyB,
+        height: 36,
+        padding: '0 14px',
+        border: `2px solid ${active ? 'var(--brand)' : 'var(--ink)'}`,
+        borderRadius: radius,
+        background: active ? 'var(--brand)' : color.bg,
+        color: active ? color.bg : 'var(--ink)',
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+      }}
+    >
+      {label}
+    </button>
   );
 }
 
@@ -234,8 +216,6 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
                     title={code === DEFAULT_NOTIFICATION_LANGUAGE ? 'Required - shown when a translation is missing' : undefined}
                     active={lang === code}
                     onClick={() => selectLang(code)}
-                    onRemove={code !== DEFAULT_NOTIFICATION_LANGUAGE && opened.includes(code) ? () => removeLang(code) : undefined}
-                    removeLabel={`Remove ${name} translation`}
                   />
                 ))}
               </div>
@@ -306,9 +286,22 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
             <div style={{ display: 'grid', gap: 20 }}>
               {previewLangs.map(code => (
                 <div key={code}>
-                  <span style={{ ...sBodyB, fontSize: 12, color: 'var(--ink-2)', display: 'block', marginBottom: 6 }}>
-                    {NOTIFICATION_LANGUAGES[code]}{code !== DEFAULT_NOTIFICATION_LANGUAGE && !isDone(code) ? ' - no translation yet, dealers see English' : ''}
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6, minHeight: 24 }}>
+                    <span style={{ ...sBodyB, fontSize: 12, color: 'var(--ink-2)' }}>
+                      {NOTIFICATION_LANGUAGES[code]}{code !== DEFAULT_NOTIFICATION_LANGUAGE && !isDone(code) ? ' - no translation yet, dealers see English' : ''}
+                    </span>
+                    {code !== DEFAULT_NOTIFICATION_LANGUAGE && (
+                      <button
+                        type="button"
+                        aria-label={`Remove ${NOTIFICATION_LANGUAGES[code]} translation`}
+                        title={`Remove ${NOTIFICATION_LANGUAGES[code]} translation`}
+                        onClick={() => removeLang(code)}
+                        style={{ width: 24, height: 24, border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <IconClose size={14} />
+                      </button>
+                    )}
+                  </div>
                   <NotificationCard
                     notification={{
                       id: 'preview-' + code,
