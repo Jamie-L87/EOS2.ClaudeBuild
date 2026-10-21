@@ -72,27 +72,45 @@ const inputStyle = {
   background: color.bg,
 };
 
-function AudienceChip({ label, title, active, onClick }: { label: string; title?: string; active: boolean; onClick: () => void }) {
+function AudienceChip({ label, title, active, onClick, onRemove, removeLabel }: { label: string; title?: string; active: boolean; onClick: () => void; onRemove?: () => void; removeLabel?: string }) {
   return (
-    <button
-      type="button"
-      title={title}
-      aria-pressed={active}
-      onClick={onClick}
-      style={{
-        ...sBodyB,
-        height: 36,
-        padding: '0 14px',
-        border: `2px solid ${active ? 'var(--brand)' : 'var(--ink)'}`,
-        borderRadius: radius,
-        background: active ? 'var(--brand)' : color.bg,
-        color: active ? color.bg : 'var(--ink)',
-        cursor: 'pointer',
-        fontFamily: 'inherit',
-      }}
-    >
-      {label}
-    </button>
+    <span style={{ position: 'relative', display: 'inline-flex' }}>
+      <button
+        type="button"
+        title={title}
+        aria-pressed={active}
+        onClick={onClick}
+        style={{
+          ...sBodyB,
+          height: 36,
+          padding: onRemove ? '0 34px 0 14px' : '0 14px',
+          border: `2px solid ${active ? 'var(--brand)' : 'var(--ink)'}`,
+          borderRadius: radius,
+          background: active ? 'var(--brand)' : color.bg,
+          color: active ? color.bg : 'var(--ink)',
+          cursor: 'pointer',
+          fontFamily: 'inherit',
+        }}
+      >
+        {label}
+      </button>
+      {onRemove && (
+        <button
+          type="button"
+          aria-label={removeLabel ?? 'Remove'}
+          title={removeLabel ?? 'Remove'}
+          onClick={onRemove}
+          style={{
+            position: 'absolute', top: 0, right: 0, width: 32, height: 36,
+            border: 'none', background: 'transparent', cursor: 'pointer', padding: 0,
+            display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+            color: active ? color.bg : 'var(--ink-2)',
+          }}
+        >
+          <IconClose size={12} />
+        </button>
+      )}
+    </span>
   );
 }
 
@@ -145,6 +163,11 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
   // Languages whose tile has been selected; each gets its own preview on the right
   const [opened, setOpened] = useState<string[]>(() => [...new Set([DEFAULT_NOTIFICATION_LANGUAGE, ...Object.keys(initial.translations)])]);
   const selectLang = (code: string) => { setLang(code); setOpened(o => (o.includes(code) ? o : [...o, code])); };
+  const removeLang = (code: string) => {
+    setDraft(d => { const { [code]: _removed, ...rest } = d.translations; return { ...d, translations: rest }; });
+    setOpened(o => o.filter(c => c !== code));
+    if (lang === code) setLang(DEFAULT_NOTIFICATION_LANGUAGE);
+  };
   const previewLangs = Object.keys(NOTIFICATION_LANGUAGES).filter(c => opened.includes(c));
   const current = draft.translations[lang] ?? { header: '', body: '' };
   const setText = (field: keyof NotificationTranslation, v: string) =>
@@ -211,6 +234,8 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
                     title={code === DEFAULT_NOTIFICATION_LANGUAGE ? 'Required - shown when a translation is missing' : undefined}
                     active={lang === code}
                     onClick={() => selectLang(code)}
+                    onRemove={code !== DEFAULT_NOTIFICATION_LANGUAGE && opened.includes(code) ? () => removeLang(code) : undefined}
+                    removeLabel={`Remove ${name} translation`}
                   />
                 ))}
               </div>
