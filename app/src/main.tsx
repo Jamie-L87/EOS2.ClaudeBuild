@@ -5,7 +5,7 @@ import './tokens.css';
 
 import ImportPage      from './pages/Import/Import';
 import OrderListPage   from './pages/OrderList/OrderList';
-import OrderDetailPage from './pages/OrderDetail/OrderDetail';
+import OrderDetailPage from './pages/OrderDetail/OrderDetailRoute';
 import CatalogueAccessAdminPage from './pages/CatalogueAccessAdmin/CatalogueAccessAdmin';
 import CatalogueGroupDetailPage from './pages/CatalogueGroupDetail/CatalogueGroupDetail';
 import CustomerGroupDetailPage from './pages/CustomerGroupDetail/CustomerGroupDetail';
