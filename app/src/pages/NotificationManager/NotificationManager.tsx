@@ -142,7 +142,10 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
   const [draft, setDraft] = useState(initial);
   const [error, setError] = useState<string | null>(null);
   const [lang, setLang] = useState(DEFAULT_NOTIFICATION_LANGUAGE);
-  const [previewLang, setPreviewLang] = useState(DEFAULT_NOTIFICATION_LANGUAGE);
+  // Languages whose tile has been selected; each gets its own preview on the right
+  const [opened, setOpened] = useState<string[]>(() => [...new Set([DEFAULT_NOTIFICATION_LANGUAGE, ...Object.keys(initial.translations)])]);
+  const selectLang = (code: string) => { setLang(code); setOpened(o => (o.includes(code) ? o : [...o, code])); };
+  const previewLangs = Object.keys(NOTIFICATION_LANGUAGES).filter(c => opened.includes(c));
   const current = draft.translations[lang] ?? { header: '', body: '' };
   const setText = (field: keyof NotificationTranslation, v: string) =>
     setDraft(d => ({ ...d, translations: { ...d.translations, [lang]: { ...(d.translations[lang] ?? { header: '', body: '' }), [field]: v } } }));
@@ -161,7 +164,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
   const submit = () => {
     if (!isDone(DEFAULT_NOTIFICATION_LANGUAGE)) { setLang(DEFAULT_NOTIFICATION_LANGUAGE); return setError('English header and message are required (used when a translation is missing).'); }
     const half = Object.keys(draft.translations).find(c => isStarted(c) && !isDone(c));
-    if (half) { setLang(half); return setError(`${NOTIFICATION_LANGUAGES[half]} needs both a header and a message, or clear both to skip it.`); }
+    if (half) { selectLang(half); return setError(`${NOTIFICATION_LANGUAGES[half]} needs both a header and a message, or clear both to skip it.`); }
     if (draft.expiryDate < draft.displayDate) return setError('Expiry date cannot be before the display date.');
     onSave({ ...draft, translations: Object.fromEntries(Object.entries(draft.translations).filter(([c]) => isDone(c))) });
   };
@@ -188,8 +191,8 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
           </button>
         </div>
 
-        <div style={{ padding: 20, overflowY: 'auto', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 24 }}>
-          <div style={{ display: 'grid', gap: 16, alignContent: 'start' }}>
+        <div style={{ padding: 20, flex: 1, minHeight: 0, overflow: 'hidden', display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', gap: 24 }}>
+          <div style={{ display: 'grid', gap: 16, alignContent: 'start', overflowY: 'auto', minHeight: 0, paddingRight: 4 }}>
             <div>
               <span style={labelStyle}>Urgency</span>
               <SegButtons
@@ -207,7 +210,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
                     label={`${name}${code === DEFAULT_NOTIFICATION_LANGUAGE ? ' *' : isDone(code) ? ' \u2713' : ''}`}
                     title={code === DEFAULT_NOTIFICATION_LANGUAGE ? 'Required - shown when a translation is missing' : undefined}
                     active={lang === code}
-                    onClick={() => setLang(code)}
+                    onClick={() => selectLang(code)}
                   />
                 ))}
               </div>
@@ -273,30 +276,34 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
             </div>
           </div>
 
-          <div style={{ alignContent: 'start' }}>
-            <label htmlFor="notif-preview-lang" style={labelStyle}>Preview (as dealers see it)</label>
-            <select id="notif-preview-lang" style={{ ...inputStyle, marginBottom: 12 }} value={previewLang} onChange={e => setPreviewLang(e.target.value)}>
-              {Object.entries(NOTIFICATION_LANGUAGES).map(([code, name]) => (
-                <option key={code} value={code}>{name}{isDone(code) || code === DEFAULT_NOTIFICATION_LANGUAGE ? '' : ' (falls back to English)'}</option>
+          <div style={{ overflowY: 'auto', minHeight: 0, paddingRight: 4 }}>
+            <span style={labelStyle}>Previews (as dealers see them)</span>
+            <div style={{ display: 'grid', gap: 20 }}>
+              {previewLangs.map(code => (
+                <div key={code}>
+                  <span style={{ ...sBodyB, fontSize: 12, color: 'var(--ink-2)', display: 'block', marginBottom: 6 }}>
+                    {NOTIFICATION_LANGUAGES[code]}{code !== DEFAULT_NOTIFICATION_LANGUAGE && !isDone(code) ? ' - no translation yet, dealers see English' : ''}
+                  </span>
+                  <NotificationCard
+                    notification={{
+                      id: 'preview-' + code,
+                      category: draft.category,
+                      audience: draft.audience,
+                      translations: {
+                        [DEFAULT_NOTIFICATION_LANGUAGE]: { header: 'Header', body: 'Your message will appear here.' },
+                        ...Object.fromEntries(Object.entries(draft.translations).filter(([c]) => isDone(c))),
+                      },
+                      bodyFormat: draft.bodyFormat,
+                      displayDate: draft.displayDate,
+                      expiryDate: draft.expiryDate,
+                      createdAt: draft.displayDate,
+                    }}
+                    language={code}
+                    unread
+                  />
+                </div>
               ))}
-            </select>
-            <NotificationCard
-              notification={{
-                id: 'preview',
-                category: draft.category,
-                audience: draft.audience,
-                translations: {
-                  [DEFAULT_NOTIFICATION_LANGUAGE]: { header: 'Header', body: 'Your message will appear here.' },
-                  ...Object.fromEntries(Object.entries(draft.translations).filter(([c]) => isDone(c))),
-                },
-                bodyFormat: draft.bodyFormat,
-                displayDate: draft.displayDate,
-                expiryDate: draft.expiryDate,
-                createdAt: draft.displayDate,
-              }}
-              language={previewLang}
-              unread
-            />
+            </div>
           </div>
         </div>
 
