@@ -24,6 +24,9 @@ export interface StoredOrder {
   deliveryCity?: string | null;
   deliveryCounty?: string | null;
   deliveryPostcode?: string | null;
+  deliveryCountry?: string | null;
+  /** Promise dates that have a timed delivery slot added */
+  timedDeliveries?: string[];
   contactName?: string | null;
   contactEmail?: string | null;
   contactTelephone?: string | null;
