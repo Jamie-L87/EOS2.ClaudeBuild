@@ -6,13 +6,11 @@ import { IconClose, IconEdit, IconPlus, IconTrash } from '../../components/Icons
 import { color, radius, size, t } from '../../tokens';
 import {
   NOTIFICATION_SITES,
-  audienceLabel,
   audienceSites,
   NOTIFICATION_CATEGORIES,
   NOTIFICATION_LANGUAGES,
   DEFAULT_NOTIFICATION_LANGUAGE,
   localizedContent,
-  translatedLanguages,
   type NotificationCategory,
   type NotificationRecord,
   type NotificationTranslation,
@@ -428,8 +426,6 @@ export default function NotificationManagerPage() {
                   <tr>
                     <th style={th}>Header</th>
                     <th style={th}>Urgency</th>
-                    <th style={th}>Translations</th>
-                    <th style={th}>Audience</th>
                     <th style={th}>Status</th>
                     <th style={th}>Display</th>
                     <th style={th}>Expiry</th>
@@ -438,7 +434,7 @@ export default function NotificationManagerPage() {
                 </thead>
                 <tbody>
                   {rows.length === 0 && (
-                    <tr><td colSpan={8} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No notifications.</td></tr>
+                    <tr><td colSpan={6} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No notifications.</td></tr>
                   )}
                   {rows.map(n => {
                     const status = statusOf(n);
@@ -446,8 +442,6 @@ export default function NotificationManagerPage() {
                       <tr key={n.id} className="eos-row">
                         <td style={{ ...td, ...sBodyB }}>{localizedContent(n, DEFAULT_NOTIFICATION_LANGUAGE).header}</td>
                         <td style={td}><CategoryTag category={n.category} /></td>
-                        <td style={td}>{translatedLanguages(n).map(c => c.toUpperCase()).join(', ')}</td>
-                        <td style={td}>{audienceLabel(n)}</td>
                         <td style={td}>
                           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: STATUS_COLOR[status].fg }}>
                             <span style={{ width: 8, height: 8, borderRadius: 4, background: STATUS_COLOR[status].dot }} />
