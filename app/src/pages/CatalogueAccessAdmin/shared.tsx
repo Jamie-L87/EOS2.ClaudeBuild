@@ -80,10 +80,11 @@ export function SearchInput({ value, onChange, placeholder }: { value: string; o
   );
 }
 
-export function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick: () => void }) {
+export function PrimaryButton({ children, onClick, disabled }: { children: React.ReactNode; onClick: () => void; disabled?: boolean }) {
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       className="eos-primary-btn"
       style={{
         ...sLargeB,
