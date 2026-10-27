@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconClose, IconChevronRight, IconUpload, IconMail } from './Icons';
-type NavId = 'import' | 'orders' | 'catalogueAccess' | 'notifications';
+type NavId = 'import' | 'orders' | 'catalogueAccess' | 'notifications' | 'preferenceManagement';
 
 interface NavDrawerProps {
   open: boolean;
   onClose: () => void;
-  current: NavId;
+  current: NavId | null;
 }
 
 interface IconProps {
@@ -37,11 +37,13 @@ const NAV_ITEMS: Array<{
   sub: string;
   path: string;
   Icon: React.ComponentType<IconProps>;
+  group?: string;
 }> = [
   { id: 'import', label: 'Import',  sub: 'Upload files or paste codes',         path: '/',       Icon: IconUpload },
   { id: 'orders', label: 'Orders',  sub: 'Active, completed and archived',       path: '/orders', Icon: IconOrders },
   { id: 'catalogueAccess', label: 'Catalogue Management', sub: 'Catalogue and customer group management', path: '/admin/catalogue-access', Icon: IconOrders },
   { id: 'notifications', label: 'Notification Manager', sub: 'Create and schedule dealer notifications', path: '/admin/notifications', Icon: IconMail },
+  { id: 'preferenceManagement', label: 'Preference Management', sub: 'Define the preferences users can set', path: '/preferences?tab=manage', Icon: IconOrders, group: 'System Management' },
 ];
 
 export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
@@ -127,8 +129,13 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           {NAV_ITEMS.map((item) => {
             const active = current === item.id;
             return (
+              <Fragment key={item.id}>
+              {item.group && (
+                <div style={{ padding: '16px 4px 4px', fontWeight: 700, letterSpacing: '0.06em', fontSize: 11, textTransform: 'uppercase', color: 'var(--ink-3)' }}>
+                  {item.group}
+                </div>
+              )}
               <button
-                key={item.id}
                 className="om-nav-item"
                 data-active={active}
                 aria-current={active ? 'page' : undefined}
@@ -168,6 +175,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
                 </span>
                 <IconChevronRight size={16} stroke={2} />
               </button>
+              </Fragment>
             );
           })}
         </nav>

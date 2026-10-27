@@ -72,6 +72,18 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
   const dealerMenuRef = useRef<HTMLDivElement>(null);
   const dealerInputRef = useRef<HTMLInputElement>(null);
 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!userMenuOpen) return;
+    const off = (e: MouseEvent) => { if (!userMenuRef.current?.contains(e.target as Node)) setUserMenuOpen(false); };
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setUserMenuOpen(false); };
+    document.addEventListener('mousedown', off);
+    document.addEventListener('keydown', esc);
+    return () => { document.removeEventListener('mousedown', off); document.removeEventListener('keydown', esc); };
+  }, [userMenuOpen]);
+
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(countUnreadNotifications);
 
@@ -207,7 +219,29 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
         <button className="om-iconplus" style={styles.iconBtn} aria-label="Help">
           <IconHelp size={20} stroke={1.6} />
         </button>
-        <div style={styles.avatar} title="Me">ME</div>
+        <div ref={userMenuRef} style={{ position: 'relative' }}>
+          <button
+            style={{ ...styles.avatar, border: 'none', fontFamily: 'inherit' }}
+            title="Stephanie Li"
+            aria-label="User menu"
+            aria-haspopup="menu"
+            aria-expanded={userMenuOpen}
+            onClick={() => setUserMenuOpen(o => !o)}
+          >
+            ME
+          </button>
+          {userMenuOpen && (
+            <div role="menu" style={styles.userMenu}>
+              <div style={styles.userMenuName}>Stephanie Li</div>
+              <button role="menuitem" className="eos-dealer-item" style={styles.userMenuItem} onClick={() => { setUserMenuOpen(false); navigate('/preferences'); }}>
+                My Preferences
+              </button>
+              <button role="menuitem" className="eos-dealer-item" style={{ ...styles.userMenuItem, borderBottom: 'none' }} onClick={() => { setUserMenuOpen(false); sessionStorage.removeItem('eos-user-role'); navigate('/'); }}>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
       <NotificationsModal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
       <style>{`
@@ -401,6 +435,39 @@ const styles = {
     justifyContent: 'center',
     padding: '0 4px',
     border: '2px solid #fff',
+  },
+  userMenu: {
+    position: 'absolute' as const,
+    top: '100%',
+    right: 0,
+    marginTop: 8,
+    width: 220,
+    background: '#fff',
+    border: '2px solid #000',
+    borderRadius: 'var(--radius)',
+    boxShadow: 'var(--shadow-pop)',
+    zIndex: 60,
+    overflow: 'hidden',
+    animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
+  },
+  userMenuName: {
+    ...t.bodyB,
+    padding: '12px 16px',
+    color: 'var(--ink-2)',
+    borderBottom: '1px solid var(--line)',
+  },
+  userMenuItem: {
+    ...t.body,
+    display: 'block',
+    width: '100%',
+    padding: '12px 16px',
+    border: 'none',
+    borderBottom: '1px solid var(--line)',
+    background: 'transparent',
+    color: 'var(--ink)',
+    cursor: 'pointer',
+    textAlign: 'left' as const,
+    fontFamily: 'inherit',
   },
   avatar: {
     width: size.hit,
