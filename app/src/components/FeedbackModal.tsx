@@ -33,6 +33,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
   const [comment, setComment] = useState('');
   const [contactOk, setContactOk] = useState(true);
   const [sent, setSent] = useState(false);
+  const [screenshot, setScreenshot] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -45,10 +46,29 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
     };
   }, [open, onClose]);
 
+  const loadImage = (file: File | null | undefined) => {
+    if (!file || !file.type.startsWith('image/')) return false;
+    const reader = new FileReader();
+    reader.onload = () => setScreenshot(reader.result as string);
+    reader.readAsDataURL(file);
+    return true;
+  };
+
+  // Paste anywhere in the modal (including the comment box) attaches a screenshot.
+  useEffect(() => {
+    if (!open) return;
+    const onPaste = (e: ClipboardEvent) => {
+      const item = Array.from(e.clipboardData?.items ?? []).find(i => i.type.startsWith('image/'));
+      if (item && loadImage(item.getAsFile())) e.preventDefault();
+    };
+    document.addEventListener('paste', onPaste);
+    return () => document.removeEventListener('paste', onPaste);
+  }, [open]);
+
   // Reset once the modal is closed so the next open starts fresh.
   useEffect(() => {
     if (open) return;
-    setType('idea'); setRating(null); setComment(''); setContactOk(true); setSent(false);
+    setType('idea'); setRating(null); setComment(''); setContactOk(true); setSent(false); setScreenshot(null);
   }, [open]);
 
   if (!open) return null;
@@ -182,6 +202,32 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
                   style={{ ...sBody, width: '100%', boxSizing: 'border-box', padding: 12, resize: 'vertical', fontFamily: 'inherit', color: 'var(--ink)', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}
                 />
                 <div style={{ ...sBody, color: 'var(--ink-3)', textAlign: 'right', marginTop: 4 }}>{comment.length}/{MAX_COMMENT}</div>
+              </div>
+
+              <div>
+                <span style={fieldLabel}>Screenshot (optional)</span>
+                {screenshot ? (
+                  <div style={{ position: 'relative', border: '2px solid var(--line)', borderRadius: 'var(--radius)', padding: 8, background: 'var(--bg-soft)' }}>
+                    <img src={screenshot} alt="Pasted screenshot" style={{ display: 'block', maxWidth: '100%', maxHeight: 180, margin: '0 auto' }} />
+                    <button
+                      onClick={() => setScreenshot(null)}
+                      aria-label="Remove screenshot"
+                      className="om-iconplus"
+                      style={{ position: 'absolute', top: 4, right: 4, width: 32, height: 32, borderRadius: 16, border: 'none', background: 'var(--bg)', cursor: 'pointer', color: 'var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <IconClose size={14} stroke={1.8} />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    onDragOver={e => e.preventDefault()}
+                    onDrop={e => { e.preventDefault(); loadImage(e.dataTransfer.files[0]); }}
+                    style={{ ...sBody, color: 'var(--ink-2)', border: '2px dashed var(--ink-3)', borderRadius: 'var(--radius)', padding: '16px 12px', textAlign: 'center' }}
+                  >
+                    Press <strong>Ctrl+V</strong> to paste a screenshot, or drop an image here.
+                    <div style={{ color: 'var(--ink-3)', marginTop: 4 }}>Tip: Win+Shift+S captures part of your screen.</div>
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'grid', gap: 4 }}>
