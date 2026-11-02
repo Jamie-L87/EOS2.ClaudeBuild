@@ -26,12 +26,35 @@ const MAX_COMMENT = 1000;
 
 const fieldLabel = { ...sBodyB, color: 'var(--ink-2)', textTransform: 'uppercase' as const, letterSpacing: 0.6, margin: '0 0 8px', display: 'block' };
 
+const DRAFT_KEY = 'eos-feedback-draft';
+
+interface Draft { type: string; rating: number | null; comment: string; contactOk: boolean }
+
+function loadDraft(): Draft {
+  const empty: Draft = { type: 'idea', rating: null, comment: '', contactOk: true };
+  try {
+    const saved = sessionStorage.getItem(DRAFT_KEY);
+    return saved ? { ...empty, ...JSON.parse(saved) } : empty;
+  } catch {
+    return empty;
+  }
+}
+
+function saveDraft(d: Draft) {
+  try { sessionStorage.setItem(DRAFT_KEY, JSON.stringify(d)); } catch { /* storage unavailable */ }
+}
+
+function clearDraft() {
+  try { sessionStorage.removeItem(DRAFT_KEY); } catch { /* storage unavailable */ }
+}
+
 export default function FeedbackModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { pathname } = useLocation();
-  const [type, setType] = useState<string>('idea');
-  const [rating, setRating] = useState<number | null>(null);
-  const [comment, setComment] = useState('');
-  const [contactOk, setContactOk] = useState(true);
+  const [draft] = useState(loadDraft);
+  const [type, setType] = useState<string>(draft.type);
+  const [rating, setRating] = useState<number | null>(draft.rating);
+  const [comment, setComment] = useState(draft.comment);
+  const [contactOk, setContactOk] = useState(draft.contactOk);
   const [sent, setSent] = useState(false);
   const [screenshot, setScreenshot] = useState<string | null>(null);
 
@@ -65,11 +88,20 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
     return () => document.removeEventListener('paste', onPaste);
   }, [open]);
 
-  // Reset once the modal is closed so the next open starts fresh.
+  // Keep the draft while the modal is closed (e.g. to take a screenshot) or the user changes
+  // page; only a sent submission starts the next one fresh. The screenshot is not kept.
+  useEffect(() => {
+    if (!sent) saveDraft({ type, rating, comment, contactOk });
+  }, [type, rating, comment, contactOk, sent]);
+
   useEffect(() => {
     if (open) return;
-    setType('idea'); setRating(null); setComment(''); setContactOk(true); setSent(false); setScreenshot(null);
-  }, [open]);
+    setScreenshot(null);
+    if (sent) {
+      clearDraft();
+      setType('idea'); setRating(null); setComment(''); setContactOk(true); setSent(false);
+    }
+  }, [open, sent]);
 
   if (!open) return null;
 
