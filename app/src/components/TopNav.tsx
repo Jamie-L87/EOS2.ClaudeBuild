@@ -8,6 +8,7 @@ import {
 import { CUSTOMERS, toDealerCode, customerSearchText, wildcardIncludes } from '../data/catalogueAccess';
 import type { CustomerRecord } from '../data/catalogueAccess';
 import NotificationsModal from './NotificationsModal';
+import FeedbackModal from './FeedbackModal';
 import { NOTIFICATIONS_CHANGED_EVENT, countUnreadNotifications, setViewerSite } from '../services/notificationsStore';
 
 interface TopNavProps {
@@ -84,6 +85,7 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
     return () => { document.removeEventListener('mousedown', off); document.removeEventListener('keydown', esc); };
   }, [userMenuOpen]);
 
+  const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(countUnreadNotifications);
 
@@ -219,6 +221,13 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
         <button className="om-iconplus" style={styles.iconBtn} aria-label="Help">
           <IconHelp size={20} stroke={1.6} />
         </button>
+        <button
+          className="eos-feedback-btn"
+          style={styles.feedbackBtn}
+          onClick={() => setFeedbackOpen(true)}
+        >
+          Feedback
+        </button>
         <div ref={userMenuRef} style={{ position: 'relative' }}>
           <button
             style={{ ...styles.avatar, border: 'none', fontFamily: 'inherit' }}
@@ -244,7 +253,9 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
         </div>
       </div>
       <NotificationsModal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
+      <FeedbackModal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
       <style>{`
+        .eos-feedback-btn:hover { background: var(--ink) !important; color: #fff !important; }
         .eos-dealer-trigger:hover { border-color: #cbd5e1; }
         .eos-dealer-item:hover { background: var(--bg-soft); }
       `}</style>
@@ -418,6 +429,18 @@ const styles = {
     justifyContent: 'center',
     color: 'var(--ink)',
     transition: 'background .15s ease',
+  },
+  feedbackBtn: {
+    ...t.bodyB,
+    height: 36,
+    padding: '0 14px',
+    border: '2px solid var(--ink)',
+    borderRadius: 'var(--radius)',
+    background: 'var(--bg)',
+    color: 'var(--ink)',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    transition: 'background .15s ease, color .15s ease',
   },
   badge: {
     position: 'absolute' as const,
