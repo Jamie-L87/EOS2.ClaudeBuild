@@ -128,7 +128,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           Navigate
         </div>
 
-        <nav style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <nav style={{ padding: '0 12px 12px', display: 'flex', flexDirection: 'column', gap: 4, flex: 1, minHeight: 0, overflowY: 'auto' }}>
           {NAV_ITEMS.map((item) => {
             const active = current === item.id;
             return (
@@ -183,8 +183,8 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           })}
         </nav>
 
-        <div style={{ flex: 1 }} />
         <div style={{
+          flexShrink: 0,
           padding: '20px 24px',
           borderTop: '1px solid var(--line)',
           fontSize: 12, fontWeight: 500, letterSpacing: '0.010em',
