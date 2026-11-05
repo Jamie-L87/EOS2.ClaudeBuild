@@ -942,7 +942,7 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
       </div>
       <div style={{ flex: 1, paddingLeft: 32, ...sBody, color: missingMeta.length ? 'var(--amber)' : 'var(--ink-2)' }}>
         {missingMeta.length > 0
-          ? `Missing for submission: ${missingMeta.join(', ')}. Complete in Order Details.`
+          ? `Missing for submission: ${missingMeta.join(', ')}. ${missingMeta.includes('Promise Dates') ? 'Set dates with Promise Dates & Delivery' : 'Complete in Order Details'}${missingMeta.includes('Promise Dates') && missingMeta.length > 1 ? ' and Order Details' : ''}.`
           : (!canSubmit ? 'Resolve invalid lines before submitting.' : null)}
       </div>
       <div style={{ display: 'flex', gap: 12 }}>
@@ -1187,6 +1187,7 @@ export default function OrderDetailPage() {
     if (!order.reference)     out.push('Reference');
     if (!order.purchaseOrder) out.push('Purchase Order');
     if (!order.deliveryLine1) out.push('Delivery Address');
+    if (order.lines.some(l => l.validationStatus === 'passed' && !l.promiseDate)) out.push('Promise Dates');
     return out;
   }, [order]);
 
