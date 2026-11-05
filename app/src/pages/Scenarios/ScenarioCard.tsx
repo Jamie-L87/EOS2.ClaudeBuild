@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { t } from '../../tokens';
+import TopNav from '../../components/TopNav';
+import NavDrawer from '../../components/NavDrawer';
+import { t, size } from '../../tokens';
 
 const sBody = { ...t.body };
 const sBodyB = { ...t.bodyB };
@@ -80,6 +82,7 @@ export default function ScenarioCardPage() {
   const { n } = useParams();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   const index = Number(n) - 1;
   const scenario = SCENARIOS[index];
@@ -96,7 +99,10 @@ export default function ScenarioCardPage() {
   return (
     <>
       <style>{CSS}</style>
-      <main style={{ minHeight: '100vh', background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, boxSizing: 'border-box' }}>
+      <TopNav onMenu={() => setNavOpen(true)} />
+      <NavDrawer open={navOpen} onClose={() => setNavOpen(false)} current={`scenario${index + 1}` as 'scenario1' | 'scenario2' | 'scenario3'} />
+
+      <main style={{ minHeight: `calc(100vh - ${size.navH}px)`, background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, boxSizing: 'border-box' }}>
         <article
           aria-label={`Scenario ${index + 1}: ${scenario.title}`}
           style={{ width: 640, maxWidth: '100%', background: '#fff', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', padding: 40, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 28 }}
