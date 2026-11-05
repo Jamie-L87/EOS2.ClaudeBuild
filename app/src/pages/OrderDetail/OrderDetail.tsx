@@ -625,7 +625,7 @@ function IconExplode({ size: s = 18 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 const LINE_COLS = '28px 36px minmax(200px, 1.5fr) minmax(140px, 1.4fr) 100px 100px 80px 110px 140px 72px 110px 110px 76px';
 
-function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, onOpenDelivery, isSuper, expanded, onToggleExpand }: {
+function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, onOpenDelivery, isSuper, expanded, onToggleExpand }: {
   line: OrderLine; idx: number; lineNum: number | 'SP'; currency: string; orderPlaced: string;
   isDragging: boolean; isOver: boolean;
   onDragStart: () => void; onDragOver: (e: React.DragEvent) => void;
@@ -824,6 +824,7 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
   onDuplicate: (id: string) => void; onDelete: (id: string) => void; onExplode: (id: string) => void;
   onReorder: (from: number, to: number) => void; onAddLine: () => void; onOpenDelivery: () => void;
 }) {
+  const undatedCount = lines.filter(l => l.validationStatus === 'passed' && !l.promiseDate).length;
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
@@ -869,6 +870,11 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
           style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease', fontFamily: 'inherit' }}>
           <IconPlus size={18} stroke={2} />
           <span style={{ whiteSpace: 'nowrap' }}>Add Line</span>
+        </button>
+        <button onClick={onOpenDelivery} className="om-stroke-btn"
+          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
+          <span style={{ whiteSpace: 'nowrap' }}>Promise Dates &amp; Delivery</span>
+          {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
         </button>
       </div>
 
