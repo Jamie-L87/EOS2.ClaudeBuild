@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { IconClose, IconSearch } from '../../components/Icons';
+import { IconClose } from '../../components/Icons';
 import { t } from '../../tokens';
 import {
   computeDeliveryCharges, earliestPromiseDate, formatDeliveryDate, isWeekend, mockLeadTime,
@@ -33,7 +33,6 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [bulkDate, setBulkDate] = useState('');
   const [bulkNote, setBulkNote] = useState<string | null>(null);
-  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -46,18 +45,6 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   const skipped = lines.length - dateable.length;
   const charges = useMemo(() => computeDeliveryCharges(dateable, currency, linesTotal, timedDeliveries), [dateable, currency, linesTotal, timedDeliveries]);
   const undated = dateable.filter(l => !l.promiseDate).length;
-
-  // Search narrows the table, and the bulk actions only touch what is shown
-  const query = search.trim().toLowerCase();
-  const visible = useMemo(() => {
-    if (!query) return dateable;
-    const terms = query.split(/\s+/);
-    return dateable.filter(l => {
-      const hay = `${l.articleCode} ${l.productName ?? ''} ${l.featureString} ${l.productLine ?? ''}`.toLowerCase();
-      return terms.every(term => hay.includes(term));
-    });
-  }, [dateable, query]);
-  const scope = query ? 'shown' : 'all';
 
   const setError = (id: string, msg: string | null) =>
     setErrors(prev => { const next = { ...prev }; if (msg) next[id] = msg; else delete next[id]; return next; });
@@ -74,7 +61,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   const applyEarliest = () => {
     setErrors({});
     setBulkNote(null);
-    visible.forEach(l => onSetPromiseDate(l.id, earliestPromiseDate(l, orderPlaced)));
+    dateable.forEach(l => onSetPromiseDate(l.id, earliestPromiseDate(l, orderPlaced)));
   };
 
   const applyToAll = () => {
@@ -82,7 +69,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
     if (isWeekend(bulkDate)) { setBulkNote('Weekends are not available.'); return; }
     setErrors({});
     let clamped = 0;
-    visible.forEach(l => {
+    dateable.forEach(l => {
       const earliest = earliestPromiseDate(l, orderPlaced);
       if (bulkDate < earliest) { clamped += 1; onSetPromiseDate(l.id, earliest); }
       else onSetPromiseDate(l.id, bulkDate);
@@ -119,25 +106,11 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
                 {undated === 0 ? 'Every line has a promise date.' : `${undated} line${undated !== 1 ? 's' : ''} still need a promise date.`}
                 {skipped > 0 && ` ${skipped} line${skipped !== 1 ? 's' : ''} that need attention can't be dated yet.`}
               </div>
-              <button onClick={applyEarliest} className="om-stroke-btn" style={btn}>{`Use earliest date for ${scope}`}</button>
-              <label htmlFor="dm-bulk-date" style={{ ...sBodyB, fontSize: 11, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: 0.6 }}>{query ? 'Set shown to' : 'Set all to'}</label>
+              <button onClick={applyEarliest} className="om-stroke-btn" style={btn}>Use earliest date for all</button>
+              <label htmlFor="dm-bulk-date" style={{ ...sBodyB, fontSize: 11, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Set all to</label>
               <input id="dm-bulk-date" type="date" value={bulkDate} onChange={(e) => setBulkDate(e.target.value)} style={dateInput} />
               <button onClick={applyToAll} disabled={!bulkDate} className="om-stroke-btn" style={{ ...btn, opacity: bulkDate ? 1 : 0.5, cursor: bulkDate ? 'pointer' : 'not-allowed' }}>Apply</button>
             </div>
-            <div style={{ position: 'relative', marginBottom: 12 }}>
-              <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--ink-2)', display: 'flex', pointerEvents: 'none' }}><IconSearch size={16} /></span>
-              <input
-                type="search" value={search} onChange={(e) => { setSearch(e.target.value); setBulkNote(null); }}
-                placeholder="Filter lines by product name or article code, e.g. Aeron"
-                aria-label="Filter lines"
-                style={{ ...dateInput, width: '100%', height: 44, paddingLeft: 36 }}
-              />
-            </div>
-            {query && (
-              <div role="status" style={{ ...sBody, color: 'var(--ink-2)', marginBottom: 12 }}>
-                Showing {visible.length} of {dateable.length} line{dateable.length !== 1 ? 's' : ''}. The date buttons above apply to these lines only.
-              </div>
-            )}
             {bulkNote && <div role="status" style={{ ...sBody, color: 'var(--yellow-60)', background: 'var(--amber-soft)', borderRadius: 'var(--radius)', padding: '8px 12px', marginBottom: 12 }}>{bulkNote}</div>}
 
             <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
@@ -156,10 +129,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
                   {dateable.length === 0 && (
                     <tr><td colSpan={6} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>There are no valid lines to date yet.</td></tr>
                   )}
-                  {dateable.length > 0 && visible.length === 0 && (
-                    <tr><td colSpan={6} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No lines match "{search.trim()}".</td></tr>
-                  )}
-                  {visible.map((l, i) => {
+                  {dateable.map((l, i) => {
                     const earliest = earliestPromiseDate(l, orderPlaced);
                     const lead = l.leadTime ?? mockLeadTime(l.productLine);
                     return (
