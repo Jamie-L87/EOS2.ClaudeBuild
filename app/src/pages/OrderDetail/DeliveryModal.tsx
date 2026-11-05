@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { IconClose } from '../../components/Icons';
+import { IconClose, IconSearch } from '../../components/Icons';
 import { t } from '../../tokens';
 import {
   computeDeliveryCharges, earliestPromiseDate, formatDeliveryDate, isWeekend, mockLeadTime,
@@ -19,7 +19,9 @@ const th = { ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)',
 const td = { ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', verticalAlign: 'middle' as const };
 const dateInput = { ...sBody, height: 36, boxSizing: 'border-box' as const, padding: '0 8px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', fontFamily: 'inherit' };
 
-export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal, timedDeliveries, onSetPromiseDate, onToggleTimed, onClose }: {
+export default function DeliveryModal({ mode = 'edit', lines, currency, orderPlaced, linesTotal, timedDeliveries, onSetPromiseDate, onToggleTimed, onSubmit, onClose }: {
+  /** 'submit' is the final step before an order is sent: the user must date every line, then submits from here. */
+  mode?: 'edit' | 'submit';
   lines: DeliveryLine[];
   currency: string;
   orderPlaced: string;
@@ -28,11 +30,13 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   timedDeliveries: string[];
   onSetPromiseDate: (lineId: string, date: string | null) => void;
   onToggleTimed: (date: string) => void;
+  onSubmit?: () => void;
   onClose: () => void;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [bulkDate, setBulkDate] = useState('');
   const [bulkNote, setBulkNote] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -45,6 +49,18 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   const skipped = lines.length - dateable.length;
   const charges = useMemo(() => computeDeliveryCharges(dateable, currency, linesTotal, timedDeliveries), [dateable, currency, linesTotal, timedDeliveries]);
   const undated = dateable.filter(l => !l.promiseDate).length;
+
+  // Search narrows the table, and the bulk actions only touch what is shown
+  const query = search.trim().toLowerCase();
+  const visible = useMemo(() => {
+    if (!query) return dateable;
+    const terms = query.split(/\s+/);
+    return dateable.filter(l => {
+      const hay = `${l.articleCode} ${l.productName ?? ''} ${l.featureString} ${l.productLine ?? ''}`.toLowerCase();
+      return terms.every(term => hay.includes(term));
+    });
+  }, [dateable, query]);
+  const scope = query ? 'shown' : 'all';
 
   const setError = (id: string, msg: string | null) =>
     setErrors(prev => { const next = { ...prev }; if (msg) next[id] = msg; else delete next[id]; return next; });
@@ -61,7 +77,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   const applyEarliest = () => {
     setErrors({});
     setBulkNote(null);
-    dateable.forEach(l => onSetPromiseDate(l.id, earliestPromiseDate(l, orderPlaced)));
+    visible.forEach(l => onSetPromiseDate(l.id, earliestPromiseDate(l, orderPlaced)));
   };
 
   const applyToAll = () => {
@@ -69,7 +85,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
     if (isWeekend(bulkDate)) { setBulkNote('Weekends are not available.'); return; }
     setErrors({});
     let clamped = 0;
-    dateable.forEach(l => {
+    visible.forEach(l => {
       const earliest = earliestPromiseDate(l, orderPlaced);
       if (bulkDate < earliest) { clamped += 1; onSetPromiseDate(l.id, earliest); }
       else onSetPromiseDate(l.id, bulkDate);
@@ -83,7 +99,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
     <>
       <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onClose} />
       <div
-        role="dialog" aria-modal="true" aria-label="Promise dates and delivery charges"
+        role="dialog" aria-modal="true" aria-label={mode === 'submit' ? 'Order submission' : 'Promise dates and delivery charges'}
         style={{
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 1040, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 48px)',
@@ -93,7 +109,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid var(--line)' }}>
-          <h2 style={{ ...sLargeB, margin: 0 }}>Promise Dates &amp; Delivery Charges</h2>
+          <h2 style={{ ...sLargeB, margin: 0 }}>{mode === 'submit' ? 'Order Submission' : 'Promise Dates & Delivery Charges'}</h2>
           <button onClick={onClose} aria-label="Close" style={{ width: 32, height: 32, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)' }}>
             <IconClose size={16} />
           </button>
@@ -106,11 +122,25 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
                 {undated === 0 ? 'Every line has a promise date.' : `${undated} line${undated !== 1 ? 's' : ''} still need a promise date.`}
                 {skipped > 0 && ` ${skipped} line${skipped !== 1 ? 's' : ''} that need attention can't be dated yet.`}
               </div>
-              <button onClick={applyEarliest} className="om-stroke-btn" style={btn}>Use earliest date for all</button>
-              <label htmlFor="dm-bulk-date" style={{ ...sBodyB, fontSize: 11, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Set all to</label>
+              <button onClick={applyEarliest} className="om-stroke-btn" style={btn}>{`Use earliest date for ${scope}`}</button>
+              <label htmlFor="dm-bulk-date" style={{ ...sBodyB, fontSize: 11, color: 'var(--ink-2)', textTransform: 'uppercase', letterSpacing: 0.6 }}>{query ? 'Set shown to' : 'Set all to'}</label>
               <input id="dm-bulk-date" type="date" value={bulkDate} onChange={(e) => setBulkDate(e.target.value)} style={dateInput} />
               <button onClick={applyToAll} disabled={!bulkDate} className="om-stroke-btn" style={{ ...btn, opacity: bulkDate ? 1 : 0.5, cursor: bulkDate ? 'pointer' : 'not-allowed' }}>Apply</button>
             </div>
+            <div style={{ position: 'relative', marginBottom: 12 }}>
+              <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'var(--ink-2)', display: 'flex', pointerEvents: 'none' }}><IconSearch size={16} /></span>
+              <input
+                type="search" value={search} onChange={(e) => { setSearch(e.target.value); setBulkNote(null); }}
+                placeholder="Filter lines by product name or article code, e.g. Aeron"
+                aria-label="Filter lines"
+                style={{ ...dateInput, width: '100%', height: 44, paddingLeft: 36 }}
+              />
+            </div>
+            {query && (
+              <div role="status" style={{ ...sBody, color: 'var(--ink-2)', marginBottom: 12 }}>
+                Showing {visible.length} of {dateable.length} line{dateable.length !== 1 ? 's' : ''}. The date buttons above apply to these lines only.
+              </div>
+            )}
             {bulkNote && <div role="status" style={{ ...sBody, color: 'var(--yellow-60)', background: 'var(--amber-soft)', borderRadius: 'var(--radius)', padding: '8px 12px', marginBottom: 12 }}>{bulkNote}</div>}
 
             <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
@@ -129,7 +159,10 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
                   {dateable.length === 0 && (
                     <tr><td colSpan={6} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>There are no valid lines to date yet.</td></tr>
                   )}
-                  {dateable.map((l, i) => {
+                  {dateable.length > 0 && visible.length === 0 && (
+                    <tr><td colSpan={6} style={{ ...td, textAlign: 'center', color: 'var(--ink-2)' }}>No lines match "{search.trim()}".</td></tr>
+                  )}
+                  {visible.map((l, i) => {
                     const earliest = earliestPromiseDate(l, orderPlaced);
                     const lead = l.leadTime ?? mockLeadTime(l.productLine);
                     return (
@@ -213,11 +246,22 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
           </section>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} className="om-primary-btn"
-            style={{ ...sLargeB, height: 50, padding: '0 28px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Done
-          </button>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
+          {mode === 'submit' ? (
+            <>
+              {undated > 0 && <span style={{ ...sBody, color: 'var(--amber)', marginRight: 'auto' }}>Give every line a promise date to submit.</span>}
+              <button onClick={onClose} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>Cancel</button>
+              <button onClick={onSubmit} disabled={undated > 0 || dateable.length === 0} className="om-primary-btn"
+                style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)', color: undated === 0 && dateable.length > 0 ? '#fff' : 'var(--ink-3)', cursor: undated === 0 && dateable.length > 0 ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
+                Submit Order
+              </button>
+            </>
+          ) : (
+            <button onClick={onClose} className="om-primary-btn"
+              style={{ ...sLargeB, height: 50, padding: '0 28px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Done
+            </button>
+          )}
         </div>
       </div>
     </>
