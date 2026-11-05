@@ -12,6 +12,8 @@ import { loadDetail, upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
 import { t, size } from '../../tokens';
+import DeliveryModal from './DeliveryModal';
+import { formatDeliveryDate } from '../../data/delivery';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -34,6 +36,7 @@ interface OrderLine {
   superChildren?: SuperChild[] | null;
   lineStatus?: string;
   leadTime?: { min: number; max: number; label: string; days: number };
+  promiseDate?: string | null;
   _explodedSuper?: Record<string, unknown>;
 }
 
@@ -62,6 +65,7 @@ interface OrderData {
   contactEmail?: string | null;
   contactTelephone?: string | null;
   pricingDate?: string | null;
+  timedDeliveries?: string[];
 }
 
 /* ------------------------------------------------------------------ */
@@ -93,17 +97,6 @@ const LEAD_TIMES: Record<string, { min: number; max: number }> = {
 function mockLeadTime(productLine: string | null) {
   const spec = (productLine && LEAD_TIMES[productLine]) || LEAD_TIMES.DEFAULT;
   return { min: spec.min, max: spec.max, label: `${spec.max}`, days: spec.max };
-}
-
-function computeDeliveryDate(fromDate: string, lead: { days: number }) {
-  const d = new Date(fromDate);
-  if (isNaN(d.getTime())) return '—';
-  let remaining = lead.days || 30;
-  while (remaining > 0) {
-    d.setDate(d.getDate() + 1);
-    if (d.getDay() !== 0 && d.getDay() !== 6) remaining--;
-  }
-  return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' });
 }
 
 /* ------------------------------------------------------------------ */
@@ -632,13 +625,13 @@ function IconExplode({ size: s = 18 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 const LINE_COLS = '28px 36px minmax(200px, 1.5fr) minmax(140px, 1.4fr) 100px 100px 80px 110px 140px 72px 110px 110px 76px';
 
-function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, isSuper, expanded, onToggleExpand }: {
+function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, onOpenDelivery, isSuper, expanded, onToggleExpand }: {
   line: OrderLine; idx: number; lineNum: number | 'SP'; currency: string; orderPlaced: string;
   isDragging: boolean; isOver: boolean;
   onDragStart: () => void; onDragOver: (e: React.DragEvent) => void;
   onDragLeave: () => void; onDrop: (e: React.DragEvent) => void; onDragEnd: () => void;
   onUpdate: (patch: Partial<OrderLine>) => void;
-  onDuplicate: () => void; onDelete: () => void; onExplode: () => void;
+  onDuplicate: () => void; onDelete: () => void; onExplode: () => void; onOpenDelivery: () => void;
   isSuper: boolean; expanded: boolean; onToggleExpand: () => void;
 }) {
   const [editingCode, setEditingCode] = useState(false);
@@ -676,7 +669,6 @@ function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onD
   const ccy         = line.currency || currency;
   const isInvalid   = line.validationStatus === 'failed';
   const lead        = line.leadTime ?? mockLeadTime(line.productLine);
-  const delivDate   = computeDeliveryDate(orderPlaced, lead);
   const actBtn      = { width: 30, height: 30, borderRadius: 4, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', transition: 'background .12s ease, color .12s ease' };
 
   return (
@@ -772,7 +764,12 @@ function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onD
       </div>
 
       <div style={{ padding: '0 12px' }}>
-        <span style={{ ...sBody, color: 'var(--ink)' }}>{delivDate}</span>
+        {isInvalid ? <span style={{ ...sBody, color: 'var(--ink-3)' }}>—</span> : (
+          <button onClick={onOpenDelivery} className="om-promise-btn"
+            style={{ ...sBody, border: 'none', background: 'transparent', padding: 0, cursor: 'pointer', fontFamily: 'inherit', color: line.promiseDate ? 'var(--ink)' : 'var(--brand)', textDecoration: line.promiseDate ? 'none' : 'underline', textUnderlineOffset: 3 }}>
+            {line.promiseDate ? formatDeliveryDate(line.promiseDate) : 'Set date'}
+          </button>
+        )}
       </div>
 
       <div style={{ padding: '0 12px' }}>
@@ -802,7 +799,7 @@ function LineBlock(props: {
   onDragLeave: () => void; onDrop: (e: React.DragEvent) => void; onDragEnd: () => void;
   onUpdate: (patch: Partial<OrderLine>) => void;
   onUpdateChild: (childId: string, patch: Partial<SuperChild>) => void;
-  onDuplicate: () => void; onDelete: () => void; onExplode: () => void;
+  onDuplicate: () => void; onDelete: () => void; onExplode: () => void; onOpenDelivery: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const isSuper = !!props.line.isSuper && Array.isArray(props.line.superChildren);
@@ -819,13 +816,13 @@ function LineBlock(props: {
 /* ------------------------------------------------------------------ */
 /*  ORDER LINES TABLE                                                   */
 /* ------------------------------------------------------------------ */
-function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpdateLine, onUpdateChild, onDuplicate, onDelete, onExplode, onReorder, onAddLine }: {
+function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpdateLine, onUpdateChild, onDuplicate, onDelete, onExplode, onReorder, onAddLine, onOpenDelivery }: {
   lines: OrderLine[]; currency: string; orderPlaced: string;
   query: string; setQuery: (v: string) => void;
   onUpdateLine: (id: string, patch: Partial<OrderLine>) => void;
   onUpdateChild: (lineId: string, childId: string, patch: Partial<SuperChild>) => void;
   onDuplicate: (id: string) => void; onDelete: (id: string) => void; onExplode: (id: string) => void;
-  onReorder: (from: number, to: number) => void; onAddLine: () => void;
+  onReorder: (from: number, to: number) => void; onAddLine: () => void; onOpenDelivery: () => void;
 }) {
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
@@ -909,6 +906,7 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
               onDrop={(e) => { e.preventDefault(); if (dragIdx !== null && dragIdx !== idx) onReorder(dragIdx, idx); setDragIdx(null); setOverIdx(null); }}
               onDragEnd={() => { setDragIdx(null); setOverIdx(null); }}
               onUpdate={(patch) => onUpdateLine(line.id, patch)}
+              onOpenDelivery={onOpenDelivery}
               onUpdateChild={(childId, patch) => onUpdateChild(line.id, childId, patch)}
               onDuplicate={() => onDuplicate(line.id)}
               onDelete={() => onDelete(line.id)}
@@ -970,6 +968,7 @@ const CSS = `
   .om-tab-strip:hover[data-active="false"] { color: var(--ink); }
   .om-header-edit:hover { color: var(--brand) !important; }
   .om-header-select:hover { color: var(--brand) !important; }
+  .om-promise-btn:hover { color: var(--brand) !important; }
   .om-expand-toggle:hover { background: var(--line) !important; }
   .om-stroke-btn:hover { background: var(--ink); color: #fff; }
   .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
@@ -1009,7 +1008,7 @@ function toStored(o: OrderData): StoredOrder {
     deliveryLine3: o.deliveryLine3, deliveryLine4: o.deliveryLine4,
     deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode,
     contactName: o.contactName, contactEmail: o.contactEmail, contactTelephone: o.contactTelephone,
-    pricingDate: o.pricingDate,
+    pricingDate: o.pricingDate, timedDeliveries: o.timedDeliveries,
   };
 }
 
@@ -1052,6 +1051,7 @@ export default function OrderDetailPage() {
   const [query,   setQuery]   = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [toast,   setToast]   = useState<string | null>(null);
+  const [deliveryModalOpen, setDeliveryModalOpen] = useState(false);
 
   useEffect(() => {
     // 1. Passed via React Router state
@@ -1162,6 +1162,18 @@ export default function OrderDetailPage() {
     }, 0);
   }, [order]);
 
+  const setPromiseDate = useCallback((lineId: string, date: string | null) => {
+    setOrder(o => o ? { ...o, lines: o.lines.map(l => l.id === lineId ? { ...l, promiseDate: date } : l) } : o);
+  }, []);
+
+  const toggleTimedDelivery = useCallback((date: string) => {
+    setOrder(o => {
+      if (!o) return o;
+      const cur = o.timedDeliveries ?? [];
+      return { ...o, timedDeliveries: cur.includes(date) ? cur.filter(d => d !== date) : [...cur, date] };
+    });
+  }, []);
+
   const allPassed   = order != null && order.lines.length > 0 && order.lines.every(l => l.validationStatus === 'passed');
   const missingMeta = useMemo(() => {
     if (!order) return [];
@@ -1215,6 +1227,7 @@ export default function OrderDetailPage() {
             onUpdateLine={updateLine} onUpdateChild={updateChild}
             onDuplicate={duplicateLine} onDelete={deleteLine}
             onExplode={explodeLine} onReorder={reorderLines} onAddLine={addLine}
+            onOpenDelivery={() => setDeliveryModalOpen(true)}
           />
         ) : (
           <ComingSoon tab={tab} />
@@ -1226,6 +1239,15 @@ export default function OrderDetailPage() {
         total={total} currency={order.currency}
         onSaveDraft={onSaveDraft} onSubmit={onSubmit} onCancel={onCancel}
       />
+
+      {deliveryModalOpen && (
+        <DeliveryModal
+          lines={order.lines} currency={order.currency} orderPlaced={order.orderPlaced}
+          linesTotal={total} timedDeliveries={order.timedDeliveries ?? []}
+          onSetPromiseDate={setPromiseDate} onToggleTimed={toggleTimedDelivery}
+          onClose={() => setDeliveryModalOpen(false)}
+        />
+      )}
 
       {toast && <Toast message={toast} onDone={() => setToast(null)} />}
     </>
