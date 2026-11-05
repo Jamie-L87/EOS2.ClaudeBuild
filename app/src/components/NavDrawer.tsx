@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconClose, IconChevronRight, IconUpload, IconMail } from './Icons';
-type NavId = 'import' | 'orders' | 'catalogueAccess' | 'notifications' | 'preferenceManagement';
+type NavId = 'import' | 'orders' | 'catalogueAccess' | 'notifications' | 'preferenceManagement' | 'scenario1' | 'scenario2' | 'scenario3';
 
 interface NavDrawerProps {
   open: boolean;
@@ -44,6 +44,9 @@ const NAV_ITEMS: Array<{
   { id: 'catalogueAccess', label: 'Catalogue Management', sub: 'Catalogue and customer group management', path: '/admin/catalogue-access', Icon: IconOrders },
   { id: 'notifications', label: 'Notification Manager', sub: 'Create and schedule dealer notifications', path: '/admin/notifications', Icon: IconMail },
   { id: 'preferenceManagement', label: 'Preference Management', sub: 'Define the preferences users can set', path: '/preferences?tab=manage', Icon: IconOrders, group: 'System Management' },
+  { id: 'scenario1', label: 'Scenario 1: Office refresh',     sub: 'Upload a basket file, export and re-import', path: '/scenarios/1', Icon: IconOrders, group: 'Workshop Scenarios' },
+  { id: 'scenario2', label: 'Scenario 2: Something to fix',   sub: 'Import a spreadsheet and fix a problem',     path: '/scenarios/2', Icon: IconOrders },
+  { id: 'scenario3', label: 'Scenario 3: Staggered delivery', sub: 'Paste full codes and stagger delivery dates', path: '/scenarios/3', Icon: IconOrders },
 ];
 
 export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
