@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cutBuffer>
+  <items>
+    <bskArticle>
+      <artNr type="final">AER1B23DW ALP G1 G1 G1 BB BK 23103</artNr>
+      <quantity>4</quantity>
+      <itemPrice type="sale" currency="EUR" value="2283.0"/>
+    </bskArticle>
+    <bskArticle>
+      <artNr type="final">AS1EA33AA N2 BK BB BK BK 7O005</artNr>
+      <quantity>2</quantity>
+      <itemPrice type="sale" currency="EUR" value="901.0"/>
+    </bskArticle>
+    <bskArticle>
+      <artNr type="final">CN132AWAA G1 G1 BB 3005</artNr>
+      <quantity>1</quantity>
+      <itemPrice type="sale" currency="EUR" value="2366.0"/>
+    </bskArticle>
+  </items>
+</cutBuffer>

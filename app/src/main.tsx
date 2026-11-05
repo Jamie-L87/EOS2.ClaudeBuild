@@ -11,6 +11,7 @@ import CatalogueGroupDetailPage from './pages/CatalogueGroupDetail/CatalogueGrou
 import CustomerGroupDetailPage from './pages/CustomerGroupDetail/CustomerGroupDetail';
 import NotificationManagerPage from './pages/NotificationManager/NotificationManager';
 import PreferencesPage from './pages/Preferences/Preferences';
+import ScenarioCardPage from './pages/Scenarios/ScenarioCard';
 
 const router = createBrowserRouter([
   { path: '/',           element: <ImportPage /> },
@@ -21,6 +22,8 @@ const router = createBrowserRouter([
   { path: '/admin/catalogue-access/customer-groups/:id', element: <CustomerGroupDetailPage /> },
   { path: '/admin/notifications', element: <NotificationManagerPage /> },
   { path: '/preferences', element: <PreferencesPage /> },
+  { path: '/scenarios', element: <Navigate to="/scenarios/1" replace /> },
+  { path: '/scenarios/:n', element: <ScenarioCardPage /> },
   { path: '/admin/preferences', element: <Navigate to="/preferences?tab=manage" replace /> },
 ]);
 
