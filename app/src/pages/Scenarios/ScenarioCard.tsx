@@ -31,6 +31,7 @@ const SCENARIOS: Scenario[] = [
       'Upload the basket file below.',
       'Export your basket as an EOS file (.eos).',
       'Clear the basket, then import the .eos file you just exported. Check the items and quantities match.',
+      'Add a contract to the basket.',
       'Create the order, with a reference and purchase order of your choice.',
       'Add any UK delivery address.',
       'Give every line a delivery date and submit the order.',
