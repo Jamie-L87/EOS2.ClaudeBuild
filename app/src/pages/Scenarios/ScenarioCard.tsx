@@ -29,7 +29,7 @@ const SCENARIOS: Scenario[] = [
       'Upload the basket file below.',
       'Export your basket as an EOS file (.eos).',
       'Clear the basket, then import the .eos file you just exported. Check the items and quantities match.',
-      'Create the order. Use "Team area refresh" as the reference and "PO-1001" as the purchase order.',
+      'Create the order, with a reference and purchase order of your choice.',
       'Add any UK delivery address.',
       'Give every line a delivery date and submit the order.',
     ],
@@ -42,7 +42,7 @@ const SCENARIOS: Scenario[] = [
     tasks: [
       'Upload the spreadsheet below. When asked, tell EOS which columns hold the article code, the feature string and the quantity.',
       'Deal with any problem you find however you think is right.',
-      'Create the order. Use "Training rooms" as the reference and "PO-2002" as the purchase order.',
+      'Create the order, with a reference and purchase order of your choice.',
       'Add a delivery address of your choice.',
       'Choose delivery dates and submit the order.',
     ],
@@ -58,7 +58,7 @@ const SCENARIOS: Scenario[] = [
     ],
     tasks: [
       'Add the items below to a new order by pasting the article codes with their feature strings, then set the quantities.',
-      'Create the order. Use "Phased install" as the reference and "PO-3003" as the purchase order.',
+      'Create the order, with a reference and purchase order of your choice.',
       'Add a delivery address of your choice.',
       'Deliver the chairs as early as possible. Deliver the tables at least two weeks after the chairs.',
       'Submit the order.',
