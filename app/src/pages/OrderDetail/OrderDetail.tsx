@@ -625,7 +625,7 @@ function IconExplode({ size: s = 18 }: { size?: number }) {
 /* ------------------------------------------------------------------ */
 const LINE_COLS = '28px 36px minmax(200px, 1.5fr) minmax(140px, 1.4fr) 100px 100px 80px 110px 140px 72px 110px 110px 76px';
 
-function LineRow({ line, lineNum, currency, orderPlaced, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, onOpenDelivery, isSuper, expanded, onToggleExpand }: {
+function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onDragOver, onDragLeave, onDrop, onDragEnd, onUpdate, onDuplicate, onDelete, onExplode, onOpenDelivery, isSuper, expanded, onToggleExpand }: {
   line: OrderLine; idx: number; lineNum: number | 'SP'; currency: string; orderPlaced: string;
   isDragging: boolean; isOver: boolean;
   onDragStart: () => void; onDragOver: (e: React.DragEvent) => void;
