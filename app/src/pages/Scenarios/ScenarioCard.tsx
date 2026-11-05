@@ -7,29 +7,28 @@ const sBodyB = { ...t.bodyB };
 const sLargeB = { ...t.largeB };
 const sLargeM = { ...t.large };
 
-interface ScenarioItem { code: string; product: string; qty: number }
+interface ScenarioItem { code: string; feature: string; product: string; qty: number }
 
 interface Scenario {
   title: string;
   story: string;
   /** Tasks, in order. Shown as a numbered list. */
   tasks: string[];
-  /** Codes to paste, or null when the scenario starts from a file instead */
+  /** Items to paste in (code plus feature string), or null when the scenario starts from a file */
   items: ScenarioItem[] | null;
-  file?: { href: string; label: string };
+  file?: { href: string; label: string; note: string };
 }
 
 const SCENARIOS: Scenario[] = [
   {
     title: 'Office refresh',
-    story: 'A dealer has asked for a quote to refresh a team area. They have emailed you a list of codes. Get this order submitted.',
-    items: [
-      { code: 'AER1B23DW', product: 'Aeron chair', qty: 4 },
-      { code: 'AS1EA33AA', product: 'Sayl chair', qty: 2 },
-      { code: 'CN132AWAA', product: 'Embody chair', qty: 1 },
-    ],
+    story: 'A dealer has sent you a basket from their design tool. Bring it into EOS, check it survives a save and reload, then get the order submitted.',
+    items: null,
+    file: { href: '/scenarios/scenario-1-basket.obx', label: 'Download the basket file (.obx)', note: 'Save it to your computer, then upload it on the import page.' },
     tasks: [
-      'Add the items below to a new order by pasting the codes, then set the quantities.',
+      'Upload the basket file below.',
+      'Export your basket as an EOS file (.eos).',
+      'Clear the basket, then import the .eos file you just exported. Check the items and quantities match.',
       'Create the order. Use "Team area refresh" as the reference and "PO-1001" as the purchase order.',
       'Add any UK delivery address.',
       'Give every line a delivery date and submit the order.',
@@ -39,9 +38,9 @@ const SCENARIOS: Scenario[] = [
     title: 'Something to fix',
     story: 'A colleague has prepared a spreadsheet for a customer. Import it and get the order submitted. Something may need fixing along the way.',
     items: null,
-    file: { href: '/scenario-2-import.csv', label: 'Download the spreadsheet' },
+    file: { href: '/scenarios/scenario-2-order-sheet.xlsx', label: 'Download the spreadsheet (.xlsx)', note: 'Save it to your computer, then upload it on the import page.' },
     tasks: [
-      'Import the spreadsheet below.',
+      'Upload the spreadsheet below. When asked, tell EOS which columns hold the article code, the feature string and the quantity.',
       'Deal with any problem you find however you think is right.',
       'Create the order. Use "Training rooms" as the reference and "PO-2002" as the purchase order.',
       'Add a delivery address of your choice.',
@@ -52,13 +51,13 @@ const SCENARIOS: Scenario[] = [
     title: 'Staggered delivery',
     story: 'The customer wants the chairs first and the tables a few weeks later. Build the order and set the delivery dates to suit.',
     items: [
-      { code: 'AS2EA33AA', product: 'Sayl chair', qty: 4 },
-      { code: 'MIR2B33DW', product: 'Mirra chair', qty: 4 },
-      { code: 'MEXXAW.0909S4MG', product: 'Civic table', qty: 2 },
-      { code: 'MEXXBW.1016S4MG', product: 'Civic table', qty: 2 },
+      { code: 'AS2EA33AA', feature: 'N2 BK BB BK BK 7O005', product: 'Sayl chair', qty: 4 },
+      { code: 'MIR2B33DW', feature: 'ALP G1 G1 G1 BB BK', product: 'Mirra chair', qty: 4 },
+      { code: 'MEXXAW.0909S4MG', feature: 'NN X1 X1 X1 X1', product: 'Civic table', qty: 2 },
+      { code: 'MEXXBW.1016S4MG', feature: 'NN X1 X1 X1 X1 X1', product: 'Civic table', qty: 2 },
     ],
     tasks: [
-      'Add the items below to a new order by pasting the codes, then set the quantities.',
+      'Add the items below to a new order by pasting the article codes with their feature strings, then set the quantities.',
       'Create the order. Use "Phased install" as the reference and "PO-3003" as the purchase order.',
       'Add a delivery address of your choice.',
       'Deliver the chairs as early as possible. Deliver the tables at least two weeks after the chairs.',
@@ -88,7 +87,7 @@ export default function ScenarioCardPage() {
 
   const copyCodes = async () => {
     try {
-      await navigator.clipboard.writeText((scenario.items ?? []).map(i => i.code).join('\n'));
+      await navigator.clipboard.writeText((scenario.items ?? []).map(i => `${i.code} ${i.feature}`).join('\n'));
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch { /* clipboard unavailable: codes are still visible to type */ }
@@ -128,14 +127,14 @@ export default function ScenarioCardPage() {
                 <div style={label}>Items</div>
                 <button onClick={copyCodes} className="eos-scn-stroke"
                   style={{ ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
-                  {copied ? 'Copied' : 'Copy codes'}
+                  {copied ? 'Copied' : 'Copy codes and features'}
                 </button>
               </div>
               <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                   <thead>
                     <tr>
-                      {[{ h: 'Article code' }, { h: 'Product' }, { h: 'Qty', c: true }].map(({ h, c }) => (
+                      {[{ h: 'Article code' }, { h: 'Feature string' }, { h: 'Product' }, { h: 'Qty', c: true }].map(({ h, c }) => (
                         <th key={h} style={{ ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)', textAlign: c ? 'center' : 'left', padding: '0 14px', height: 40 }}>{h}</th>
                       ))}
                     </tr>
@@ -144,6 +143,7 @@ export default function ScenarioCardPage() {
                     {scenario.items.map(i => (
                       <tr key={i.code}>
                         <td style={{ ...sBodyB, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.code}</td>
+                        <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.feature}</td>
                         <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink-2)' }}>{i.product}</td>
                         <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', textAlign: 'center' }}>{i.qty}</td>
                       </tr>
@@ -161,6 +161,7 @@ export default function ScenarioCardPage() {
                 style={{ ...btn, alignSelf: 'flex-start', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)' }}>
                 {scenario.file.label}
               </a>
+              <span style={{ ...sBody, color: 'var(--ink-2)' }}>{scenario.file.note}</span>
             </section>
           )}
 
