@@ -824,6 +824,7 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
   onDuplicate: (id: string) => void; onDelete: (id: string) => void; onExplode: (id: string) => void;
   onReorder: (from: number, to: number) => void; onAddLine: () => void; onOpenDelivery: () => void;
 }) {
+  const undatedCount = lines.filter(l => l.validationStatus === 'passed' && !l.promiseDate).length;
   const [dragIdx, setDragIdx] = useState<number | null>(null);
   const [overIdx, setOverIdx] = useState<number | null>(null);
 
@@ -869,6 +870,11 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
           style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease', fontFamily: 'inherit' }}>
           <IconPlus size={18} stroke={2} />
           <span style={{ whiteSpace: 'nowrap' }}>Add Line</span>
+        </button>
+        <button onClick={onOpenDelivery} className="om-stroke-btn"
+          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
+          <span style={{ whiteSpace: 'nowrap' }}>Promise Dates &amp; Delivery</span>
+          {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
         </button>
       </div>
 
