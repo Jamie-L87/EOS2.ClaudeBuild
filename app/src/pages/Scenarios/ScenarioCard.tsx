@@ -24,17 +24,17 @@ interface Scenario {
 const SCENARIOS: Scenario[] = [
   {
     title: 'Office refresh',
-    story: 'A dealer has sent you a basket from their design tool. Bring it into EOS, check it survives a save and reload, then get the order submitted.',
+    story: 'A dealer has sent you a basket from their design tool. Bring it into EOS and get the order submitted. Finish by checking your export brings the basket back.',
     items: null,
     file: { href: '/scenarios/scenario-1-basket.obx', label: 'Download the basket file (.obx)', note: 'Save it to your computer, then upload it on the import page.' },
     tasks: [
       'Upload the basket file below.',
-      'Export your basket as an EOS file (.eos).',
-      'Clear the basket, then import the .eos file you just exported. Check the items and quantities match.',
       'Add a contract to the basket.',
+      'Export your basket as an EOS file (.eos) before you create the order.',
       'Create the order, with a reference and purchase order of your choice.',
       'Add any UK delivery address.',
       'Give every line a delivery date and submit the order.',
+      'Upload the .eos file you exported on the import page. Check the items match.',
     ],
   },
   {
