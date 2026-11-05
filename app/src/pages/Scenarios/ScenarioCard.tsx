@@ -60,7 +60,7 @@ const SCENARIOS: Scenario[] = [
       { code: 'MEXXBW.1016S4MG', feature: 'NN X1 X1 X1 X1 X1', product: 'Civic table', qty: 2 },
     ],
     tasks: [
-      'Add the items below to a new order by pasting the article codes with their feature strings, then set the quantities.',
+      'Paste the articles below, with their feature strings, into a new order, then set the quantities.',
       'Create the order, with a reference and purchase order of your choice.',
       'Add a delivery address of your choice.',
       'Deliver the chairs as early as possible. Deliver the tables at least two weeks after the chairs.',
@@ -103,12 +103,12 @@ export default function ScenarioCardPage() {
       <TopNav onMenu={() => setNavOpen(true)} />
       <NavDrawer open={navOpen} onClose={() => setNavOpen(false)} current={`scenario${index + 1}` as 'scenario1' | 'scenario2' | 'scenario3'} />
 
-      <main style={{ minHeight: `calc(100vh - ${size.navH}px)`, background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, boxSizing: 'border-box' }}>
+      <main style={{ minHeight: `calc(100vh - ${size.navH}px)`, background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8, boxSizing: 'border-box' }}>
         <article
           aria-label={`Scenario ${index + 1}: ${scenario.title}`}
-          style={{ width: 640, maxWidth: '100%', background: '#fff', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', padding: 40, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 28 }}
+          style={{ width: 768, maxWidth: '100%', background: '#fff', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', padding: 18, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 12 }}
         >
-          <header style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <header style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={label}>Scenario {index + 1} of {SCENARIOS.length}</span>
               <span aria-hidden style={{ display: 'flex', gap: 6 }}>
@@ -117,23 +117,23 @@ export default function ScenarioCardPage() {
                 ))}
               </span>
             </div>
-            <h1 style={{ fontWeight: 700, fontSize: 33.18, lineHeight: 1.2, letterSpacing: '-0.01em', margin: 0, color: 'var(--ink)' }}>{scenario.title}</h1>
-            <p style={{ ...sLargeM, margin: 0, color: 'var(--ink-2)', lineHeight: 1.4 }}>{scenario.story}</p>
+            <h1 style={{ fontWeight: 700, fontSize: 28, lineHeight: 1.2, letterSpacing: '-0.01em', margin: 0, color: 'var(--ink)' }}>{scenario.title}</h1>
+            <p style={{ ...sLargeM, fontSize: 14.5, margin: 0, color: 'var(--ink-2)', lineHeight: 1.35 }}>{scenario.story}</p>
           </header>
 
-          <section aria-label="Your tasks" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <section aria-label="Your tasks" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <div style={label}>Your tasks</div>
-            <ol style={{ ...sLargeM, margin: 0, paddingLeft: 22, display: 'flex', flexDirection: 'column', gap: 10, color: 'var(--ink)', lineHeight: 1.35 }}>
+            <ol style={{ ...sLargeM, fontSize: 14.5, margin: 0, paddingLeft: 22, display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--ink)', lineHeight: 1.35 }}>
               {scenario.tasks.map(task => <li key={task}>{task}</li>)}
             </ol>
           </section>
 
           {scenario.items && (
-            <section aria-label="Items" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <section aria-label="Items" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={label}>Items</div>
                 <button onClick={copyCodes} className="eos-scn-stroke"
-                  style={{ ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  style={{ ...sBodyB, height: 30, padding: '0 12px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
                   {copied ? 'Copied' : 'Copy codes and features'}
                 </button>
               </div>
@@ -142,17 +142,17 @@ export default function ScenarioCardPage() {
                   <thead>
                     <tr>
                       {[{ h: 'Article code' }, { h: 'Feature string' }, { h: 'Product' }, { h: 'Qty', c: true }].map(({ h, c }) => (
-                        <th key={h} style={{ ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)', textAlign: c ? 'center' : 'left', padding: '0 14px', height: 40 }}>{h}</th>
+                        <th key={h} style={{ ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)', textAlign: c ? 'center' : 'left', padding: '0 14px', height: 30 }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {scenario.items.map(i => (
                       <tr key={i.code}>
-                        <td style={{ ...sBodyB, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.code}</td>
-                        <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.feature}</td>
-                        <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink-2)' }}>{i.product}</td>
-                        <td style={{ ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', textAlign: 'center' }}>{i.qty}</td>
+                        <td style={{ ...sBodyB, padding: '4px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.code}</td>
+                        <td style={{ ...sBody, padding: '4px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)' }}>{i.feature}</td>
+                        <td style={{ ...sBody, padding: '4px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink-2)' }}>{i.product}</td>
+                        <td style={{ ...sBody, padding: '4px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', textAlign: 'center' }}>{i.qty}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -162,20 +162,20 @@ export default function ScenarioCardPage() {
           )}
 
           {scenario.file && (
-            <section aria-label="File" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <section aria-label="File" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={label}>File</div>
               <a href={scenario.file.href} download className="eos-scn-stroke"
-                style={{ ...btn, alignSelf: 'flex-start', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)' }}>
+                style={{ ...btn, height: 44, alignSelf: 'flex-start', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)' }}>
                 {scenario.file.label}
               </a>
               <span style={{ ...sBody, color: 'var(--ink-2)' }}>{scenario.file.note}</span>
             </section>
           )}
 
-          <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, borderTop: '1px solid var(--line)', paddingTop: 24 }}>
+          <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
             <span style={{ ...sBody, color: 'var(--ink-2)' }}>Please think out loud as you go.</span>
             <button onClick={() => navigate('/')} className="eos-scn-primary"
-              style={{ ...btn, border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff' }}>
+              style={{ ...btn, height: 44, border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff' }}>
               Start scenario
             </button>
           </footer>
