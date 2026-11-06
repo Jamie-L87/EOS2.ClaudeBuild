@@ -346,7 +346,7 @@ function BulkActionBar({ count, onClear, onAction }: {
       animation: 'slideDown .18s ease',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <span style={{ background: 'rgba(255,255,255,0.16)', padding: '3px 10px', borderRadius: 12, fontWeight: 700, fontSize: 12 }}>{count}</span>
+        <span style={{ background: 'var(--chip-on-brand)', padding: '3px 10px', borderRadius: 12, fontWeight: 700, fontSize: 12 }}>{count}</span>
         <span style={sBody}>selected</span>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -662,8 +662,8 @@ const CSS = `
   .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
   .om-create-btn:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
   .om-account-btn:hover { color: var(--brand-text); }
-  .om-stroke-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
-  .om-stroke-icon-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+  .om-stroke-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand-text); }
+  .om-stroke-icon-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand-text); }
   .om-tab[aria-selected="false"]:hover { background: var(--line); }
   .om-search-wrap:focus-within { box-shadow: 0 0 0 4px rgba(37,37,37,0.08); }
   .om-action-btn { opacity: .5; }

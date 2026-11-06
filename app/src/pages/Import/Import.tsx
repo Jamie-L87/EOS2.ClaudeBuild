@@ -451,7 +451,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
           </thead>
           <tbody>
             {preview.map((row, ri) => (
-              <tr key={ri} style={{ background: ri < skipRows ? 'var(--line)' : 'var(--bg)', opacity: ri < skipRows ? 0.55 : 1 }}>
+              <tr key={ri} style={{ background: ri < skipRows ? 'var(--line)' : 'var(--bg)', opacity: ri < skipRows ? 'var(--skipped-row-opacity)' : 1 }}>
                 <td style={{ padding: '8px 12px', borderTop: '1px solid var(--line)', borderRight: '1px solid var(--line)', ...sBody, color: 'var(--ink-2)' }}>{ri + 1}</td>
                 {Array.from({ length: maxCols }).map((_, c) => (
                   <td key={c} style={{ padding: '8px 12px', borderTop: '1px solid var(--line)', borderRight: '1px solid var(--line)', whiteSpace: 'nowrap', maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', background: columnRoles[c] && ri >= skipRows ? 'var(--brand-soft)' : undefined }}>
@@ -793,7 +793,7 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
             <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{lineNum}</span>
             {status === 'pending' && <span style={{ width: 14, height: 14, borderRadius: '50%', border: '2px solid var(--line)', borderTopColor: 'var(--brand)', display: 'inline-block', animation: 'spin .8s linear infinite', flexShrink: 0 }} />}
             {status === 'passed' && !isSuper && <span style={{ width: 16, height: 16, borderRadius: 8, background: 'var(--green)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconCheck size={10} stroke={3} /></span>}
-            {status === 'failed' && <span style={{ width: 16, height: 16, borderRadius: 8, background: 'var(--red)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={10} stroke={3} /></span>}
+            {status === 'failed' && <span style={{ width: 16, height: 16, borderRadius: 8, background: 'var(--red)', color: 'var(--on-red)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={10} stroke={3} /></span>}
           </div>
         </td>
         <td style={{ padding: '12px 18px', verticalAlign: 'middle' }}>
@@ -841,11 +841,11 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
             : <span style={{ color: 'var(--ink-3)' }}>—</span>}
         </td>
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--control-border)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
             <button onClick={() => onQtyChange(item.qty - 1)} disabled={item.qty <= 1}
               style={{ width: 32, height: 32, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
             <input value={item.qty} type="number" min={1} max={MAX_QTY} maxLength={5} onChange={(e) => onQtyChange(e.target.value)}
-              style={{ width: 50, height: 32, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', MozAppearance: 'textfield' as const }} aria-label="Quantity" />
+              style={{ width: 50, height: 32, border: 'none', borderLeft: '1px solid var(--control-border)', borderRight: '1px solid var(--control-border)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', MozAppearance: 'textfield' as const }} aria-label="Quantity" />
             <button onClick={() => onQtyChange(item.qty + 1)} disabled={item.qty >= MAX_QTY}
               style={{ width: 32, height: 32, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
           </div>
@@ -992,7 +992,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
           <div style={{ height: 1, background: 'var(--line)', margin: '0 24px' }} />
           <div style={{ padding: '14px 24px' }}>
             <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer' }}>
-              <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: expandSuper ? 'none' : '1px solid var(--ink-2)', background: expandSuper ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+              <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: expandSuper ? 'none' : '1px solid var(--ink-2)', background: expandSuper ? 'var(--check-fill)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
                 {expandSuper && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
               </div>
               <input type="checkbox" checked={expandSuper} onChange={e => setExpandSuper(e.target.checked)} style={{ display: 'none' }} />
@@ -1017,7 +1017,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
             const checked = selected.has(f.key);
             return (
               <label key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 10, minHeight: 40, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.4 : 1 }}>
-                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--ink)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
+                <div style={{ flexShrink: 0, width: 18, height: 18, borderRadius: 2, border: checked ? 'none' : '1px solid var(--ink-2)', background: checked ? 'var(--check-fill)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s ease' }}>
                   {checked && <svg width={11} height={11} viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#fff" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"/></svg>}
                 </div>
                 <input type="checkbox" checked={checked} disabled={disabled} onChange={() => !disabled && toggle(f.key)} style={{ display: 'none' }} />
@@ -1358,7 +1358,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
             No
           </button>
           <button onClick={handleYes} className="om-danger-btn"
-            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--red)', background: 'var(--red)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--red)', background: 'var(--red)', color: 'var(--on-red)', cursor: 'pointer', fontFamily: 'inherit' }}>
             Yes
           </button>
         </div>
@@ -1507,7 +1507,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
       </div>
 
       {contractDateWarning && (
-        <div role="status" style={{ ...sBody, padding: '12px 24px', background: 'var(--amber-soft)', color: 'var(--yellow-60)', borderBottom: '1px solid var(--line)' }}>
+        <div role="status" style={{ ...sBody, padding: '12px 24px', background: 'var(--warn-bg)', color: 'var(--warn-text)', borderBottom: '1px solid var(--line)' }}>
           {contractDateWarning.kind === 'before-start'
             ? `Contract start (${formatDisplayDate(contractDateWarning.date)}) is after the pricing date. Discounts will still apply in the basket and show in exports.`
             : `Contract expiry (${formatDisplayDate(contractDateWarning.date)}) is before the pricing date. Discounts will still apply in the basket and show in exports.`}

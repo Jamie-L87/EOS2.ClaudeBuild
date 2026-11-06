@@ -207,7 +207,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
                           ...sLargeB, flex: 1, height: 44, cursor: 'pointer', fontFamily: 'inherit',
                           border: `2px solid ${active ? 'var(--ink)' : 'var(--line)'}`,
                           borderRadius: 'var(--radius)',
-                          background: active ? 'var(--ink)' : 'var(--bg)',
+                          background: active ? 'var(--ink-fill)' : 'var(--bg)',
                           color: active ? '#fff' : 'var(--ink)',
                         }}
                       >

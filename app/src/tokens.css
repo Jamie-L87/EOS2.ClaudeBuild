@@ -100,6 +100,12 @@
   --dot-muted:     #999999;  /* status dot for unknown / draft states */
   --scrollbar:     #D6D6D6;
   --backdrop:      rgba(9, 9, 9, 0.32);  /* behind modals and the nav drawer */
+  --on-red:        #FFFFFF;  /* text on red badges and buttons */
+  --check-fill:    #252525;  /* checked checkbox */
+  --placeholder:   #757575;  /* input placeholder text */
+  --skipped-row-opacity: 0.55;  /* rows ignored in the column mapper */
+  --control-border: #EBEBEB;  /* quantity stepper outline */
+  --chip-on-brand: rgba(255, 255, 255, 0.16);  /* count chip on the brand-red bulk action bar */
   --blue-wash:     #F3F5F5;  /* super product component rows */
 
   /* --- Experience palette — Blue --- */
@@ -154,14 +160,14 @@
   color-scheme: dark;
 
   --brand:         #E22D00;
-  --brand-dark:    #F04A1E;
-  --brand-darker:  #B82400;
+  --brand-dark:    #C42700;
+  --brand-darker:  #A81910;
   --brand-soft:    #2D1A16;
 
   --ink:           #F2F2F2;
   --ink-select:    #FFFFFF;
   --ink-2:         #B3B3B3;
-  --ink-3:         #8F8F8F;
+  --ink-3:         #9E9E9E;
   --line:          #333333;
   --bg:            #1F1F1F;
   --bg-soft:       #161616;
@@ -185,8 +191,8 @@
   --strong:        #BDBDBD;
   --ink-fill:      #0D0D0D;
   --modal-border:  #4A4A4A;
-  --brand-text:    #FF6B47;
-  --brand-hover:   #F04A1E;
+  --brand-text:    #FF7A57;
+  --brand-hover:   #C42700;
   --brand-wash:    #3A211B;
   --danger-hover:  #C23A4C;
   --red-text:      #F0707F;
@@ -195,7 +201,7 @@
   --amber-text:    #E5B25D;
   --pending-bg:    #2E2718;
   --err-bg:        #2D1A1D;
-  --err-text:      #F0707F;
+  --err-text:      #F58F9C;
   --info-bg:       #1B2A3A;
   --info-text:     #BFD9EE;
   --warn-bg:       #2E2718;
@@ -206,6 +212,12 @@
   --dot-muted:     #8F8F8F;
   --scrollbar:     #4A4A4A;
   --backdrop:      rgba(0, 0, 0, 0.62);
+  --on-red:        #161616;
+  --check-fill:    #E22D00;
+  --placeholder:   #AAAAAA;
+  --skipped-row-opacity: 0.85;
+  --control-border: #6E6E6E;
+  --chip-on-brand: rgba(0, 0, 0, 0.22);
   --blue-wash:     #182330;
 }
 
@@ -249,6 +261,9 @@ button, input, textarea, select {
 *::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 6px; border: 2px solid var(--bg-soft); }
 *::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
 *::-webkit-scrollbar-track { background: transparent; }
+
+/* Placeholder text: explicit so it meets contrast in both themes */
+::placeholder { color: var(--placeholder); opacity: 1; }
 
 /* Focus ring */
 button:focus-visible,

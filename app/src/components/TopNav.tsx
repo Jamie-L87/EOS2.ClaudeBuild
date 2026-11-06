@@ -207,7 +207,7 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
                       style={{
                         ...styles.dealerMenuItem,
                         borderBottom: isLast ? 'none' : '1px solid var(--line)',
-                        background: isSelected ? 'var(--ink)' : 'transparent',
+                        background: isSelected ? 'var(--ink-fill)' : 'transparent',
                       }}
                       onClick={() => closeDealerMenu(d)}
                     >
