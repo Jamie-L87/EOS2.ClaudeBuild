@@ -19,7 +19,9 @@ const th = { ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)',
 const td = { ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', verticalAlign: 'middle' as const };
 const dateInput = { ...sBody, height: 36, boxSizing: 'border-box' as const, padding: '0 8px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', fontFamily: 'inherit' };
 
-export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal, timedDeliveries, onSetPromiseDate, onToggleTimed, onClose }: {
+export default function DeliveryModal({ mode = 'edit', lines, currency, orderPlaced, linesTotal, timedDeliveries, onSetPromiseDate, onToggleTimed, onSubmit, onClose }: {
+  /** 'submit' is the final step before an order is sent: the user must date every line, then submits from here. */
+  mode?: 'edit' | 'submit';
   lines: DeliveryLine[];
   currency: string;
   orderPlaced: string;
@@ -28,6 +30,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
   timedDeliveries: string[];
   onSetPromiseDate: (lineId: string, date: string | null) => void;
   onToggleTimed: (date: string) => void;
+  onSubmit?: () => void;
   onClose: () => void;
 }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -96,7 +99,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
     <>
       <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onClose} />
       <div
-        role="dialog" aria-modal="true" aria-label="Promise dates and delivery charges"
+        role="dialog" aria-modal="true" aria-label={mode === 'submit' ? 'Order submission' : 'Promise dates and delivery charges'}
         style={{
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 1040, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 48px)',
@@ -106,7 +109,7 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', borderBottom: '1px solid var(--line)' }}>
-          <h2 style={{ ...sLargeB, margin: 0 }}>Promise Dates &amp; Delivery Charges</h2>
+          <h2 style={{ ...sLargeB, margin: 0 }}>{mode === 'submit' ? 'Order Submission' : 'Promise Dates & Delivery Charges'}</h2>
           <button onClick={onClose} aria-label="Close" style={{ width: 32, height: 32, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--ink-2)' }}>
             <IconClose size={16} />
           </button>
@@ -243,11 +246,22 @@ export default function DeliveryModal({ lines, currency, orderPlaced, linesTotal
           </section>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end' }}>
-          <button onClick={onClose} className="om-primary-btn"
-            style={{ ...sLargeB, height: 50, padding: '0 28px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
-            Done
-          </button>
+        <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12 }}>
+          {mode === 'submit' ? (
+            <>
+              {undated > 0 && <span style={{ ...sBody, color: 'var(--amber)', marginRight: 'auto' }}>Give every line a promise date to submit.</span>}
+              <button onClick={onClose} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>Cancel</button>
+              <button onClick={onSubmit} disabled={undated > 0 || dateable.length === 0} className="om-primary-btn"
+                style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)', color: undated === 0 && dateable.length > 0 ? '#fff' : 'var(--ink-3)', cursor: undated === 0 && dateable.length > 0 ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
+                Submit Order
+              </button>
+            </>
+          ) : (
+            <button onClick={onClose} className="om-primary-btn"
+              style={{ ...sLargeB, height: 50, padding: '0 28px', border: '2px solid var(--brand)', borderRadius: 'var(--radius)', background: 'var(--brand)', color: '#fff', cursor: 'pointer', fontFamily: 'inherit' }}>
+              Done
+            </button>
+          )}
         </div>
       </div>
     </>
