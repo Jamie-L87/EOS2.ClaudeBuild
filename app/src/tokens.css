@@ -73,6 +73,35 @@
   /* --- Radius --- */
   --radius:        4px;
 
+  /* --- Semantic tokens ---
+     These exist so dark mode can swap them. Light values match what was previously hard-coded. */
+  --strong:        #252525;  /* emphasised borders (inputs, stroke buttons) */
+  --ink-fill:      #252525;  /* background of ink-filled elements (table headers, dark buttons) */
+  --on-ink:        #FFFFFF;  /* text on --ink-fill */
+  --modal-border:  #000000;
+  --brand-text:    #E22D00;  /* brand red used as small text */
+  --brand-hover:   #C42700;  /* primary button hover */
+  --brand-wash:    #FFEEE6;  /* checked-row hover */
+  --danger-hover:  #8A223B;
+  --red-text:      #A11616;
+  --red-wash:      #FCEAEA;
+  --red-dot:       #DF1F1F;
+  --amber-text:    #8A6D1E;
+  --pending-bg:    #FAF1DA;
+  --err-bg:        #F7F0F1;
+  --err-text:      #8A223B;
+  --info-bg:       #E7EDEE;
+  --info-text:     #283D28;
+  --warn-bg:       #F6F4EA;
+  --warn-text:     #926D53;
+  --soft-border:   #CBD5E1;
+  --nav-text:      #334155;
+  --menu-text:     #000000;  /* the Menu label in the top nav */
+  --dot-muted:     #999999;  /* status dot for unknown / draft states */
+  --scrollbar:     #D6D6D6;
+  --backdrop:      rgba(9, 9, 9, 0.32);  /* behind modals and the nav drawer */
+  --blue-wash:     #F3F5F5;  /* super product component rows */
+
   /* --- Experience palette — Blue --- */
   --blue-5:   #F3F5F5;  --blue-10:  #E7EDEE;  --blue-15:  #D0DCDE;
   --blue-20:  #B0CED8;  --blue-30:  #86BBD2;  --blue-40:  #568EB8;
@@ -117,6 +146,70 @@
 }
 
 /* ============================================================
+   Dark theme: "Charcoal"
+   Applied with <html data-theme="dark"> (see services/theme.ts).
+   Every component reads these tokens, so this block is the whole theme.
+   ============================================================ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --brand:         #E22D00;
+  --brand-dark:    #F04A1E;
+  --brand-darker:  #B82400;
+  --brand-soft:    #2D1A16;
+
+  --ink:           #F2F2F2;
+  --ink-select:    #FFFFFF;
+  --ink-2:         #B3B3B3;
+  --ink-3:         #8F8F8F;
+  --line:          #333333;
+  --bg:            #1F1F1F;
+  --bg-soft:       #161616;
+  --black:         #0D0D0D;
+  --ink-deep:      #2A2A2A;
+
+  --pin:           rgba(255, 255, 255, 0.14);
+
+  --green:         #3FBF9F;
+  --green-soft:    #1B2B28;
+  --blue:          #6AA6D8;
+  --blue-soft:     #1B2A3A;
+  --amber:         #E5B25D;
+  --amber-soft:    #2E2718;
+  --red:           #F0707F;
+  --red-soft:      #2D1A1D;
+
+  --shadow-pop:    8px 8px 32px rgba(0, 0, 0, 0.55);
+  --shadow-sm:     1px 1px 16px rgba(0, 0, 0, 0.4);
+
+  --strong:        #BDBDBD;
+  --ink-fill:      #0D0D0D;
+  --modal-border:  #4A4A4A;
+  --brand-text:    #FF6B47;
+  --brand-hover:   #F04A1E;
+  --brand-wash:    #3A211B;
+  --danger-hover:  #C23A4C;
+  --red-text:      #F0707F;
+  --red-wash:      #3A2024;
+  --red-dot:       #F0707F;
+  --amber-text:    #E5B25D;
+  --pending-bg:    #2E2718;
+  --err-bg:        #2D1A1D;
+  --err-text:      #F0707F;
+  --info-bg:       #1B2A3A;
+  --info-text:     #BFD9EE;
+  --warn-bg:       #2E2718;
+  --warn-text:     #E5B25D;
+  --soft-border:   #3A3A3A;
+  --nav-text:      #E6E6E6;
+  --menu-text:     #F2F2F2;
+  --dot-muted:     #8F8F8F;
+  --scrollbar:     #4A4A4A;
+  --backdrop:      rgba(0, 0, 0, 0.62);
+  --blue-wash:     #182330;
+}
+
+/* ============================================================
    Global resets
    ============================================================ */
 
@@ -148,12 +241,12 @@ button, input, textarea, select {
 
 ::selection {
   background: var(--ink);
-  color: #fff;
+  color: var(--bg-soft);
 }
 
 /* Scrollbar */
 *::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-thumb { background: #D6D6D6; border-radius: 6px; border: 2px solid var(--bg-soft); }
+*::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 6px; border: 2px solid var(--bg-soft); }
 *::-webkit-scrollbar-thumb:hover { background: var(--ink-3); }
 *::-webkit-scrollbar-track { background: transparent; }
 

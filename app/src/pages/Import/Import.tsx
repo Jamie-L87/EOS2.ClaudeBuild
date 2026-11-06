@@ -219,7 +219,7 @@ function FileDropZone({ onParsed, disabled }: { onParsed: (e: FileParseEvent) =>
         <>
           <div style={dropzoneStyles.icon}><IconUpload size={28} stroke={1.7} /></div>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginTop: 16 }}>Drop file here</div>
-          <div style={{ ...sBody, color: 'var(--ink-2)', marginTop: 4 }}>or <span style={{ color: 'var(--brand)', textDecoration: 'underline', textUnderlineOffset: 3 }}>browse files</span></div>
+          <div style={{ ...sBody, color: 'var(--ink-2)', marginTop: 4 }}>or <span style={{ color: 'var(--brand-text)', textDecoration: 'underline', textUnderlineOffset: 3 }}>browse files</span></div>
           <div style={dropzoneStyles.exts}>
             {Object.keys(ACCEPT_MAP).map(e => (
               <span key={e} style={dropzoneStyles.extPill}>{e}</span>
@@ -250,7 +250,7 @@ const dropzoneStyles = {
     border: `2px ${dragging ? 'solid' : 'dashed'} var(--ink)`,
     borderColor: dragging ? 'var(--brand)' : 'var(--ink)',
     borderRadius: 'var(--radius)',
-    background: dragging ? 'var(--brand-soft)' : '#fff',
+    background: dragging ? 'var(--brand-soft)' : 'var(--bg)',
     display: 'flex', flexDirection: 'column' as const, alignItems: 'center', justifyContent: 'center',
     cursor: loading ? 'default' : 'pointer',
     transition: 'border-color .15s ease, background .15s ease',
@@ -314,11 +314,11 @@ function ArticleInput({ onAdd, disabled }: { onAdd: (items: ParsedItem[]) => voi
         placeholder={'e.g.\nAER1B23DW ALP G1 G1 G1 BB BK 23103\nMI1E325AA\nBA512LN DB3 CSQ'}
         style={{
           flex: 1, minHeight: 180,
-          border: '2px solid var(--ink)', borderRadius: 'var(--radius)',
+          border: '2px solid var(--strong)', borderRadius: 'var(--radius)',
           padding: '14px 16px',
           fontFamily: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace",
           ...sBody, fontSize: 13.5,
-          color: 'var(--ink)', background: '#fff',
+          color: 'var(--ink)', background: 'var(--bg)',
           outline: 'none', resize: 'vertical',
           transition: 'border-color .15s ease, box-shadow .15s ease',
         }}
@@ -396,10 +396,10 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
     { value: 'listPrice',       label: 'List Price' },
   ];
 
-  const btnBase = { ...sLargeB, height: 44, padding: '0 18px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' };
+  const btnBase = { ...sLargeB, height: 44, padding: '0 18px', borderRadius: 'var(--radius)', border: '2px solid var(--strong)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' };
 
   return (
-    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', padding: 24, marginBottom: 20, animation: 'slideDown .2s ease' }}>
+    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg)', padding: 24, marginBottom: 20, animation: 'slideDown .2s ease' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16, gap: 16 }}>
         <div>
           <div style={{ ...sLargeB, color: 'var(--ink)', marginBottom: 4 }}>Map columns</div>
@@ -418,7 +418,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
           <label style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>SHEET</span>
             <select value={sheetIdx} onChange={(e) => setSheetIdx(Number(e.target.value))}
-              style={{ height: 40, padding: '0 12px', border: '1px solid var(--ink-3)', borderRadius: 'var(--radius)', background: '#fff', ...sBody, color: 'var(--ink)', minWidth: 140 }}>
+              style={{ height: 40, padding: '0 12px', border: '1px solid var(--ink-3)', borderRadius: 'var(--radius)', background: 'var(--bg)', ...sBody, color: 'var(--ink)', minWidth: 140 }}>
               {sheetData.map((s, i) => <option key={i} value={i}>{s.name}</option>)}
             </select>
           </label>
@@ -427,7 +427,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
           <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>SKIP ROWS</span>
           <input type="number" min={0} value={skipRows}
             onChange={(e) => setSkipRows(Number(e.target.value || 0))}
-            style={{ height: 40, padding: '0 12px', border: '1px solid var(--ink-3)', borderRadius: 'var(--radius)', background: '#fff', ...sBody, color: 'var(--ink)', minWidth: 140 }} />
+            style={{ height: 40, padding: '0 12px', border: '1px solid var(--ink-3)', borderRadius: 'var(--radius)', background: 'var(--bg)', ...sBody, color: 'var(--ink)', minWidth: 140 }} />
         </label>
       </div>
 
@@ -435,14 +435,14 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
         <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'auto' }}>
           <thead>
             <tr>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '10px 12px', textAlign: 'left', verticalAlign: 'top', borderRight: '1px solid #3a3a3a', minWidth: 60, position: 'sticky', top: 0, zIndex: 1 }}>Row</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '10px 12px', textAlign: 'left', verticalAlign: 'top', borderRight: '1px solid #3a3a3a', minWidth: 60, position: 'sticky', top: 0, zIndex: 1 }}>Row</th>
               {Array.from({ length: maxCols }).map((_, c) => (
-                <th key={c} style={{ background: 'var(--ink)', color: '#fff', padding: '10px 12px', textAlign: 'left', verticalAlign: 'top', borderRight: '1px solid #3a3a3a', minWidth: 140, position: 'sticky', top: 0, zIndex: 1 }}>
+                <th key={c} style={{ background: 'var(--ink-fill)', color: '#fff', padding: '10px 12px', textAlign: 'left', verticalAlign: 'top', borderRight: '1px solid #3a3a3a', minWidth: 140, position: 'sticky', top: 0, zIndex: 1 }}>
                   <div style={{ ...sBody, color: '#fff', marginBottom: 6 }}>Col {c + 1}</div>
                   <select
                     value={columnRoles[c] || 'ignore'}
                     onChange={(e) => setRole(c, e.target.value)}
-                    style={{ width: '100%', height: 32, padding: '0 8px', background: '#fff', border: '1px solid var(--ink-3)', ...sBody, color: 'var(--ink)', borderRadius: 4 }}>
+                    style={{ width: '100%', height: 32, padding: '0 8px', background: 'var(--bg)', border: '1px solid var(--ink-3)', ...sBody, color: 'var(--ink)', borderRadius: 4 }}>
                     {ROLE_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                   </select>
                 </th>
@@ -451,7 +451,7 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
           </thead>
           <tbody>
             {preview.map((row, ri) => (
-              <tr key={ri} style={{ background: ri < skipRows ? 'var(--line)' : '#fff', opacity: ri < skipRows ? 0.55 : 1 }}>
+              <tr key={ri} style={{ background: ri < skipRows ? 'var(--line)' : 'var(--bg)', opacity: ri < skipRows ? 0.55 : 1 }}>
                 <td style={{ padding: '8px 12px', borderTop: '1px solid var(--line)', borderRight: '1px solid var(--line)', ...sBody, color: 'var(--ink-2)' }}>{ri + 1}</td>
                 {Array.from({ length: maxCols }).map((_, c) => (
                   <td key={c} style={{ padding: '8px 12px', borderTop: '1px solid var(--line)', borderRight: '1px solid var(--line)', whiteSpace: 'nowrap', maxWidth: 220, overflow: 'hidden', textOverflow: 'ellipsis', background: columnRoles[c] && ri >= skipRows ? 'var(--brand-soft)' : undefined }}>
@@ -712,7 +712,7 @@ function SuperChildrenTable({ parent }: { parent: BasketItem }) {
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 8 }}>
         Bundle Contents · {parent.superChildren!.length} parts
       </div>
-      <table style={{ width: '100%', borderCollapse: 'collapse', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         <thead>
           <tr style={{ background: 'var(--bg-soft)' }}>
             {['Component Item', 'Feature String', 'Short Description', 'PLC', 'Quantity', 'Total Price'].map((h, i) => (
@@ -843,11 +843,11 @@ function BasketRow({ item, lineNum, onRemove, onQtyChange, onCopy, onUpdateArtic
         <td style={{ padding: '12px 12px', verticalAlign: 'middle', textAlign: 'center' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
             <button onClick={() => onQtyChange(item.qty - 1)} disabled={item.qty <= 1}
-              style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+              style={{ width: 32, height: 32, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
             <input value={item.qty} type="number" min={1} max={MAX_QTY} maxLength={5} onChange={(e) => onQtyChange(e.target.value)}
-              style={{ width: 50, height: 32, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', MozAppearance: 'textfield' as const }} aria-label="Quantity" />
+              style={{ width: 50, height: 32, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', MozAppearance: 'textfield' as const }} aria-label="Quantity" />
             <button onClick={() => onQtyChange(item.qty + 1)} disabled={item.qty >= MAX_QTY}
-              style={{ width: 32, height: 32, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+              style={{ width: 32, height: 32, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 18, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
           </div>
           {item.qtyCapped && (
             <div style={{ ...sBody, fontSize: 11, color: 'var(--amber)', marginTop: 4, maxWidth: 90 }}>Quantity cannot exceed 99,999</div>
@@ -1048,12 +1048,12 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
       </colgroup>
       <thead>
         <tr>
-          <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+          <th style={{ background: 'var(--ink-fill)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
             <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Article Code</div>
           </th>
-          <th style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', fontFamily: 'inherit' }}>Qty</th>
+          <th style={{ background: 'var(--ink-fill)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', fontFamily: 'inherit' }}>Qty</th>
           {EXTRA_EXPORT_FIELDS.filter(f => selected.has(f.key)).map(f => (
-            <th key={f.key} style={{ background: 'var(--ink)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
+            <th key={f.key} style={{ background: 'var(--ink-fill)', color: '#fff', ...sBodyB, fontSize: 12, padding: '0 12px', height: 36, textAlign: 'left', overflow: 'hidden', fontFamily: 'inherit' }}>
               <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{f.label}</div>
             </th>
           ))}
@@ -1064,7 +1064,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
           const combined = item.featureString ? `${item.articleCode} ${item.featureString}` : item.articleCode;
           const isParent = !!item.superExpanded;
           const isComp   = !!item.superParentCode;
-          const rowBg    = isParent ? 'var(--blue-soft)' : isComp ? '#F3F5F5' : (i % 2 === 0 ? '#fff' : 'var(--bg-soft)');
+          const rowBg    = isParent ? 'var(--blue-soft)' : isComp ? 'var(--blue-wash)' : (i % 2 === 0 ? 'var(--bg)' : 'var(--bg-soft)');
           const textCol  = isComp ? 'var(--ink-2)' : 'var(--ink)';
           return (
             <tr key={item.id} style={{ background: rowBg, borderBottom: '1px solid var(--line)' }}>
@@ -1091,7 +1091,7 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
   );
 
   const btnCancel = (
-    <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+    <button onClick={onCancel} className="om-stroke-btn" style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--strong)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
       Cancel
     </button>
   );
@@ -1105,11 +1105,11 @@ function ExportFieldPicker({ format, hasSuperProducts, hasContract, items, selec
     <>
       <div
         onClick={loading ? undefined : onCancel}
-        style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }}
+        style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 300 }}
       />
       <div style={{
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-        zIndex: 301, background: '#fff', border: '2px solid var(--black)',
+        zIndex: 301, background: 'var(--bg)', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
         width: variant === 'b' ? 1060 : 520,
         maxWidth: 'calc(100vw - 32px)',
@@ -1322,7 +1322,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
 
   return (
     <>
-      <div onClick={busy ? undefined : onCancel} className={burning ? 'om-burn-backdrop' : undefined} style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 300 }} />
+      <div onClick={busy ? undefined : onCancel} className={burning ? 'om-burn-backdrop' : undefined} style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 300 }} />
       {phase === 'match' && origin && (
         <div style={{ position: 'fixed', left: origin.x, bottom: origin.y, width: origin.w, height: origin.h, zIndex: 302, pointerEvents: 'none' }}>
           <Match w={origin.w} h={origin.h} />
@@ -1343,7 +1343,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
       )}
       <div ref={boxRef} className={burning ? 'om-burn-box' : undefined} style={{
         position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
-        zIndex: 301, background: '#fff', border: '2px solid var(--black)',
+        zIndex: 301, background: 'var(--bg)', border: '2px solid var(--black)',
         borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
         width: 420, maxWidth: 'calc(100vw - 32px)', overflow: 'hidden',
         animation: 'pickerIn .14s cubic-bezier(.4,0,.2,1)',
@@ -1354,7 +1354,7 @@ function ClearBasketConfirm({ onConfirm, onCancel }: { onConfirm: () => void; on
         </div>
         <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10, position: 'relative', zIndex: 1, opacity: busy ? 0.4 : 1, pointerEvents: busy ? 'none' : 'auto' }}>
           <button onClick={onCancel} className="om-stroke-btn"
-            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+            style={{ ...sLargeB, height: 44, padding: '0 20px', borderRadius: 'var(--radius)', border: '2px solid var(--strong)', background: 'transparent', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
             No
           </button>
           <button onClick={handleYes} className="om-danger-btn"
@@ -1436,7 +1436,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
   const superCount  = items.filter(i => i.isSuper).length;
   const mismatchCount = priceMismatches.filter(Boolean).length;
   const canCreate   = passedCount > 0;
-  const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
+  const btnBase     = { ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
   const hasContract = selectedContract !== null;
   const contractDateWarning = getContractDateWarning(selectedContract, pricingDate);
@@ -1454,7 +1454,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 
   return (
     <>
-    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', overflow: 'hidden', marginTop: 24 }}>
+    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg)', overflow: 'hidden', marginTop: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid var(--line)', flexWrap: 'wrap', gap: 12 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <h2 style={{ ...sLargeB, margin: 0, fontSize: 20 }}>Basket</h2>
@@ -1488,7 +1488,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           id="basket-contract"
           value={selectedContract?.id ?? ''}
           onChange={e => onContractChange(e.target.value)}
-          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: '#fff', minWidth: 260, fontFamily: 'inherit' }}
+          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: 'var(--bg)', minWidth: 260, fontFamily: 'inherit' }}
         >
           <option value="">No contract — list prices only</option>
           {CONTRACTS.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -1502,7 +1502,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           type="date"
           value={pricingDate}
           onChange={e => onPricingDateChange(e.target.value)}
-          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+          style={{ height: 36, padding: '0 12px', border: '1.5px solid var(--ink-3)', borderRadius: 'var(--radius)', ...sBody, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
         />
       </div>
 
@@ -1518,16 +1518,16 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>#</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Article Code</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Product Name</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Lead Time</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Discount</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Unit Buying Price</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total Buying Price</th>
-              <th style={{ background: 'var(--ink)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }} aria-label="Actions" />
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>#</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Article Code</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Product Name</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'left', whiteSpace: 'nowrap' }}>Lead Time</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Qty</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>List Price</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }}>Discount</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Unit Buying Price</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 18px', ...sBodyB, fontSize: 12.5, textAlign: 'right', whiteSpace: 'nowrap' }}>Total Buying Price</th>
+              <th style={{ background: 'var(--ink-fill)', color: '#fff', padding: '14px 12px', ...sBodyB, fontSize: 12.5, textAlign: 'center', whiteSpace: 'nowrap' }} aria-label="Actions" />
             </tr>
           </thead>
           <tbody>
@@ -1577,7 +1577,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
           <button onClick={() => setConfirmClearOpen(true)} className="om-stroke-btn" style={btnBase}>Clear Basket</button>
           <div ref={saveMenuRef} style={{ position: 'relative' }}>
             {saveMenuOpen && (
-              <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: '#fff', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
+              <div style={{ position: 'absolute', bottom: 'calc(100% + 8px)', right: 0, background: 'var(--bg)', border: '2px solid var(--black)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', minWidth: 220, zIndex: 100, overflow: 'hidden', animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)' }}>
                 {EXPORT_FORMATS.map(f => (
                   <button key={f.id} onClick={() => {
                     setSaveMenuOpen(false);
@@ -1630,8 +1630,8 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 /* ------------------------------------------------------------------ */
 function Footer() {
   return (
-    <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: '#fff' }}>
-      <span style={{ ...sLargeB, color: 'var(--brand)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+    <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
     </footer>
@@ -1658,7 +1658,7 @@ function ErrorBanner({ message, onClose }: { message: string; onClose: () => voi
 function Toast({ message, onDone }: { message: string; onDone: () => void }) {
   useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, [onDone]);
   return (
-    <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
+    <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
   );
 }
 
@@ -1768,11 +1768,11 @@ export default function ImportPage() {
         button:focus-visible, a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .om-dropzone[data-state="idle"]:hover { border-color: var(--brand) !important; background: var(--brand-soft) !important; }
         .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
-        .om-stroke-btn:hover { background: var(--ink) !important; color: #fff !important; }
+        .om-stroke-btn:hover { background: var(--ink-fill) !important; color: #fff !important; }
         .om-export-option:hover { background: var(--bg-soft) !important; }
         @keyframes menuPop { from { opacity: 0; transform: scale(.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
-        .om-danger-btn:hover { background: #8A223B !important; border-color: #8A223B !important; }
+        .om-primary-btn:not(:disabled):hover { background: var(--brand-hover) !important; border-color: var(--brand-hover) !important; }
+        .om-danger-btn:hover { background: var(--danger-hover) !important; border-color: var(--danger-hover) !important; }
         @keyframes boxBurn5s {
           0%   { transform: translate(-50%,-50%) scale(1); filter: brightness(1) saturate(1);      box-shadow: var(--shadow-pop); }
           15%  { transform: translate(-50%,-50%) scale(1); filter: brightness(1.05) saturate(1.3);  box-shadow: 0 0 30px 6px rgba(226,45,0,0.35); }
@@ -1860,7 +1860,7 @@ export default function ImportPage() {
         }
         .om-match-throw { animation: matchThrow 550ms ease-in forwards; }
         .om-match-head { animation: matchHeadGlow 550ms ease-in forwards; transform-origin: center; }
-        .om-link-btn:hover { color: var(--brand) !important; }
+        .om-link-btn:hover { color: var(--brand-text) !important; }
         .om-row-action:hover { background: var(--line); color: var(--ink); }
         .om-basket-row:hover { background: var(--bg-soft); }
         textarea:focus, input:focus { box-shadow: 0 0 0 4px rgba(226,45,0,0.08); }

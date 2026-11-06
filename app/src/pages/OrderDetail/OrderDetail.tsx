@@ -178,7 +178,7 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
             if (e.key === 'Enter') e.currentTarget.blur();
             if (e.key === 'Escape') { setV(value ?? ''); setEditing(false); }
           }}
-          style={{ ...sBodyB, color: 'var(--ink)', border: `2px solid ${showRequired ? 'var(--red)' : 'var(--brand)'}`, borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: '#fff', maxWidth: 240, fontFamily: 'inherit' }}
+          style={{ ...sBodyB, color: 'var(--ink)', border: `2px solid ${showRequired ? 'var(--red)' : 'var(--brand)'}`, borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: 'var(--bg)', maxWidth: 240, fontFamily: 'inherit' }}
         />
       ) : (
         <button
@@ -242,7 +242,7 @@ function HeaderDateField({ label, value, onChange }: {
           value={value ?? ''}
           onChange={(e) => onChange?.(e.target.value || null)}
           onBlur={() => setEditing(false)}
-          style={{ ...sBodyB, color: 'var(--ink)', border: '2px solid var(--brand)', borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: '#fff', fontFamily: 'inherit' }}
+          style={{ ...sBodyB, color: 'var(--ink)', border: '2px solid var(--brand)', borderRadius: 4, padding: '6px 8px', margin: '-6px -8px', outline: 'none', background: 'var(--bg)', fontFamily: 'inherit' }}
         />
       ) : (
         <button
@@ -334,7 +334,7 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Search Address</div>
-      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff' }}>
+      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}>
         <span style={{ width: 44, height: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--ink-3)' }}>
           <IconSearch size={16} stroke={1.7} />
         </span>
@@ -388,7 +388,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
       <button
         onClick={() => setExpanded(e => !e)}
         className="om-expand-toggle"
-        style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', cursor: 'pointer', padding: '0 4px', height: 44, ...sLargeB, color: 'var(--brand)', fontFamily: 'inherit', transition: 'background .15s ease' }}
+        style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', border: 'none', borderTop: '1px solid var(--line)', background: 'var(--bg-soft)', cursor: 'pointer', padding: '0 4px', height: 44, ...sLargeB, color: 'var(--brand-text)', fontFamily: 'inherit', transition: 'background .15s ease' }}
       >
         <span>Order Details</span>
         <span style={{ display: 'inline-flex', alignItems: 'center', transition: 'transform .2s ease', transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}>
@@ -520,13 +520,13 @@ function QtyStepper({ qty, onChange }: { qty: number; onChange: (v: number) => v
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', height: 32 }}>
       <button onClick={() => onChange(qty - 1)} disabled={qty <= 1}
-        style={{ width: 28, height: 30, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+        style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
       <input value={qty} type="number" min={1}
         onChange={(e) => onChange(Math.max(1, parseInt(e.target.value, 10) || 1))}
-        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
         aria-label="Quantity" />
       <button onClick={() => onChange(qty + 1)}
-        style={{ width: 28, height: 30, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+        style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
     </div>
   );
 }
@@ -538,7 +538,7 @@ function QtyStepper({ qty, onChange }: { qty: number; onChange: (v: number) => v
 /* ------------------------------------------------------------------ */
 function FinishSelect({ value, options, onChange }: { value: string; options: string[]; onChange: (v: string) => void }) {
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid var(--line)', borderRadius: 4, padding: '0 8px 0 10px', height: 30, background: '#fff', maxWidth: '100%' }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid var(--line)', borderRadius: 4, padding: '0 8px 0 10px', height: 30, background: 'var(--bg)', maxWidth: '100%' }}>
       <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}
         style={{ border: 'none', outline: 'none', background: 'transparent', ...sBodyB, fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', fontSize: 12, color: 'var(--ink)', appearance: 'none' }}>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -555,7 +555,7 @@ function ShippedInput({ value, max, onChange }: { value: number; max: number; on
   return (
     <input type="number" min={0} max={max} value={value}
       onChange={(e) => onChange(Math.min(max, Math.max(0, parseInt(e.target.value, 10) || 0)))}
-      style={{ width: 60, height: 30, border: '1px solid var(--line)', borderRadius: 4, textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+      style={{ width: 60, height: 30, border: '1px solid var(--line)', borderRadius: 4, textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
       aria-label="Quantity shipped" />
   );
 }
@@ -575,7 +575,7 @@ function SuperChildren({ parent, currency, onUpdateChild }: {
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, padding: '12px 16px 6px 60px' }}>
         Bundle Contents · {children.length} parts
       </div>
-      <div style={{ margin: '0 16px 16px 60px', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+      <div style={{ margin: '0 16px 16px 60px', background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: sCols, background: 'var(--bg-soft)', minHeight: 38, alignItems: 'stretch' }}>
           {['Component Item', 'Feature String', 'Short Description', 'Product Code', 'Quantity', 'Qty Shipped', 'Unit Price', 'Total Price'].map(h => (
             <div key={h} style={{ padding: '0 14px', display: 'flex', alignItems: 'center', color: 'var(--ink-2)', ...sBodyB, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h}</div>
@@ -690,7 +690,7 @@ function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onD
         display: 'grid', gridTemplateColumns: LINE_COLS,
         alignItems: 'center', minHeight: 64,
         borderTop: '1px solid var(--line)',
-        background: isOver ? 'var(--brand-soft)' : (isInvalid ? 'var(--red-soft)' : (isSuper && expanded ? 'var(--blue-soft)' : '#fff')),
+        background: isOver ? 'var(--brand-soft)' : (isInvalid ? 'var(--red-soft)' : (isSuper && expanded ? 'var(--blue-soft)' : 'var(--bg)')),
         opacity: isDragging ? 0.4 : 1,
         transition: 'background .12s ease, opacity .12s ease',
       }}
@@ -863,7 +863,7 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', width: 380, height: 50, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', transition: 'box-shadow .15s ease' }}>
+        <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', width: 380, height: 50, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', transition: 'box-shadow .15s ease' }}>
           <span style={{ width: size.hit, height: size.hit, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <IconSearch size={18} stroke={1.7} />
           </span>
@@ -882,14 +882,14 @@ function OrderLinesTable({ lines, currency, orderPlaced, query, setQuery, onUpda
           <span style={{ whiteSpace: 'nowrap' }}>Add Line</span>
         </button>
         <button onClick={onOpenDelivery} className="om-stroke-btn"
-          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
+          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
           <span style={{ whiteSpace: 'nowrap' }}>Promise Dates &amp; Delivery</span>
           {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
         </button>
       </div>
 
-      <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: '#fff' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: LINE_COLS, background: 'var(--ink)', minHeight: size.rowH, alignItems: 'stretch' }}>
+      <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: 'var(--bg)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: LINE_COLS, background: 'var(--ink-fill)', minHeight: size.rowH, alignItems: 'stretch' }}>
           {[{ label: '', w: '40px' }, { label: '#', w: '48px' },
             { label: 'Article Code', w: '' }, { label: 'Short Description', w: '' },
             { label: 'Qty', align: 'center' }, { label: 'List Price', align: 'right' },
@@ -945,7 +945,7 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
 }) {
   const ready = canSubmit && missingMeta.length === 0;
   return (
-    <div style={{ position: 'sticky', bottom: 0, background: '#fff', borderTop: '1px solid var(--line)', padding: '16px 40px', display: 'flex', alignItems: 'center', gap: 24, boxShadow: '0 -2px 12px rgba(0,0,0,0.04)', zIndex: 20 }}>
+    <div style={{ position: 'sticky', bottom: 0, background: 'var(--bg)', borderTop: '1px solid var(--line)', padding: '16px 40px', display: 'flex', alignItems: 'center', gap: 24, boxShadow: '0 -2px 12px rgba(0,0,0,0.04)', zIndex: 20 }}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <div style={{ ...sBody, color: 'var(--ink-2)' }}>Total Order Value</div>
         <div style={{ fontWeight: 700, fontSize: 20, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums' }}>{fmt(total, currency)}</div>
@@ -956,8 +956,8 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
           : (!canSubmit ? 'Resolve invalid lines before submitting.' : null)}
       </div>
       <div style={{ display: 'flex', gap: 12 }}>
-        <button onClick={onCancel}    className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Cancel</button>
-        <button onClick={onSaveDraft} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Save Draft</button>
+        <button onClick={onCancel}    className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Cancel</button>
+        <button onClick={onSaveDraft} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 18px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>Save Draft</button>
         <button onClick={onSubmit} disabled={!ready} className="om-primary-btn"
           style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${ready ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: ready ? 'var(--brand)' : 'var(--line)', color: ready ? '#fff' : 'var(--ink-3)', cursor: ready ? 'pointer' : 'not-allowed', transition: 'background .15s ease', fontFamily: 'inherit' }}>
           Submit Order
@@ -973,7 +973,7 @@ function ActionBar({ canSubmit, missingMeta, onSaveDraft, onSubmit, onCancel, to
 function Toast({ message, onDone }: { message: string; onDone: () => void }) {
   useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, [onDone]);
   return (
-    <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
+    <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
   );
 }
 
@@ -982,19 +982,19 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
 /* ------------------------------------------------------------------ */
 const CSS = `
   .om-tab-strip:hover[data-active="false"] { color: var(--ink); }
-  .om-header-edit:hover { color: var(--brand) !important; }
-  .om-header-select:hover { color: var(--brand) !important; }
-  .om-promise-btn:hover { color: var(--brand) !important; }
+  .om-header-edit:hover { color: var(--brand-text) !important; }
+  .om-header-select:hover { color: var(--brand-text) !important; }
+  .om-promise-btn:hover { color: var(--brand-text) !important; }
   .om-expand-toggle:hover { background: var(--line) !important; }
-  .om-stroke-btn:hover { background: var(--ink); color: #fff; }
-  .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
+  .om-stroke-btn:hover { background: var(--ink-fill); color: #fff; }
+  .om-primary-btn:not(:disabled):hover { background: var(--brand-hover) !important; border-color: var(--brand-hover) !important; }
   .om-line-row:hover { background: var(--bg-soft); }
   .om-line-row[data-over="true"] { background: var(--brand-soft) !important; }
   .om-row-action:hover { background: var(--line); color: var(--ink); }
-  .om-code-edit:hover span:first-child { color: var(--brand); }
+  .om-code-edit:hover span:first-child { color: var(--brand-text); }
   .om-search-wrap:focus-within { box-shadow: 0 0 0 4px rgba(226,45,0,0.08); }
   .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
-  .om-account-btn:hover { color: var(--brand); }
+  .om-account-btn:hover { color: var(--brand-text); }
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   @keyframes slideDown {

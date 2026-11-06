@@ -203,7 +203,7 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Search Address</div>
-      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff' }}>
+      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}>
         <span style={{ width: 44, height: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--ink-3)' }}>
           <IconSearch size={16} stroke={1.7} />
         </span>
@@ -261,7 +261,7 @@ function OrderHeaderStrip({ order, total, deliveryTotal }: { order: OrderData; t
 }
 
 const fieldLabel = { ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 };
-const fieldBox = { ...sBody, height: 40, boxSizing: 'border-box' as const, width: '100%', padding: '0 10px', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', fontFamily: 'inherit' };
+const fieldBox = { ...sBody, height: 40, boxSizing: 'border-box' as const, width: '100%', padding: '0 10px', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', fontFamily: 'inherit' };
 
 function PanelInput({ id, label, value, required, placeholder, onChange }: {
   id: string; label: string; value: string | null; required?: boolean; placeholder?: string; onChange: (v: string | null) => void;
@@ -309,7 +309,7 @@ function PanelDate({ id, label, value, onChange }: {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <label htmlFor={id} style={fieldLabel}>{label}</label>
-      <input id={id} type="date" className="om-field" value={value ?? ''} onChange={(e) => onChange(e.target.value || null)} style={{ ...fieldBox, border: '2px solid var(--ink)' }} />
+      <input id={id} type="date" className="om-field" value={value ?? ''} onChange={(e) => onChange(e.target.value || null)} style={{ ...fieldBox, border: '2px solid var(--strong)' }} />
     </div>
   );
 }
@@ -323,7 +323,7 @@ function PanelHeading({ children }: { children: React.ReactNode }) {
 /** The Order Details tab: order, delivery and contact details side by side, as on EOS 1. */
 function OrderDetailsTab({ order, onUpdateMeta }: { order: OrderData; onUpdateMeta: (k: keyof OrderData, v: string | null) => void }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'flex-start', border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: '#fff', paddingBottom: 16 }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', border: '1px solid var(--line)', borderRadius: 'var(--radius)', background: 'var(--bg)', paddingBottom: 16 }}>
       <div style={{ ...panelStyle, borderRight: '1px solid var(--line)' }}>
         <PanelHeading>Order Details</PanelHeading>
         <PanelSelect id="op-order-type" label="Order Type" value={order.orderType ?? 'Normal'} options={ORDER_TYPE_OPTIONS} onChange={(v) => onUpdateMeta('orderType', v)} />
@@ -373,12 +373,12 @@ interface SubmitProblem { label: string; tab: 'details' | 'lines'; fieldId?: str
 
 function SubmitProblems({ problems, onGo }: { problems: SubmitProblem[]; onGo: (p: SubmitProblem) => void }) {
   return (
-    <div role="alert" style={{ ...sBody, padding: '14px 16px', marginBottom: 16, borderRadius: 'var(--radius)', background: '#F7F0F1', color: '#8A223B' }}>
+    <div role="alert" style={{ ...sBody, padding: '14px 16px', marginBottom: 16, borderRadius: 'var(--radius)', background: 'var(--err-bg)', color: 'var(--err-text)' }}>
       <div style={{ ...sBodyB, marginBottom: 6 }}>This order can't be submitted yet. Please sort out the following:</div>
       <ul style={{ margin: 0, paddingLeft: 20 }}>
         {problems.map(p => (
           <li key={p.label}>
-            <button onClick={() => onGo(p)} style={{ ...sBody, border: 'none', background: 'transparent', padding: 0, color: '#8A223B', textDecoration: 'underline', textUnderlineOffset: 3, cursor: 'pointer', fontFamily: 'inherit' }}>{p.label}</button>
+            <button onClick={() => onGo(p)} style={{ ...sBody, border: 'none', background: 'transparent', padding: 0, color: 'var(--err-text)', textDecoration: 'underline', textUnderlineOffset: 3, cursor: 'pointer', fontFamily: 'inherit' }}>{p.label}</button>
           </li>
         ))}
       </ul>
@@ -462,13 +462,13 @@ function QtyStepper({ qty, onChange }: { qty: number; onChange: (v: number) => v
   return (
     <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', height: 32 }}>
       <button onClick={() => onChange(qty - 1)} disabled={qty <= 1}
-        style={{ width: 28, height: 30, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
+        style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
       <input value={qty} type="number" min={1}
         onChange={(e) => onChange(Math.max(1, parseInt(e.target.value, 10) || 1))}
-        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
         aria-label="Quantity" />
       <button onClick={() => onChange(qty + 1)}
-        style={{ width: 28, height: 30, border: 'none', background: '#fff', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
+        style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
     </div>
   );
 }
@@ -480,7 +480,7 @@ function QtyStepper({ qty, onChange }: { qty: number; onChange: (v: number) => v
 /* ------------------------------------------------------------------ */
 function FinishSelect({ value, options, onChange }: { value: string; options: string[]; onChange: (v: string) => void }) {
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid var(--line)', borderRadius: 4, padding: '0 8px 0 10px', height: 30, background: '#fff', maxWidth: '100%' }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid var(--line)', borderRadius: 4, padding: '0 8px 0 10px', height: 30, background: 'var(--bg)', maxWidth: '100%' }}>
       <select value={value ?? ''} onChange={(e) => onChange(e.target.value)}
         style={{ border: 'none', outline: 'none', background: 'transparent', ...sBodyB, fontFamily: 'ui-monospace, "SF Mono", Menlo, Consolas, monospace', fontSize: 12, color: 'var(--ink)', appearance: 'none' }}>
         {options.map(o => <option key={o} value={o}>{o}</option>)}
@@ -497,7 +497,7 @@ function ShippedInput({ value, max, onChange }: { value: number; max: number; on
   return (
     <input type="number" min={0} max={max} value={value}
       onChange={(e) => onChange(Math.min(max, Math.max(0, parseInt(e.target.value, 10) || 0)))}
-      style={{ width: 60, height: 30, border: '1px solid var(--line)', borderRadius: 4, textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: '#fff', fontFamily: 'inherit' }}
+      style={{ width: 60, height: 30, border: '1px solid var(--line)', borderRadius: 4, textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
       aria-label="Quantity shipped" />
   );
 }
@@ -517,7 +517,7 @@ function SuperChildren({ parent, currency, onUpdateChild }: {
       <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, padding: '12px 16px 6px 60px' }}>
         Bundle Contents · {children.length} parts
       </div>
-      <div style={{ margin: '0 16px 16px 60px', background: '#fff', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
+      <div style={{ margin: '0 16px 16px 60px', background: 'var(--bg)', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
         <div style={{ display: 'grid', gridTemplateColumns: sCols, background: 'var(--bg-soft)', minHeight: 38, alignItems: 'stretch' }}>
           {['Component Item', 'Feature String', 'Short Description', 'Product Code', 'Quantity', 'Qty Shipped', 'Unit Price', 'Total Price'].map(h => (
             <div key={h} style={{ padding: '0 14px', display: 'flex', alignItems: 'center', color: 'var(--ink-2)', ...sBodyB, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h}</div>
@@ -635,7 +635,7 @@ function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onD
         display: 'grid', gridTemplateColumns: LINE_COLS,
         alignItems: 'center', minHeight: 64,
         borderTop: '1px solid var(--line)',
-        background: isOver ? 'var(--brand-soft)' : (isInvalid ? 'var(--red-soft)' : (isSuper && expanded ? 'var(--blue-soft)' : '#fff')),
+        background: isOver ? 'var(--brand-soft)' : (isInvalid ? 'var(--red-soft)' : (isSuper && expanded ? 'var(--blue-soft)' : 'var(--bg)')),
         opacity: isDragging ? 0.4 : 1,
         transition: 'background .12s ease, opacity .12s ease',
       }}
@@ -809,7 +809,7 @@ function OrderLinesTable({ lines, currency, query, setQuery, invalidCount, undat
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', width: 380, height: 50, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', transition: 'box-shadow .15s ease' }}>
+        <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', width: 380, height: 50, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', transition: 'box-shadow .15s ease' }}>
           <span style={{ width: size.hit, height: size.hit, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
             <IconSearch size={18} stroke={1.7} />
           </span>
@@ -828,25 +828,25 @@ function OrderLinesTable({ lines, currency, query, setQuery, invalidCount, undat
           <span style={{ whiteSpace: 'nowrap' }}>Add Line</span>
         </button>
         <button onClick={onOpenDelivery} className="om-stroke-btn"
-          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
+          style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
           <span style={{ whiteSpace: 'nowrap' }}>Promise Dates &amp; Delivery</span>
           {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
         </button>
       </div>
 
       {invalidCount > 0 && (
-        <div role="status" style={{ ...sBody, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', marginBottom: 16, borderRadius: 'var(--radius)', background: '#F7F0F1', color: '#8A223B' }}>
+        <div role="status" style={{ ...sBody, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '12px 16px', marginBottom: 16, borderRadius: 'var(--radius)', background: 'var(--err-bg)', color: 'var(--err-text)' }}>
           <span>{invalidCount} line{invalidCount !== 1 ? 's' : ''} need{invalidCount === 1 ? 's' : ''} attention. They are marked in red where they are, so your line order is untouched.</span>
           <button onClick={onJumpToIssue} className="om-stroke-btn"
-            style={{ ...sBodyB, height: 36, padding: '0 14px', border: '2px solid #8A223B', borderRadius: 'var(--radius)', background: 'transparent', color: '#8A223B', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>
+            style={{ ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--err-text)', borderRadius: 'var(--radius)', background: 'transparent', color: 'var(--err-text)', cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>
             Go to next
           </button>
         </div>
       )}
 
-      <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflowX: 'auto', background: '#fff' }}>
+      <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflowX: 'auto', background: 'var(--bg)' }}>
         <div style={{ minWidth: 1302 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: LINE_COLS, background: 'var(--ink)', minHeight: size.rowH, alignItems: 'stretch' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: LINE_COLS, background: 'var(--ink-fill)', minHeight: size.rowH, alignItems: 'stretch' }}>
           {[{ label: '', w: '40px' }, { label: '#', w: '48px' },
             { label: 'Article Code', w: '' }, { label: 'Short Description', w: '' },
             { label: 'Qty', align: 'center' }, { label: 'List Price', align: 'right' },
@@ -899,7 +899,7 @@ function OrderLinesTable({ lines, currency, query, setQuery, invalidCount, undat
 function Toast({ message, onDone }: { message: string; onDone: () => void }) {
   useEffect(() => { const id = setTimeout(onDone, 2400); return () => clearTimeout(id); }, [onDone]);
   return (
-    <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
+    <div style={{ position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: '#fff', padding: '14px 22px', borderRadius: 'var(--radius)', ...sBody, zIndex: 80, boxShadow: 'var(--shadow-pop)', animation: 'toastIn .2s cubic-bezier(.4,0,.2,1)' }}>{message}</div>
   );
 }
 
@@ -908,21 +908,21 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
 /* ------------------------------------------------------------------ */
 const CSS = `
   .om-tab-strip:hover[data-active="false"] { color: var(--ink); }
-  .om-header-edit:hover { color: var(--brand) !important; }
-  .om-header-select:hover { color: var(--brand) !important; }
+  .om-header-edit:hover { color: var(--brand-text) !important; }
+  .om-header-select:hover { color: var(--brand-text) !important; }
   .om-expand-toggle:hover { background: var(--line) !important; }
   .om-field:focus { outline: none; border-color: var(--brand) !important; box-shadow: 0 0 0 4px rgba(226,45,0,0.08); }
   .om-check-item:hover { background: var(--bg-soft) !important; }
-  .om-promise-btn:hover { color: var(--brand) !important; }
-  .om-stroke-btn:hover { background: var(--ink); color: #fff; }
-  .om-primary-btn:not(:disabled):hover { background: #C42700 !important; border-color: #C42700 !important; }
+  .om-promise-btn:hover { color: var(--brand-text) !important; }
+  .om-stroke-btn:hover { background: var(--ink-fill); color: #fff; }
+  .om-primary-btn:not(:disabled):hover { background: var(--brand-hover) !important; border-color: var(--brand-hover) !important; }
   .om-line-row:hover { background: var(--bg-soft); }
   .om-line-row[data-over="true"] { background: var(--brand-soft) !important; }
   .om-row-action:hover { background: var(--line); color: var(--ink); }
-  .om-code-edit:hover span:first-child { color: var(--brand); }
+  .om-code-edit:hover span:first-child { color: var(--brand-text); }
   .om-search-wrap:focus-within { box-shadow: 0 0 0 4px rgba(226,45,0,0.08); }
   .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
-  .om-account-btn:hover { color: var(--brand); }
+  .om-account-btn:hover { color: var(--brand-text); }
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
   @keyframes slideDown {
@@ -1216,7 +1216,7 @@ export default function OrderDetailTabsPage() {
 
   if (!order) return <div style={{ padding: 80, textAlign: 'center', ...sBody, color: 'var(--ink-2)' }}>Loading…</div>;
 
-  const barBtn = { ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
+  const barBtn = { ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' };
 
   return (
     <FlagMissingContext.Provider value={submitAttempted}>

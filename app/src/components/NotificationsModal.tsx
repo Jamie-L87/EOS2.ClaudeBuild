@@ -61,10 +61,10 @@ export default function NotificationsModal({ open, onClose }: { open: boolean; o
     <>
       <NotificationBodyStyles />
       <style>{`
-        .eos-notif-markall:hover { background: var(--ink) !important; color: var(--bg) !important; }
+        .eos-notif-markall:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; }
         .eos-notif-action:hover { background: var(--a-fg) !important; color: var(--a-bg) !important; }
       `}</style>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onClose} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onClose} />
       <div
         role="dialog"
         aria-modal="true"
@@ -81,7 +81,7 @@ export default function NotificationsModal({ open, onClose }: { open: boolean; o
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--bg)',
-          border: '2px solid #000',
+          border: '2px solid var(--modal-border)',
           borderRadius: 'var(--radius)',
           boxShadow: 'var(--shadow-pop)',
           animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
@@ -134,7 +134,7 @@ export default function NotificationsModal({ open, onClose }: { open: boolean; o
             <button
               className="eos-notif-markall"
               onClick={() => markAllNotificationsRead(unreadIds)}
-              style={{ ...sLargeB, height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', padding: '0 18px', cursor: 'pointer', fontFamily: 'inherit' }}
+              style={{ ...sLargeB, height: 44, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', padding: '0 18px', cursor: 'pointer', fontFamily: 'inherit' }}
             >
               Mark all as read
             </button>

@@ -70,7 +70,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
         aria-hidden={!open}
         style={{
           position: 'fixed', inset: 0,
-          background: 'rgba(9,9,9,0.32)',
+          background: 'var(--backdrop)',
           opacity: open ? 1 : 0,
           pointerEvents: open ? 'auto' : 'none',
           transition: 'opacity .2s ease',
@@ -85,8 +85,8 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
         style={{
           position: 'fixed', top: 0, left: 0, bottom: 0,
           width: 360, maxWidth: '85vw',
-          background: '#fff',
-          borderRight: '2px solid var(--ink)',
+          background: 'var(--bg)',
+          borderRight: '2px solid var(--strong)',
           transform: open ? 'translateX(0)' : 'translateX(-100%)',
           transition: 'transform .25s cubic-bezier(.4,0,.2,1)',
           zIndex: 91,
@@ -101,7 +101,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           borderBottom: '1px solid var(--line)',
           flexShrink: 0,
         }}>
-          <span style={{ fontWeight: 700, letterSpacing: '0.05em', color: 'var(--brand)', fontSize: 18 }}>
+          <span style={{ fontWeight: 700, letterSpacing: '0.05em', color: 'var(--brand-text)', fontSize: 18 }}>
             EOS CLOUD
           </span>
           <button

@@ -70,13 +70,13 @@ export type StatusKey =
 export const statusColor: Record<StatusKey, { fg: string; bg: string; dot: string }> = {
   'Confirmed':   { fg: 'var(--green)',       bg: 'var(--green-soft)',  dot: 'var(--green)'  },
   'In Progress': { fg: 'var(--blue)',        bg: 'var(--blue-soft)',   dot: 'var(--blue)'   },
-  'Pending':     { fg: '#8A6D1E',            bg: 'var(--amber-soft)',  dot: 'var(--amber)'  },
-  'On Hold':     { fg: '#A11616',            bg: 'var(--red-soft)',    dot: 'var(--red)'    },
+  'Pending':     { fg: 'var(--amber-text)',     bg: 'var(--amber-soft)',  dot: 'var(--amber)'  },
+  'On Hold':     { fg: 'var(--red-text)',            bg: 'var(--red-soft)',    dot: 'var(--red)'    },
   'Completed':   { fg: 'var(--green)',       bg: 'var(--green-soft)',  dot: 'var(--green)'  },
   'Delivered':   { fg: 'var(--green)',       bg: 'var(--green-soft)',  dot: 'var(--green)'  },
   'Invoiced':    { fg: 'var(--blue)',        bg: 'var(--blue-soft)',   dot: 'var(--blue)'   },
   'Archived':    { fg: 'var(--ink-2)',       bg: 'var(--line)',        dot: 'var(--ink-3)'  },
-  'Cancelled':   { fg: '#A11616',            bg: 'var(--red-soft)',    dot: 'var(--red)'    },
+  'Cancelled':   { fg: 'var(--red-text)',            bg: 'var(--red-soft)',    dot: 'var(--red)'    },
   'Draft':       { fg: 'var(--ink)',         bg: 'var(--line)',        dot: 'var(--ink-3)'  },
   'Submitted':   { fg: 'var(--blue)',        bg: 'var(--blue-soft)',   dot: 'var(--blue)'   },
 };

@@ -74,7 +74,7 @@ const btn = { ...sLargeB, height: 50, padding: '0 22px', borderRadius: 'var(--ra
 
 const CSS = `
   .eos-scn-stroke { transition: background .15s ease, color .15s ease; }
-  .eos-scn-stroke:hover { background: var(--ink) !important; color: #fff !important; }
+  .eos-scn-stroke:hover { background: var(--ink-fill) !important; color: #fff !important; }
   .eos-scn-primary { transition: background .15s ease; }
   .eos-scn-primary:hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
 `;
@@ -106,7 +106,7 @@ export default function ScenarioCardPage() {
       <main style={{ minHeight: `calc(100vh - ${size.navH}px)`, background: 'var(--bg-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8, boxSizing: 'border-box' }}>
         <article
           aria-label={`Scenario ${index + 1}: ${scenario.title}`}
-          style={{ width: 768, maxWidth: '100%', background: '#fff', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', padding: 18, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 12 }}
+          style={{ width: 768, maxWidth: '100%', background: 'var(--bg)', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)', padding: 18, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: 12 }}
         >
           <header style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -133,7 +133,7 @@ export default function ScenarioCardPage() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={label}>Items</div>
                 <button onClick={copyCodes} className="eos-scn-stroke"
-                  style={{ ...sBodyB, height: 30, padding: '0 12px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  style={{ ...sBodyB, height: 30, padding: '0 12px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>
                   {copied ? 'Copied' : 'Copy codes and features'}
                 </button>
               </div>
@@ -142,7 +142,7 @@ export default function ScenarioCardPage() {
                   <thead>
                     <tr>
                       {[{ h: 'Article code' }, { h: 'Feature string' }, { h: 'Product' }, { h: 'Qty', c: true }].map(({ h, c }) => (
-                        <th key={h} style={{ ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)', textAlign: c ? 'center' : 'left', padding: '0 14px', height: 30 }}>{h}</th>
+                        <th key={h} style={{ ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink-fill)', textAlign: c ? 'center' : 'left', padding: '0 14px', height: 30 }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -165,7 +165,7 @@ export default function ScenarioCardPage() {
             <section aria-label="File" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={label}>File</div>
               <a href={scenario.file.href} download className="eos-scn-stroke"
-                style={{ ...btn, height: 44, alignSelf: 'flex-start', border: '2px solid var(--ink)', background: '#fff', color: 'var(--ink)' }}>
+                style={{ ...btn, height: 44, alignSelf: 'flex-start', border: '2px solid var(--strong)', background: 'var(--bg)', color: 'var(--ink)' }}>
                 {scenario.file.label}
               </a>
               <span style={{ ...sBody, color: 'var(--ink-2)' }}>{scenario.file.note}</span>

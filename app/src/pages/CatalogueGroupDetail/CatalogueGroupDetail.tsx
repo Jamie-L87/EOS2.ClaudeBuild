@@ -63,7 +63,7 @@ function RowList({
                 <DateInput
                   value={row.goLiveDate ?? ''}
                   onChange={iso => onSetGoLiveDate(row.id, iso || null)}
-                  style={{ ...sBody, height: 30, border: '1px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 6px', fontFamily: 'inherit', fontSize: 12 }}
+                  style={{ ...sBody, height: 30, border: '1px solid var(--strong)', borderRadius: 'var(--radius)', padding: '0 6px', fontFamily: 'inherit', fontSize: 12 }}
                 />
               </label>
               <button
@@ -72,7 +72,7 @@ function RowList({
                 style={{
                   ...sBodyB,
                   height: 30,
-                  border: '1px solid var(--ink)',
+                  border: '1px solid var(--strong)',
                   borderRadius: 'var(--radius)',
                   background: 'var(--bg)',
                   color: 'var(--ink)',
@@ -174,7 +174,7 @@ export default function CatalogueGroupDetailPage() {
       <style>{`
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
-        .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
+        .eos-stroke-btn:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; border-color: var(--strong) !important; }
       `}</style>
 
       <TopNav onMenu={() => setNavOpen(true)} />
@@ -208,7 +208,7 @@ export default function CatalogueGroupDetailPage() {
               <input
                 value={name}
                 onChange={e => { setName(e.target.value); setError(null); }}
-                style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
+                style={{ ...sBody, width: '100%', height: 44, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', padding: '0 12px', marginTop: 8, fontFamily: 'inherit' }}
               />
               {error && <p style={{ ...sBody, color: 'var(--red)', marginTop: 10 }}>{error}</p>}
             </section>
@@ -241,7 +241,7 @@ export default function CatalogueGroupDetailPage() {
                       style={{
                         ...sBodyB,
                         height: 28,
-                        border: '1px solid var(--ink)',
+                        border: '1px solid var(--strong)',
                         borderRadius: 'var(--radius)',
                         background: 'var(--bg)',
                         color: 'var(--ink)',

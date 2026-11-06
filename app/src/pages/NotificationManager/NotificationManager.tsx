@@ -62,7 +62,7 @@ const inputStyle = {
   width: '100%',
   height: 44,
   boxSizing: 'border-box' as const,
-  border: '2px solid var(--ink)',
+  border: '2px solid var(--strong)',
   borderRadius: 'var(--radius)',
   padding: '0 12px',
   fontFamily: 'inherit',
@@ -84,7 +84,7 @@ function AudienceChip({ label, title, active, onClick }: { label: string; title?
         border: `2px solid ${active ? 'var(--brand)' : 'var(--ink)'}`,
         borderRadius: radius,
         background: active ? 'var(--brand)' : color.bg,
-        color: active ? color.bg : 'var(--ink)',
+        color: active ? '#fff' : 'var(--ink)',
         cursor: 'pointer',
         fontFamily: 'inherit',
       }}
@@ -106,7 +106,7 @@ function SegButtons<T extends string>({ value, options, onChange }: { value: T; 
             ...sBodyB,
             height: 44,
             padding: '0 16px',
-            border: '2px solid var(--ink)',
+            border: '2px solid var(--strong)',
             borderLeftWidth: i === 0 ? 2 : 1,
             borderRightWidth: i === options.length - 1 ? 2 : 1,
             borderRadius: 0,
@@ -115,7 +115,7 @@ function SegButtons<T extends string>({ value, options, onChange }: { value: T; 
             borderTopRightRadius: i === options.length - 1 ? radius : 0,
             borderBottomRightRadius: i === options.length - 1 ? radius : 0,
             background: value === o.id ? 'var(--brand)' : color.bg,
-            color: value === o.id ? color.bg : 'var(--ink)',
+            color: value === o.id ? '#fff' : 'var(--ink)',
             borderColor: value === o.id ? 'var(--brand)' : 'var(--ink)',
             cursor: 'pointer',
             fontFamily: 'inherit',
@@ -174,7 +174,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onCancel} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onCancel} />
       <div
         role="dialog"
         aria-modal="true"
@@ -183,7 +183,7 @@ function Composer({ initial, onCancel, onSave }: { initial: Draft; onCancel: () 
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 960, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 48px)',
           display: 'flex', flexDirection: 'column',
-          background: color.bg, border: '2px solid #000', borderRadius: radius, boxShadow: 'var(--shadow-pop)',
+          background: color.bg, border: '2px solid var(--modal-border)', borderRadius: radius, boxShadow: 'var(--shadow-pop)',
           animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
         }}
       >
@@ -378,7 +378,7 @@ export default function NotificationManagerPage() {
     setEditing(null);
   };
 
-  const th = { ...sBodyB, fontSize: 12.5, color: color.bg, background: 'var(--ink)', textAlign: 'left' as const, padding: '0 16px', height: 44 };
+  const th = { ...sBodyB, fontSize: 12.5, color: 'var(--on-ink)', background: 'var(--ink-fill)', textAlign: 'left' as const, padding: '0 16px', height: 44 };
   const td = { ...sBody, padding: '0 16px', height: size.rowH ?? 50, borderBottom: '1px solid var(--line)', color: 'var(--ink)' };
 
   return (
@@ -386,7 +386,7 @@ export default function NotificationManagerPage() {
       <style>{`
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
-        .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
+        .eos-stroke-btn:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; border-color: var(--strong) !important; }
         .eos-row:hover { background: var(--bg-soft); }
       `}</style>
       <NotificationBodyStyles />
@@ -467,7 +467,7 @@ export default function NotificationManagerPage() {
       </main>
 
       <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: color.bg }}>
-        <span style={{ ...sLargeB, color: 'var(--brand)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+        <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
         <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
         <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
       </footer>
@@ -486,9 +486,9 @@ export default function NotificationManagerPage() {
       />
 
       {toast && (
-        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: color.bg, padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: 'var(--on-ink)', padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
           <span>{toast}</span>
-          <button onClick={() => setToast(null)} style={{ marginLeft: 10, border: 'none', background: 'transparent', color: color.bg, cursor: 'pointer' }}>
+          <button onClick={() => setToast(null)} style={{ marginLeft: 10, border: 'none', background: 'transparent', color: 'var(--on-ink)', cursor: 'pointer' }}>
             <IconClose size={13} />
           </button>
         </div>
