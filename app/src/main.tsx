@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import './tokens.css';
+import { captureVariantFromUrl } from './hooks/useVariant';
 
 import ImportPage      from './pages/Import/Import';
 import OrderListPage   from './pages/OrderList/OrderList';
@@ -26,6 +27,8 @@ const router = createBrowserRouter([
   { path: '/scenarios/:n', element: <ScenarioCardPage /> },
   { path: '/admin/preferences', element: <Navigate to="/preferences?tab=manage" replace /> },
 ]);
+
+captureVariantFromUrl();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
