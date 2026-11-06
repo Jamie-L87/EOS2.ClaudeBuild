@@ -1,3 +1,6 @@
+import { convertPrice } from './currency';
+import type { PriceCurrency } from './currency';
+
 export interface SuperChild {
   articleCode: string;
   featureString: string;
@@ -124,22 +127,24 @@ export const SUPER_BOM: Record<string, SuperBomEntry> = {
   },
 };
 
-export function lookupSuper(articleCode: string) {
+/** Super products are priced in the BOM currency; `currency` re-expresses them in the account's list currency. */
+export function lookupSuper(articleCode: string, currency: PriceCurrency = 'GBP') {
   const def = SUPER_BOM[articleCode];
   if (!def) return null;
   const children: SuperChild[] = def.children.map((c, i) => ({
     ...c,
+    listPrice: convertPrice(c.listPrice ?? 0, def.currency, currency),
     id: `c-${articleCode}-${i}-${Math.random().toString(36).slice(2, 7)}`,
     qtyShipped: 0,
-    currency: def.currency,
+    currency,
   }));
   return {
     isSuper: true,
     productName: def.productName,
     productLine: def.productLine,
     plc: def.plc,
-    currency: def.currency,
+    currency,
     children,
-    listPrice: def.children.reduce((s, c) => s + (c.listPrice ?? 0) * (c.qty ?? 1), 0),
+    listPrice: children.reduce((s, c) => s + (c.listPrice ?? 0) * (c.qty ?? 1), 0),
   };
 }

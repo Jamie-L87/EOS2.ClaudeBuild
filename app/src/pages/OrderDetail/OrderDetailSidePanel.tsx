@@ -7,6 +7,8 @@ import {
   IconCopy, IconTrash, IconChevronDown, IconCheck,
 } from '../../components/Icons';
 import { validateItem } from '../../services/validation';
+import { getPricingCurrency } from '../../services/accountStore';
+import { pricingCurrency } from '../../data/currency';
 import type { SuperChild } from '../../data/superProducts';
 import { loadDetail, upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
@@ -640,7 +642,7 @@ function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onD
       const sp = v.indexOf(' ');
       const articleCode   = sp > 0 ? v.slice(0, sp) : v;
       const featureString = sp > 0 ? v.slice(sp + 1) : '';
-      const result = validateItem(articleCode, featureString);
+      const result = validateItem(articleCode, featureString, pricingCurrency(currency));
       onUpdate({
         articleCode, featureString,
         productName: result.valid ? result.productName : null,
@@ -1059,21 +1061,24 @@ function hydrateOrder(o: OrderData): OrderData {
 /*  DEFAULT DEMO ORDER                                                  */
 /* ------------------------------------------------------------------ */
 function buildDemoOrder(orderNo: string): OrderData {
-  const atlas = validateItem('UPXSGA4NN22PPNU.0814RAM', 'X1 G1 G1');
+  const ccy = getPricingCurrency();
+  const aeron = validateItem('AER1B23DW', 'ALP G1 G1 G1 BB BK 23103', ccy);
+  const sayl = validateItem('AS1EA33AA', 'N2 BK BB BK BK 7O005', ccy);
+  const atlas = validateItem('UPXSGA4NN22PPNU.0814RAM', 'X1 G1 G1', ccy);
   return {
     orderNo,
     status: 'Draft',
-    currency: 'EUR',
+    currency: ccy,
     orderPlaced: new Date().toISOString().slice(0, 10),
     reference: null, customer: null, purchaseOrder: null,
     lines: [
-      { id: 'demo-1', articleCode: 'AER1B23DW', featureString: 'ALP G1 G1 G1 BB BK 23103', productName: 'AERON', productLine: 'AERON', qty: 2,  listPrice: 2283,  discount: 10, currency: 'EUR', validationStatus: 'passed' },
-      { id: 'demo-2', articleCode: 'AS1EA33AA', featureString: 'N2 BK BB BK BK 7O005',      productName: 'SAYL',  productLine: 'SAYL',  qty: 4,  listPrice: 901,   discount: 0,  currency: 'EUR', validationStatus: 'passed' },
+      { id: 'demo-1', articleCode: 'AER1B23DW', featureString: 'ALP G1 G1 G1 BB BK 23103', productName: 'AERON', productLine: 'AERON', qty: 2,  listPrice: aeron.price ?? 0,  discount: 10, currency: ccy, validationStatus: 'passed' },
+      { id: 'demo-2', articleCode: 'AS1EA33AA', featureString: 'N2 BK BB BK BK 7O005',      productName: 'SAYL',  productLine: 'SAYL',  qty: 4,  listPrice: sayl.price ?? 0,   discount: 0,  currency: ccy, validationStatus: 'passed' },
       {
         id: 'demo-3',
         articleCode: 'UPXSGA4NN22PPNU.0814RAM', featureString: 'X1 G1 G1',
         productName: atlas.productName ?? 'Atlas Sit-to-Stand Desk', productLine: atlas.productLine,
-        qty: 1, listPrice: atlas.price ?? 0, discount: 0, currency: 'GBP',
+        qty: 1, listPrice: atlas.price ?? 0, discount: 0, currency: ccy,
         validationStatus: 'passed', isSuper: true,
         superChildren: atlas.superChildren ?? [],
       },

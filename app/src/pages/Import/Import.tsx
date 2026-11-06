@@ -23,6 +23,9 @@ type ExportFormat = 'obx' | 'csv' | 'xlsx' | 'json';
 import type { ParsedItem, SheetData, BasketItem, ExtraFieldKey } from '../../services/parsers';
 import type { SuperChild } from '../../data/superProducts';
 import { upsert } from '../../services/orderStore';
+import { validateItem } from '../../services/validation';
+import type { ValidationResult } from '../../services/validation';
+import { ACCOUNT_CHANGED_EVENT, getPricingCurrency } from '../../services/accountStore';
 import type { StoredOrder } from '../../services/orderStore';
 import { useVariant } from '../../hooks/useVariant';
 
@@ -490,6 +493,24 @@ function ColumnMapper({ sheetData, onConfirm, onCancel }: {
   );
 }
 
+/** Fold a validation result (status, product, list price in the account currency) into a basket item. */
+function applyValidation(i: BasketItem, result: ValidationResult): BasketItem {
+  const price = result.price || 0;
+  return {
+    ...i,
+    validationStatus: result.valid ? 'passed' : 'failed',
+    validationError: result.error,
+    productName: result.valid ? result.productName : null,
+    productLine: result.productLine || null,
+    listPrice: price,
+    currency: result.currency || getPricingCurrency(),
+    isSuper: !!result.isSuper,
+    superChildren: result.superChildren || null,
+    ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
+    ...(result.plc ? { plc: result.plc } : {}),
+  };
+}
+
 /* ------------------------------------------------------------------ */
 /*  BASKET HOOK                                                         */
 /* ------------------------------------------------------------------ */
@@ -513,6 +534,17 @@ function useBasket() {
     }
   }, [items]);
 
+  // Switching dealer account switches the list currency, so reprice what is already in the basket.
+  useEffect(() => {
+    const reprice = () => {
+      const ccy = getPricingCurrency();
+      setItems(cur => cur.map(i =>
+        i.validationStatus === 'passed' && i.currency !== ccy ? applyValidation(i, validateItem(i.articleCode, i.featureString, ccy)) : i));
+    };
+    window.addEventListener(ACCOUNT_CHANGED_EVENT, reprice);
+    return () => window.removeEventListener(ACCOUNT_CHANGED_EVENT, reprice);
+  }, []);
+
   const addItems = useCallback((incoming: ParsedItem[]) => {
     const newItems: BasketItem[] = incoming
       .map(({ articleCode, featureString = '', qty = 1, filePrice, fileCurrency }) => {
@@ -523,7 +555,7 @@ function useBasket() {
           featureString: (featureString || '').trim(),
           qty: Math.min(MAX_QTY, Math.max(1, parsedQty)),
           qtyCapped: parsedQty > MAX_QTY,
-          productName: null, productLine: null, listPrice: 0, currency: 'EUR',
+          productName: null, productLine: null, listPrice: 0, currency: getPricingCurrency(),
           validationStatus: 'pending' as const, validationError: null,
           ...(filePrice !== undefined ? { filePrice } : {}),
           ...(fileCurrency ? { fileCurrency } : {}),
@@ -537,20 +569,7 @@ function useBasket() {
         validateBasketItems(newItems, ({ id, result }) => {
           setItems(cur => cur.map(i => {
             if (i.id !== id) return i;
-            const price = result.price || 0;
-            return {
-              ...i,
-              validationStatus: result.valid ? 'passed' : 'failed',
-              validationError: result.error,
-              productName: result.valid ? result.productName : null,
-              productLine: result.productLine || null,
-              listPrice: price,
-              currency: result.currency || 'EUR',
-              isSuper: !!result.isSuper,
-              superChildren: result.superChildren || null,
-              ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
-              ...(result.plc ? { plc: result.plc } : {}),
-            };
+            return applyValidation(i, result);
           }));
         });
       }, 0);
@@ -598,20 +617,7 @@ function useBasket() {
         validateBasketItems([it], ({ id: vid, result }) => {
           setItems(cur => cur.map(i => {
             if (i.id !== vid) return i;
-            const price = result.price || 0;
-            return {
-              ...i,
-              validationStatus: result.valid ? 'passed' : 'failed',
-              validationError: result.error,
-              productName: result.valid ? result.productName : null,
-              productLine: result.productLine || null,
-              listPrice: price,
-              currency: result.currency || 'EUR',
-              isSuper: !!result.isSuper,
-              superChildren: result.superChildren || null,
-              ...(result.valid ? mockEnrich(i.articleCode, price, result.productLine, result.productName) : {}),
-              ...(result.plc ? { plc: result.plc } : {}),
-            };
+            return applyValidation(i, result);
           }));
         });
       }, 0);
@@ -1686,7 +1692,7 @@ export default function ImportPage() {
     const order = {
       orderNo: draftOrderNo,
       status: 'Draft',
-      currency: basket.items[0]?.currency || 'EUR',
+      currency: basket.items[0]?.currency || getPricingCurrency(),
       orderPlaced: new Date().toISOString().slice(0, 10),
       reference: null, customer: null, purchaseOrder: null, contract: selectedContractId || null,
       pricingDate: pricingDate || null,
