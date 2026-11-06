@@ -7,6 +7,8 @@ import {
   IconCopy, IconTrash, IconEdit, IconChevronDown,
 } from '../../components/Icons';
 import { validateItem } from '../../services/validation';
+import { COUNTRIES } from '../../data/countries';
+import { missingDelivery } from '../../data/deliveryAddress';
 import { getPricingCurrency } from '../../services/accountStore';
 import { pricingCurrency } from '../../data/currency';
 import type { SuperChild } from '../../data/superProducts';
@@ -63,6 +65,7 @@ interface OrderData {
   deliveryCity?: string | null;
   deliveryCounty?: string | null;
   deliveryPostcode?: string | null;
+  deliveryCountry?: string | null;
   contactName?: string | null;
   contactEmail?: string | null;
   contactTelephone?: string | null;
@@ -194,7 +197,7 @@ function HeaderField({ label, value, placeholder, readonly, badge, required, onC
 /*  HEADER SELECT FIELD                                                 */
 /* ------------------------------------------------------------------ */
 function HeaderSelectField({ label, value, options, onChange }: {
-  label: string; value: string | null; options: string[];
+  label: string; value: string | null; options: Array<string | { value: string; label: string }>;
   onChange?: (v: string | null) => void;
 }) {
   return (
@@ -208,7 +211,7 @@ function HeaderSelectField({ label, value, options, onChange }: {
           style={{ ...sBodyB, color: value ? 'var(--ink)' : 'var(--ink-3)', border: 'none', background: 'transparent', padding: 0, paddingRight: 20, cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none', fontFamily: 'inherit', outline: 'none' }}
         >
           <option value="">Not set</option>
-          {options.map(o => <option key={o} value={o}>{o}</option>)}
+          {options.map(o => { const opt = typeof o === 'string' ? { value: o, label: o } : o; return <option key={opt.value} value={opt.value}>{opt.label}</option>; })}
         </select>
         <span style={{ position: 'absolute', right: 0, pointerEvents: 'none', color: 'var(--ink-3)', display: 'flex', alignItems: 'center' }}>
           <IconChevronDown size={12} stroke={2} />
@@ -280,7 +283,7 @@ function ensureMaps(): Promise<void> {
 /* ------------------------------------------------------------------ */
 /*  DELIVERY ADDRESS LOOKUP                                             */
 /* ------------------------------------------------------------------ */
-interface DeliveryAddress { companyName: string; line1: string; line2: string; line3: string; line4: string; city: string; county: string; postcode: string; }
+interface DeliveryAddress { companyName: string; line1: string; line2: string; line3: string; line4: string; city: string; county: string; postcode: string; countryCode: string; }
 
 function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => void }) {
   const inputRef  = useRef<HTMLInputElement>(null);
@@ -308,6 +311,8 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
       const place = ac.getPlace();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const get = (type: string): string => (place.address_components as any[])?.find((c) => c.types.includes(type))?.long_name ?? '';
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const countryCode = (place.address_components as any[])?.find((c) => c.types.includes('country'))?.short_name ?? '';
       const streetNum = get('street_number');
       const route     = get('route');
       onFillRef.current({
@@ -319,6 +324,7 @@ function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => 
         city:        get('postal_town') || get('locality') || get('administrative_area_level_2'),
         county:      get('administrative_area_level_2') || get('administrative_area_level_1'),
         postcode:    get('postal_code'),
+        countryCode,
       });
       if (inputRef.current) inputRef.current.value = '';
     });
@@ -403,6 +409,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
                 onUpdateMeta('deliveryCity',     addr.city        || null);
                 onUpdateMeta('deliveryCounty',   addr.county      || null);
                 onUpdateMeta('deliveryPostcode', addr.postcode    || null);
+                if (COUNTRIES.some(c => c.code === addr.countryCode)) onUpdateMeta('deliveryCountry', addr.countryCode);
               }} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
@@ -415,6 +422,7 @@ function OrderHeader({ order, total, onUpdateMeta }: {
               <HeaderField label="City"           value={order.deliveryCity ?? null}     placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCity', v)} />
               <HeaderField label="County"         value={order.deliveryCounty ?? null}   placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
               <HeaderField label="Postcode"       value={order.deliveryPostcode ?? null} placeholder="Not set" onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+              <HeaderSelectField label="Country" value={order.deliveryCountry ?? null} options={COUNTRIES.map(c => ({ value: c.code, label: c.name }))} onChange={(v) => onUpdateMeta('deliveryCountry', v)} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Contact</div>
@@ -1014,7 +1022,7 @@ function toStored(o: OrderData): StoredOrder {
     companyName: o.companyName,
     deliveryLine1: o.deliveryLine1, deliveryLine2: o.deliveryLine2,
     deliveryLine3: o.deliveryLine3, deliveryLine4: o.deliveryLine4,
-    deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode,
+    deliveryCity: o.deliveryCity, deliveryCounty: o.deliveryCounty, deliveryPostcode: o.deliveryPostcode, deliveryCountry: o.deliveryCountry,
     contactName: o.contactName, contactEmail: o.contactEmail, contactTelephone: o.contactTelephone,
     pricingDate: o.pricingDate, timedDeliveries: o.timedDeliveries,
   };
@@ -1214,7 +1222,8 @@ export default function OrderDetailPage() {
     const out: string[] = [];
     if (!order.reference)     out.push('Reference');
     if (!order.purchaseOrder) out.push('Purchase Order');
-    if (!order.deliveryLine1) out.push('Delivery Address');
+    const del = missingDelivery(order);
+    if (del.length) out.push(`Delivery Address (${del.map(d => d.label).join(', ')})`);
     if (order.lines.some(l => l.validationStatus === 'passed' && !l.promiseDate)) out.push('Promise Dates');
     return out;
   }, [order]);

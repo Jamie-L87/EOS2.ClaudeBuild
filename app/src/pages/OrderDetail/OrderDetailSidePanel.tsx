@@ -13,7 +13,8 @@ import type { SuperChild } from '../../data/superProducts';
 import { loadDetail, upsert } from '../../services/orderStore';
 import type { StoredOrder } from '../../services/orderStore';
 import { CONTRACTS, PRODUCT_LINE_PLCS, getContractDiscount } from '../../data/contracts';
-import { COUNTRIES, postcodeRequiredFor } from '../../data/countries';
+import { COUNTRIES } from '../../data/countries';
+import { missingDelivery } from '../../data/deliveryAddress';
 import { computeDeliveryCharges, formatDeliveryDate, mockLeadTime } from '../../data/delivery';
 import DeliveryModal from './DeliveryModal';
 import { t, size } from '../../tokens';
@@ -357,16 +358,6 @@ function SubmitChecklist({ items }: { items: ChecklistItem[] }) {
   );
 }
 
-/** What is still missing from the delivery address, with the field to jump to. */
-function missingDelivery(o: OrderData): Array<{ label: string; fieldId: string }> {
-  const out: Array<{ label: string; fieldId: string }> = [];
-  if (!o.deliveryLine1) out.push({ label: 'address line 1', fieldId: 'op-delivery-line1' });
-  if (!o.deliveryCountry) out.push({ label: 'country', fieldId: 'op-delivery-country' });
-  if (!o.deliveryCounty) out.push({ label: 'region', fieldId: 'op-delivery-county' });
-  if (postcodeRequiredFor(o.deliveryCountry) && !o.deliveryPostcode) out.push({ label: 'postcode', fieldId: 'op-delivery-postcode' });
-  return out;
-}
-
 function OrderDetailsPanel({ order, onUpdateMeta, checklist, deliveryOpen, onToggleDelivery, onClose }: {
   order: OrderData; onUpdateMeta: (k: keyof OrderData, v: string | null) => void;
   checklist: ChecklistItem[]; deliveryOpen: boolean; onToggleDelivery: () => void; onClose: () => void;
@@ -413,7 +404,7 @@ function OrderDetailsPanel({ order, onUpdateMeta, checklist, deliveryOpen, onTog
         <PanelInput id="op-delivery-line4"   label="Address Line 4" value={order.deliveryLine4 ?? null}    onChange={(v) => onUpdateMeta('deliveryLine4', v)} />
         <PanelInput id="op-delivery-city"    label="City"           value={order.deliveryCity ?? null}     onChange={(v) => onUpdateMeta('deliveryCity', v)} />
         <PanelInput id="op-delivery-county"  label="Region / State / County" required value={order.deliveryCounty ?? null} onChange={(v) => onUpdateMeta('deliveryCounty', v)} />
-        <PanelInput id="op-delivery-postcode" label="Postcode" required={postcodeRequiredFor(order.deliveryCountry)} value={order.deliveryPostcode ?? null} onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
+        <PanelInput id="op-delivery-postcode" label="Postcode" required value={order.deliveryPostcode ?? null} onChange={(v) => onUpdateMeta('deliveryPostcode', v)} />
         <PanelSelect id="op-delivery-country" label="Country" required value={order.deliveryCountry ?? null} options={COUNTRIES.map(c => ({ value: c.code, label: c.name }))} onChange={(v) => onUpdateMeta('deliveryCountry', v)} />
       </PanelSection>
 
