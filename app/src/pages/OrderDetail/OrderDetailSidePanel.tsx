@@ -440,7 +440,7 @@ function TabStrip({ active, onChange, right }: { active: DetailTab; onChange: (t
         const isActive = tab.id === active;
         return (
           <button key={tab.id} onClick={() => onChange(tab.id)} className="om-tab-strip" data-active={isActive}
-            style={{ ...sLargeB, border: 'none', background: 'transparent', cursor: 'pointer', padding: '14px 24px', color: isActive ? 'var(--brand)' : 'var(--ink-2)', borderBottom: isActive ? '2px solid var(--brand)' : '2px solid transparent', marginBottom: -1, transition: 'color .15s ease, border-color .15s ease', fontFamily: 'inherit' }}>
+            style={{ ...sLargeB, border: 'none', background: 'transparent', cursor: 'pointer', padding: '14px 24px', color: isActive ? 'var(--brand-text)' : 'var(--ink-2)', borderBottom: isActive ? '2px solid var(--brand)' : '2px solid transparent', marginBottom: -1, transition: 'color .15s ease, border-color .15s ease', fontFamily: 'inherit' }}>
             {tab.label}
           </button>
         );
@@ -495,12 +495,12 @@ function DragHandle() {
 /* ------------------------------------------------------------------ */
 function QtyStepper({ qty, onChange }: { qty: number; onChange: (v: number) => void }) {
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', height: 32 }}>
+    <div style={{ display: 'inline-flex', alignItems: 'center', border: '1px solid var(--control-border)', borderRadius: 'var(--radius)', overflow: 'hidden', height: 32 }}>
       <button onClick={() => onChange(qty - 1)} disabled={qty <= 1}
         style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>−</button>
       <input value={qty} type="number" min={1}
         onChange={(e) => onChange(Math.max(1, parseInt(e.target.value, 10) || 1))}
-        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--line)', borderRight: '1px solid var(--line)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
+        style={{ width: 40, height: 30, border: 'none', borderLeft: '1px solid var(--control-border)', borderRight: '1px solid var(--control-border)', textAlign: 'center', outline: 'none', ...sBodyB, color: 'var(--ink)', background: 'var(--bg)', fontFamily: 'inherit' }}
         aria-label="Quantity" />
       <button onClick={() => onChange(qty + 1)}
         style={{ width: 28, height: 30, border: 'none', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', ...sLargeB, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>+</button>
@@ -693,7 +693,7 @@ function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onD
           </button>
         )}
         <span style={{ ...sBody, color: 'var(--ink-2)', fontVariantNumeric: 'tabular-nums' }}>{lineNum}</span>
-        {isInvalid && <span style={{ width: 14, height: 14, borderRadius: 7, background: 'var(--red)', color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={9} stroke={3} /></span>}
+        {isInvalid && <span style={{ width: 14, height: 14, borderRadius: 7, background: 'var(--red)', color: 'var(--on-red)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}><IconClose size={9} stroke={3} /></span>}
       </div>
 
       <div style={{ padding: '10px 16px', minWidth: 0 }}>
@@ -757,7 +757,7 @@ function LineRow({ line, lineNum, currency, isDragging, isOver, onDragStart, onD
       <div style={{ padding: '0 12px' }}>
         {isInvalid ? <span style={{ ...sBody, color: 'var(--ink-3)' }}>—</span> : (
           <button onClick={onOpenDelivery} className="om-promise-btn"
-            style={{ ...sBody, border: 'none', background: 'transparent', padding: 0, cursor: 'pointer', fontFamily: 'inherit', color: line.promiseDate ? 'var(--ink)' : 'var(--brand)', textDecoration: line.promiseDate ? 'none' : 'underline', textUnderlineOffset: 3 }}>
+            style={{ ...sBody, border: 'none', background: 'transparent', padding: 0, cursor: 'pointer', fontFamily: 'inherit', color: line.promiseDate ? 'var(--ink)' : 'var(--brand-text)', textDecoration: line.promiseDate ? 'none' : 'underline', textUnderlineOffset: 3 }}>
             {line.promiseDate ? formatDeliveryDate(line.promiseDate) : 'Set date'}
           </button>
         )}
@@ -865,7 +865,7 @@ function OrderLinesTable({ lines, currency, query, setQuery, invalidCount, undat
         <button onClick={onOpenDelivery} className="om-stroke-btn"
           style={{ ...sLargeB, height: 50, padding: '0 20px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 10, transition: 'background .15s ease, color .15s ease', fontFamily: 'inherit' }}>
           <span style={{ whiteSpace: 'nowrap' }}>Promise Dates &amp; Delivery</span>
-          {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
+          {undatedCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: 'var(--on-red)', borderRadius: 999, padding: '2px 7px' }}>{undatedCount}</span>}
         </button>
       </div>
 
@@ -1301,7 +1301,7 @@ export default function OrderDetailSidePanelPage() {
                 <button onClick={() => setPanelOpen(true)} className="om-stroke-btn"
                   style={{ ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'inherit' }}>
                   Show order details
-                  {todoCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: '#fff', borderRadius: 999, padding: '2px 7px' }}>{todoCount}</span>}
+                  {todoCount > 0 && <span style={{ ...sBodyB, fontSize: 11, background: 'var(--red)', color: 'var(--on-red)', borderRadius: 999, padding: '2px 7px' }}>{todoCount}</span>}
                 </button>
               ) : undefined
             }

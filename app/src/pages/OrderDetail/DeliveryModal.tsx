@@ -141,7 +141,7 @@ export default function DeliveryModal({ mode = 'edit', lines, currency, orderPla
                 Showing {visible.length} of {dateable.length} line{dateable.length !== 1 ? 's' : ''}. The date buttons above apply to these lines only.
               </div>
             )}
-            {bulkNote && <div role="status" style={{ ...sBody, color: 'var(--yellow-60)', background: 'var(--amber-soft)', borderRadius: 'var(--radius)', padding: '8px 12px', marginBottom: 12 }}>{bulkNote}</div>}
+            {bulkNote && <div role="status" style={{ ...sBody, color: 'var(--warn-text)', background: 'var(--amber-soft)', borderRadius: 'var(--radius)', padding: '8px 12px', marginBottom: 12 }}>{bulkNote}</div>}
 
             <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>

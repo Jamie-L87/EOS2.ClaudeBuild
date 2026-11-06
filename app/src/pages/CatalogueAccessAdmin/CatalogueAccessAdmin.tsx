@@ -410,7 +410,7 @@ export default function CatalogueAccessAdminPage() {
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
         .eos-stroke-btn:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; border-color: var(--strong) !important; }
         .eos-row:hover { background: var(--bg-soft); }
-        .eos-tab-btn[data-active="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
+        .eos-tab-btn[data-active="true"] { background: var(--brand); color: #fff; border-color: var(--brand-text); }
       `}</style>
 
       <TopNav onMenu={() => setNavOpen(true)} />

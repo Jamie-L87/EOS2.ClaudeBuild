@@ -150,7 +150,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
                   border: active ? '2px solid var(--brand)' : '2px solid transparent',
                   background: active ? 'var(--brand-soft)' : 'transparent',
                   textDecoration: 'none',
-                  color: active ? 'var(--brand)' : 'var(--ink)',
+                  color: active ? 'var(--brand-text)' : 'var(--ink)',
                   transition: 'background .15s ease, color .15s ease, border-color .15s ease',
                   cursor: 'pointer',
                   width: '100%',
@@ -172,7 +172,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
                   <span style={{ display: 'block', fontWeight: 700, letterSpacing: '0.010em', fontSize: 16, lineHeight: 1.2 }}>
                     {item.label}
                   </span>
-                  <span style={{ display: 'block', fontWeight: 500, letterSpacing: '0.010em', fontSize: 13, lineHeight: 1.3, color: active ? 'var(--brand)' : 'var(--ink-2)', marginTop: 2 }}>
+                  <span style={{ display: 'block', fontWeight: 500, letterSpacing: '0.010em', fontSize: 13, lineHeight: 1.3, color: active ? 'var(--brand-text)' : 'var(--ink-2)', marginTop: 2 }}>
                     {item.sub}
                   </span>
                 </span>
