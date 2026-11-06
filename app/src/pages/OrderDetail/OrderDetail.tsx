@@ -1222,6 +1222,7 @@ export default function OrderDetailPage() {
     const out: string[] = [];
     if (!order.reference)     out.push('Reference');
     if (!order.purchaseOrder) out.push('Purchase Order');
+    if (!order.contract)      out.push('Contract');
     const del = missingDelivery(order);
     if (del.length) out.push(`Delivery Address (${del.map(d => d.label).join(', ')})`);
     if (order.lines.some(l => l.validationStatus === 'passed' && !l.promiseDate)) out.push('Promise Dates');
