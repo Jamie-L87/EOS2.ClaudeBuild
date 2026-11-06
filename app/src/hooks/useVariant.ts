@@ -14,13 +14,35 @@ function writeSticky(id: string, value: Variant): void {
   try { sessionStorage.setItem(storageKey(id), value); } catch { /* ignore */ }
 }
 
+function variantFromUrl(def: VariantDef): Variant | null {
+  const active = new URLSearchParams(window.location.search).get('variant');
+  return active === def.id ? 'b'
+    : active === `${def.id}-a` ? 'a'
+    : def.extra?.c && active === def.extra.c ? 'c'
+    : null;
+}
+
+/**
+ * Remember a ?variant= choice from whichever page the session starts on (Import, a scenario
+ * card, the order list...). Called once at startup, so a facilitator can open any link with
+ * the param and the choice is already set by the time the order page loads.
+ */
+export function captureVariantFromUrl(): void {
+  for (const def of Object.values(VARIANTS) as VariantDef[]) {
+    if (!def.sticky) continue;
+    const fromUrl = variantFromUrl(def);
+    if (fromUrl) writeSticky(def.id, fromUrl);
+  }
+}
+
 /**
  * Returns the active variant ('a', 'b' or 'c') for a given experiment key.
  *
  * Variant B is active when the URL contains ?variant=<id> matching the experiment,
  * and C when it contains the experiment's extra id. ?variant=<id>-a forces A.
  * Falls back to the experiment's default when no matching param is present.
- * Experiments marked sticky remember the last choice for the browser session.
+ * Experiments marked sticky remember the last choice for the browser session
+ * (see captureVariantFromUrl for setting it from any page).
  *
  * Usage:
  *   const variant = useVariant('exportPreview');
@@ -28,14 +50,8 @@ function writeSticky(id: string, value: Variant): void {
  */
 export function useVariant(key: VariantKey): Variant {
   return useMemo(() => {
-    const params = new URLSearchParams(window.location.search);
-    const active = params.get('variant');
     const def: VariantDef = VARIANTS[key];
-    const fromUrl: Variant | null =
-      active === def.id ? 'b'
-      : active === `${def.id}-a` ? 'a'
-      : def.extra?.c && active === def.extra.c ? 'c'
-      : null;
+    const fromUrl = variantFromUrl(def);
     if (def.sticky) {
       if (fromUrl) { writeSticky(def.id, fromUrl); return fromUrl; }
       return readSticky(def.id) ?? def.default;
