@@ -15,9 +15,9 @@ function money(n: number, c: string) {
   return (CCY[c] ?? c + ' ') + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-const th = { ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink)', textAlign: 'left' as const, padding: '0 14px', height: 40, whiteSpace: 'nowrap' as const };
+const th = { ...sBodyB, fontSize: 12.5, color: '#fff', background: 'var(--ink-fill)', textAlign: 'left' as const, padding: '0 14px', height: 40, whiteSpace: 'nowrap' as const };
 const td = { ...sBody, padding: '10px 14px', borderTop: '1px solid var(--line)', color: 'var(--ink)', verticalAlign: 'middle' as const };
-const dateInput = { ...sBody, height: 36, boxSizing: 'border-box' as const, padding: '0 8px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', fontFamily: 'inherit' };
+const dateInput = { ...sBody, height: 36, boxSizing: 'border-box' as const, padding: '0 8px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', fontFamily: 'inherit' };
 
 export default function DeliveryModal({ mode = 'edit', lines, currency, orderPlaced, linesTotal, timedDeliveries, onSetPromiseDate, onToggleTimed, onSubmit, onClose }: {
   /** 'submit' is the final step before an order is sent: the user must date every line, then submits from here. */
@@ -93,18 +93,18 @@ export default function DeliveryModal({ mode = 'edit', lines, currency, orderPla
     setBulkNote(clamped > 0 ? `${clamped} line${clamped !== 1 ? 's' : ''} can't arrive that early and ${clamped !== 1 ? 'were' : 'was'} set to ${clamped !== 1 ? 'their' : 'its'} earliest date.` : null);
   };
 
-  const btn = { ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const };
+  const btn = { ...sBodyB, height: 36, padding: '0 14px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' as const };
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onClose} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onClose} />
       <div
         role="dialog" aria-modal="true" aria-label={mode === 'submit' ? 'Order submission' : 'Promise dates and delivery charges'}
         style={{
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 1040, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 48px)',
           display: 'flex', flexDirection: 'column',
-          background: '#fff', border: '2px solid #000', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
+          background: 'var(--bg)', border: '2px solid var(--modal-border)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
           animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
         }}
       >
@@ -250,7 +250,7 @@ export default function DeliveryModal({ mode = 'edit', lines, currency, orderPla
           {mode === 'submit' ? (
             <>
               {undated > 0 && <span style={{ ...sBody, color: 'var(--amber)', marginRight: 'auto' }}>Give every line a promise date to submit.</span>}
-              <button onClick={onClose} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: '#fff', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>Cancel</button>
+              <button onClick={onClose} className="om-stroke-btn" style={{ ...sLargeB, height: 50, padding: '0 22px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}>Cancel</button>
               <button onClick={onSubmit} disabled={undated > 0 || dateable.length === 0} className="om-primary-btn"
                 style={{ ...sLargeB, height: 50, padding: '0 28px', border: `2px solid ${undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)'}`, borderRadius: 'var(--radius)', background: undated === 0 && dateable.length > 0 ? 'var(--brand)' : 'var(--line)', color: undated === 0 && dateable.length > 0 ? '#fff' : 'var(--ink-3)', cursor: undated === 0 && dateable.length > 0 ? 'pointer' : 'not-allowed', fontFamily: 'inherit' }}>
                 Submit Order

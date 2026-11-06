@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import './tokens.css';
 import { captureVariantFromUrl } from './hooks/useVariant';
+import { initTheme } from './services/theme';
 
 import ImportPage      from './pages/Import/Import';
 import OrderListPage   from './pages/OrderList/OrderList';
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
 ]);
 
 captureVariantFromUrl();
+initTheme();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

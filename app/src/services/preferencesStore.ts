@@ -8,6 +8,9 @@ import {
 const DEFINITIONS_KEY = 'eos-preference-definitions:v1';
 const USER_VALUES_KEY = 'eos-user-preferences:v1';
 
+/** Fired after the user's own preference values change, so things like the theme can react. */
+export const PREFERENCES_CHANGED_EVENT = 'eos-preferences-changed';
+
 function read<T>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
@@ -41,11 +44,13 @@ export function loadUserPreferences(): UserPreferenceValues {
 /** POST /api/user-preferences - replaces the stored values for each supplied preference code. */
 export function saveUserPreferences(values: UserPreferenceValues): void {
   localStorage.setItem(USER_VALUES_KEY, JSON.stringify({ ...loadUserPreferences(), ...values }));
+  window.dispatchEvent(new Event(PREFERENCES_CHANGED_EVENT));
 }
 
 /** DELETE /api/user-preferences/{preferenceCode} */
 export function resetUserPreference(code: string): UserPreferenceValues {
   const { [code]: _removed, ...rest } = loadUserPreferences();
   localStorage.setItem(USER_VALUES_KEY, JSON.stringify(rest));
+  window.dispatchEvent(new Event(PREFERENCES_CHANGED_EVENT));
   return rest;
 }

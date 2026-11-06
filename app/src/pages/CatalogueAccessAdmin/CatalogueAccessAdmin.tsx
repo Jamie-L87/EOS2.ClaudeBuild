@@ -60,7 +60,7 @@ function Footer() {
         background: color.bg,
       }}
     >
-      <span style={{ ...sLargeB, color: 'var(--brand)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
     </footer>
@@ -408,9 +408,9 @@ export default function CatalogueAccessAdminPage() {
       <style>{`
         button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
-        .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
+        .eos-stroke-btn:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; border-color: var(--strong) !important; }
         .eos-row:hover { background: var(--bg-soft); }
-        .eos-tab-btn[data-active="true"] { background: var(--brand); color: var(--bg); border-color: var(--brand); }
+        .eos-tab-btn[data-active="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
       `}</style>
 
       <TopNav onMenu={() => setNavOpen(true)} />
@@ -444,7 +444,7 @@ export default function CatalogueAccessAdminPage() {
                   style={{
                     ...sLargeB,
                     height: size.tabH,
-                    border: '2px solid var(--ink)',
+                    border: '2px solid var(--strong)',
                     borderLeftWidth: idx === 0 ? 2 : 1,
                     borderRightWidth: idx === arr.length - 1 ? 2 : 1,
                     borderRadius: 0,
@@ -453,7 +453,7 @@ export default function CatalogueAccessAdminPage() {
                     borderTopRightRadius: idx === arr.length - 1 ? 'var(--radius)' : 0,
                     borderBottomRightRadius: idx === arr.length - 1 ? 'var(--radius)' : 0,
                     background: section === item.id ? 'var(--brand)' : color.bg,
-                    color: section === item.id ? color.bg : 'var(--ink)',
+                    color: section === item.id ? '#fff' : 'var(--ink)',
                     cursor: 'pointer',
                     padding: '0 20px',
                     fontFamily: 'inherit',
@@ -562,7 +562,7 @@ export default function CatalogueAccessAdminPage() {
                         style={{
                           ...sBody,
                           height: 44,
-                          border: '2px solid var(--ink)',
+                          border: '2px solid var(--strong)',
                           borderRadius: 'var(--radius)',
                           padding: '0 12px',
                           minWidth: 320,
@@ -709,7 +709,7 @@ export default function CatalogueAccessAdminPage() {
                             <DateInput
                               value={dealerAsOfDate}
                               onChange={setDealerAsOfDate}
-                              style={{ ...sBody, height: 38, border: '2px solid var(--ink)', borderRadius: 'var(--radius)', padding: '0 10px', fontFamily: 'inherit' }}
+                              style={{ ...sBody, height: 38, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', padding: '0 10px', fontFamily: 'inherit' }}
                             />
                           </label>
                         </div>
@@ -818,8 +818,8 @@ export default function CatalogueAccessAdminPage() {
             bottom: 24,
             left: '50%',
             transform: 'translateX(-50%)',
-            background: 'var(--ink)',
-            color: color.bg,
+            background: 'var(--ink-fill)',
+            color: 'var(--on-ink)',
             padding: '12px 18px',
             borderRadius: radius,
             ...sBody,
@@ -829,7 +829,7 @@ export default function CatalogueAccessAdminPage() {
           <span>{toast}</span>
           <button
             onClick={() => setToast(null)}
-            style={{ marginLeft: 10, border: 'none', background: 'transparent', color: color.bg, cursor: 'pointer' }}
+            style={{ marginLeft: 10, border: 'none', background: 'transparent', color: 'var(--on-ink)', cursor: 'pointer' }}
           >
             <IconClose size={13} />
           </button>

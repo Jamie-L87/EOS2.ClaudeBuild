@@ -63,7 +63,7 @@ function TabsPill({ tab, setTab }: { tab: OrderTab; setTab: (t: OrderTab) => voi
               ...sLargeB,
               height: size.tabH,
               padding: '0 30px',
-              border: '2px solid var(--ink)',
+              border: '2px solid var(--strong)',
               borderRadius: 0,
               borderTopLeftRadius:     isFirst ? 'var(--radius)' : 0,
               borderBottomLeftRadius:  isFirst ? 'var(--radius)' : 0,
@@ -71,7 +71,7 @@ function TabsPill({ tab, setTab }: { tab: OrderTab; setTab: (t: OrderTab) => voi
               borderBottomRightRadius: isLast  ? 'var(--radius)' : 0,
               borderRightWidth: isLast  ? 2 : 1,
               borderLeftWidth:  isFirst ? 2 : 1,
-              background:   active ? 'var(--brand)' : '#fff',
+              background:   active ? 'var(--brand)' : 'var(--bg)',
               color:        active ? '#fff' : 'var(--ink)',
               borderColor:  active ? 'var(--brand)' : 'var(--ink)',
               cursor: 'pointer',
@@ -115,7 +115,7 @@ function Switch({ on, onChange, label }: { on: boolean; onChange: (v: boolean) =
           <span style={{
             position: 'absolute', top: 2, left: on ? 22 : 4,
             width: 16, height: 16, borderRadius: '50%',
-            background: '#fff',
+            background: 'var(--bg)',
             transition: 'left .2s cubic-bezier(.4,0,.2,1)',
           }} />
         </span>
@@ -154,8 +154,8 @@ function SearchBar({ query, setQuery }: { query: string; setQuery: (v: string) =
     <div className="om-search-wrap" style={{
       display: 'flex', alignItems: 'center',
       width: 339, height: size.tabH,
-      border: '2px solid var(--ink)', borderRadius: 'var(--radius)',
-      background: '#fff',
+      border: '2px solid var(--strong)', borderRadius: 'var(--radius)',
+      background: 'var(--bg)',
       transition: 'box-shadow .15s ease',
     }}>
       <span style={{ width: size.hit, height: size.hit, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
@@ -191,8 +191,8 @@ function FilterButtons({ filtersOpen, setFiltersOpen, activeFilterCount }: {
         style={{
           ...sLargeB,
           height: 50, padding: '0 18px',
-          border: '2px solid var(--ink)', borderRadius: 'var(--radius)',
-          background: filtersOpen ? 'var(--brand)' : '#fff',
+          border: '2px solid var(--strong)', borderRadius: 'var(--radius)',
+          background: filtersOpen ? 'var(--brand)' : 'var(--bg)',
           color: filtersOpen ? '#fff' : 'var(--ink)',
           borderColor: filtersOpen ? 'var(--brand)' : 'var(--ink)',
           cursor: 'pointer',
@@ -220,8 +220,8 @@ function FilterButtons({ filtersOpen, setFiltersOpen, activeFilterCount }: {
         aria-label="More"
         style={{
           width: 50, height: 50,
-          border: '2px solid var(--ink)', borderRadius: 'var(--radius)',
-          background: '#fff', color: 'var(--ink)',
+          border: '2px solid var(--strong)', borderRadius: 'var(--radius)',
+          background: 'var(--bg)', color: 'var(--ink)',
           cursor: 'pointer',
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
           transition: 'background .15s ease, color .15s ease',
@@ -248,7 +248,7 @@ type Filters = {
 
 const fieldWrap = {
   display: 'flex', alignItems: 'center', gap: 8,
-  background: '#fff', border: '1px solid var(--ink-3)',
+  background: 'var(--bg)', border: '1px solid var(--ink-3)',
   borderRadius: 'var(--radius)', padding: '0 14px', height: 44,
   transition: 'border-color .15s ease',
 };
@@ -421,7 +421,7 @@ function Highlight({ text, q }: { text: string; q: string }) {
   return (
     <>
       {s.slice(0, i)}
-      <mark style={{ background: 'var(--brand-soft)', color: 'var(--brand)', padding: '0 2px' }}>{s.slice(i, i + q.length)}</mark>
+      <mark style={{ background: 'var(--brand-soft)', color: 'var(--brand-text)', padding: '0 2px' }}>{s.slice(i, i + q.length)}</mark>
       {s.slice(i + q.length)}
     </>
   );
@@ -438,7 +438,7 @@ function Truncate({ text, q, max = 20 }: { text: string; q: string; max?: number
 }
 
 function StatusInline({ status }: { status: string }) {
-  const color = STATUS_COLOR[status] ?? { fg: 'var(--ink)', dot: '#999' };
+  const color = STATUS_COLOR[status] ?? { fg: 'var(--ink)', dot: 'var(--dot-muted)' };
   return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
       <span style={{ width: 8, height: 8, borderRadius: 4, background: color.dot, flexShrink: 0 }} />
@@ -462,8 +462,8 @@ function RowMenu({ row, onAction }: { row: Order; onAction: (a: RowAction) => vo
   return (
     <div style={{
       position: 'absolute', top: '100%', right: 8,
-      minWidth: 220, background: '#fff',
-      border: '2px solid #000', borderRadius: 'var(--radius)',
+      minWidth: 220, background: 'var(--bg)',
+      border: '2px solid var(--modal-border)', borderRadius: 'var(--radius)',
       padding: '6px 4px',
       boxShadow: 'var(--shadow-pop)', zIndex: 20,
       animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
@@ -568,8 +568,8 @@ function OrdersTable({ rows, sort, setSort, selected, setSelected, query, onRowO
   };
 
   return (
-    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: '#fff' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: gridTemplate, background: 'var(--ink)', minHeight: size.rowH, alignItems: 'stretch' }}>
+    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', overflow: 'hidden', background: 'var(--bg)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: gridTemplate, background: 'var(--ink-fill)', minHeight: size.rowH, alignItems: 'stretch' }}>
         <div style={{ padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
           <Checkbox light checked={allSelected} indeterminate={someSelected} onChange={toggleAll} />
         </div>
@@ -623,8 +623,8 @@ function OrdersTable({ rows, sort, setSort, selected, setSelected, query, onRowO
 /* ------------------------------------------------------------------ */
 function Footer({ resultsCount }: { resultsCount: number }) {
   return (
-    <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', height: size.footerH, borderTop: '1px solid var(--line)', background: '#fff' }}>
-      <span style={{ ...sLargeB, color: 'var(--brand)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+    <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', height: size.footerH, borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink)', textTransform: 'uppercase' }}>
         Results: <strong style={{ marginLeft: 4 }}>{resultsCount}</strong> {resultsCount === 1 ? 'entry' : 'entries'}
@@ -641,7 +641,7 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
   return (
     <div style={{
       position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)',
-      background: 'var(--ink)', color: '#fff',
+      background: 'var(--ink-fill)', color: '#fff',
       padding: '14px 22px', borderRadius: 'var(--radius)',
       ...sBody,
       boxShadow: 'var(--shadow-pop)', zIndex: 80,
@@ -655,20 +655,20 @@ function Toast({ message, onDone }: { message: string; onDone: () => void }) {
 /* ------------------------------------------------------------------ */
 const CSS = `
   .om-row:hover { background: var(--line) !important; }
-  .om-row[data-checked="true"]:hover { background: #FFEEE6 !important; }
+  .om-row[data-checked="true"]:hover { background: var(--brand-wash) !important; }
   .om-menu-item:hover { background: var(--line); }
-  .om-menu-item[data-danger="true"]:hover { background: #FCEAEA; }
-  .om-textlink:hover { color: var(--brand); }
+  .om-menu-item[data-danger="true"]:hover { background: var(--red-wash); }
+  .om-textlink:hover { color: var(--brand-text); }
   .om-iconplus:hover { background: var(--line); border-radius: var(--radius); }
-  .om-create-btn:hover { background: #C42700; border-color: #C42700; }
-  .om-account-btn:hover { color: var(--brand); }
+  .om-create-btn:hover { background: var(--brand-hover); border-color: var(--brand-hover); }
+  .om-account-btn:hover { color: var(--brand-text); }
   .om-stroke-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
   .om-stroke-icon-btn:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
   .om-tab[aria-selected="false"]:hover { background: var(--line); }
   .om-search-wrap:focus-within { box-shadow: 0 0 0 4px rgba(37,37,37,0.08); }
   .om-action-btn { opacity: .5; }
   .om-row:hover .om-action-btn { opacity: 1; }
-  .om-action-btn:hover { background: #fff !important; opacity: 1 !important; }
+  .om-action-btn:hover { background: var(--bg) !important; opacity: 1 !important; }
   .om-header-sort:hover { color: #fff; }
   .om-bulk-btn:hover { background: rgba(255,255,255,0.12); }
   .om-nav-item:hover { background: var(--bg-soft) !important; }

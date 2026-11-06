@@ -25,7 +25,7 @@ const inputStyle = {
   width: '100%',
   height: 44,
   boxSizing: 'border-box' as const,
-  border: '2px solid var(--ink)',
+  border: '2px solid var(--strong)',
   borderRadius: 'var(--radius)',
   padding: '0 12px',
   fontFamily: 'inherit',
@@ -93,7 +93,7 @@ function MultiSelect({ def, options, value, onChange }: ControlProps) {
           />
         </label>
         {open && (
-          <div role="listbox" style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, background: color.bg, border: '2px solid #000', borderRadius: radius, boxShadow: 'var(--shadow-pop)', zIndex: 20, maxHeight: 240, overflowY: 'auto' }}>
+          <div role="listbox" style={{ position: 'absolute', top: '100%', left: 0, right: 0, marginTop: 4, background: color.bg, border: '2px solid var(--modal-border)', borderRadius: radius, boxShadow: 'var(--shadow-pop)', zIndex: 20, maxHeight: 240, overflowY: 'auto' }}>
             {matches.length === 0 && <div style={{ ...sBody, color: 'var(--ink-3)', padding: '10px 16px' }}>No matches</div>}
             {matches.map(o => (
               <button
@@ -229,9 +229,9 @@ export default function MyPreferencesTab() {
         </section>
 
       {toast && (
-        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: color.bg, padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: 'var(--on-ink)', padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
           <span>{toast}</span>
-          <button onClick={() => setToast(null)} aria-label="Dismiss" style={{ marginLeft: 10, border: 'none', background: 'transparent', color: color.bg, cursor: 'pointer' }}>
+          <button onClick={() => setToast(null)} aria-label="Dismiss" style={{ marginLeft: 10, border: 'none', background: 'transparent', color: 'var(--on-ink)', cursor: 'pointer' }}>
             <IconClose size={13} />
           </button>
         </div>

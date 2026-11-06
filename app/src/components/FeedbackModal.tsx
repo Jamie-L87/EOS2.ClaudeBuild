@@ -114,7 +114,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
         .eos-fb-rate:hover { border-color: var(--brand) !important; }
         .eos-fb-field:focus { border-color: var(--brand) !important; box-shadow: 0 0 0 4px rgba(226,45,0,0.08); outline: none; }
       `}</style>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onClose} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onClose} />
       <div
         role="dialog"
         aria-modal="true"
@@ -123,7 +123,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 560, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 64px)',
           display: 'flex', flexDirection: 'column', background: 'var(--bg)',
-          border: '2px solid #000', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
+          border: '2px solid var(--modal-border)', borderRadius: 'var(--radius)', boxShadow: 'var(--shadow-pop)',
           animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
         }}
       >
@@ -231,7 +231,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
                   onChange={e => setComment(e.target.value)}
                   placeholder="What were you trying to do? What happened, and what did you expect?"
                   rows={5}
-                  style={{ ...sBody, width: '100%', boxSizing: 'border-box', padding: 12, resize: 'vertical', fontFamily: 'inherit', color: 'var(--ink)', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}
+                  style={{ ...sBody, width: '100%', boxSizing: 'border-box', padding: 12, resize: 'vertical', fontFamily: 'inherit', color: 'var(--ink)', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}
                 />
                 <div style={{ ...sBody, color: 'var(--ink-3)', textAlign: 'right', marginTop: 4 }}>{comment.length}/{MAX_COMMENT}</div>
               </div>
@@ -276,7 +276,7 @@ export default function FeedbackModal({ open, onClose }: { open: boolean; onClos
             <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
               <button
                 onClick={onClose}
-                style={{ ...sLargeB, height: 44, padding: '0 18px', border: '2px solid var(--ink)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}
+                style={{ ...sLargeB, height: 44, padding: '0 18px', border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)', color: 'var(--ink)', cursor: 'pointer', fontFamily: 'inherit' }}
               >
                 Cancel
               </button>

@@ -31,7 +31,7 @@ export default function PreferencesPage() {
         input:focus, select:focus { border-color: var(--brand) !important; box-shadow: 0 0 0 4px rgba(226,45,0,0.08); }
         .eos-primary-btn:not(:disabled):hover { background: var(--brand-dark) !important; border-color: var(--brand-dark) !important; }
         .eos-primary-btn:disabled { background: var(--line) !important; color: var(--ink-3) !important; border-color: var(--line) !important; cursor: not-allowed !important; }
-        .eos-stroke-btn:hover { background: var(--ink) !important; color: var(--bg) !important; border-color: var(--ink) !important; }
+        .eos-stroke-btn:hover { background: var(--ink-fill) !important; color: var(--on-ink) !important; border-color: var(--strong) !important; }
         .eos-pref-option:hover { background: var(--bg-soft) !important; }
         .eos-row:hover { background: var(--bg-soft); }
         .eos-pref-tab:not([aria-selected="true"]):hover { color: var(--ink) !important; }
@@ -82,7 +82,7 @@ export default function PreferencesPage() {
       </main>
 
       <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: color.bg }}>
-        <span style={{ ...sLargeB, color: 'var(--brand)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+        <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
         <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
         <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
       </footer>

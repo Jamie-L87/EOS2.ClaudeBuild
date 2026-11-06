@@ -144,7 +144,7 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
       <div style={styles.menuGroup}>
         <button className="om-iconplus" style={styles.menuBtn} onClick={onMenu} aria-label="Open menu">
           <span style={styles.iconBox}><IconMenu size={20} stroke={1.6} /></span>
-          <span style={{ ...sLargeM, color: '#000' }}>Menu</span>
+          <span style={{ ...sLargeM, color: 'var(--menu-text)' }}>Menu</span>
         </button>
         <button className="om-iconplus" style={styles.iconBtn} aria-label={basketCount > 0 ? `Basket — ${basketCount} item${basketCount !== 1 ? 's' : ''}` : 'Basket'} onClick={() => { if (pathname !== '/') navigate('/'); }}>
           <IconBasket size={20} stroke={1.6} />
@@ -266,8 +266,8 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
       <NotificationsModal open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
       <FeedbackModal open={feedbackOpen} onClose={() => setFeedbackOpen(false)} />
       <style>{`
-        .eos-feedback-btn:hover { background: var(--ink) !important; color: #fff !important; }
-        .eos-dealer-trigger:hover { border-color: #cbd5e1; }
+        .eos-feedback-btn:hover { background: var(--ink-fill) !important; color: #fff !important; }
+        .eos-dealer-trigger:hover { border-color: var(--soft-border); }
         .eos-dealer-item:hover { background: var(--bg-soft); }
       `}</style>
     </header>
@@ -281,7 +281,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 24px',
-    background: '#fff',
+    background: 'var(--bg)',
     borderBottom: '1px solid var(--ink-deep)',
     position: 'sticky' as const,
     top: 0,
@@ -338,7 +338,7 @@ const styles = {
     borderStyle: 'solid',
     borderColor: 'transparent',
     borderRadius: 6,
-    background: '#fff',
+    background: 'var(--bg)',
     transition: 'border-color .15s ease',
   },
   dealerTriggerOpen: {
@@ -352,7 +352,7 @@ const styles = {
     font: 'inherit',
   },
   dealerTriggerActive: {
-    borderColor: '#cbd5e1',
+    borderColor: 'var(--soft-border)',
   },
   dealerInput: {
     flex: 1,
@@ -378,7 +378,7 @@ const styles = {
     display: 'block',
     fontSize: 13,
     lineHeight: 1.2,
-    color: '#334155',
+    color: 'var(--nav-text)',
     whiteSpace: 'normal' as const,
     overflowWrap: 'break-word' as const,
   },
@@ -405,7 +405,7 @@ const styles = {
     right: 0,
     marginTop: 4,
     width: DEALER_TRIGGER_WIDTH,
-    background: '#fff',
+    background: 'var(--bg)',
     border: '1px solid var(--line)',
     borderRadius: 6,
     boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)',
@@ -445,7 +445,7 @@ const styles = {
     ...t.bodyB,
     height: 36,
     padding: '0 14px',
-    border: '2px solid var(--ink)',
+    border: '2px solid var(--strong)',
     borderRadius: 'var(--radius)',
     background: 'var(--bg)',
     color: 'var(--ink)',
@@ -468,7 +468,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '0 4px',
-    border: '2px solid #fff',
+    border: '2px solid var(--bg)',
   },
   userMenu: {
     position: 'absolute' as const,
@@ -476,8 +476,8 @@ const styles = {
     right: 0,
     marginTop: 8,
     width: 220,
-    background: '#fff',
-    border: '2px solid #000',
+    background: 'var(--bg)',
+    border: '2px solid var(--modal-border)',
     borderRadius: 'var(--radius)',
     boxShadow: 'var(--shadow-pop)',
     zIndex: 60,

@@ -109,9 +109,9 @@ export interface NotificationRecord {
 // background is a one-off (#F7F0F1) that isn't part of the shared --pink-*
 // ramp in tokens.css, so it's hardcoded here rather than invented.
 export const NOTIFICATION_CATEGORIES: Record<NotificationCategory, { label: string; bg: string; fg: string }> = {
-  info:    { label: 'Info',    bg: 'var(--blue-10)', fg: '#283D28' },
-  warning: { label: 'Warning', bg: 'var(--yellow-5)', fg: '#926D53' },
-  error:   { label: 'Error',   bg: '#F7F0F1',          fg: '#8A223B' },
+  info:    { label: 'Info',    bg: 'var(--info-bg)', fg: 'var(--info-text)' },
+  warning: { label: 'Warning', bg: 'var(--warn-bg)', fg: 'var(--warn-text)' },
+  error:   { label: 'Error',   bg: 'var(--err-bg)',      fg: 'var(--err-text)' },
 };
 
 export function isNotificationActive(n: NotificationRecord, asOf: Date = new Date()): boolean {

@@ -54,7 +54,7 @@ export function SearchInput({ value, onChange, placeholder }: { value: string; o
         alignItems: 'center',
         gap: 8,
         height: 44,
-        border: '2px solid var(--ink)',
+        border: '2px solid var(--strong)',
         borderRadius: 'var(--radius)',
         padding: '0 12px',
         background: color.bg,
@@ -92,7 +92,7 @@ export function PrimaryButton({ children, onClick, disabled }: { children: React
         border: '2px solid var(--brand)',
         borderRadius: radius,
         background: 'var(--brand)',
-        color: color.bg,
+        color: '#fff',
         padding: '0 18px',
         display: 'inline-flex',
         alignItems: 'center',
@@ -114,7 +114,7 @@ export function StrokeButton({ children, onClick }: { children: React.ReactNode;
       style={{
         ...sLargeB,
         height: 50,
-        border: '2px solid var(--ink)',
+        border: '2px solid var(--strong)',
         borderRadius: radius,
         background: color.bg,
         color: 'var(--ink)',
@@ -139,7 +139,7 @@ export function IconActionButton({ label, onClick, icon }: { label: string; onCl
       style={{
         ...sBodyB,
         height: 36,
-        border: '1px solid var(--ink)',
+        border: '1px solid var(--strong)',
         borderRadius: radius,
         background: color.bg,
         color: 'var(--ink)',
@@ -174,7 +174,7 @@ export function ConfirmDialog({
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onCancel} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onCancel} />
       <div
         style={{
           position: 'fixed',

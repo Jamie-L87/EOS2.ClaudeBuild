@@ -35,7 +35,7 @@ const inputStyle = {
   width: '100%',
   height: 44,
   boxSizing: 'border-box' as const,
-  border: '2px solid var(--ink)',
+  border: '2px solid var(--strong)',
   borderRadius: 'var(--radius)',
   padding: '0 12px',
   fontFamily: 'inherit',
@@ -121,7 +121,7 @@ function PreferenceForm({
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, background: 'rgba(9,9,9,0.32)', zIndex: 130 }} onClick={onCancel} />
+      <div style={{ position: 'fixed', inset: 0, background: 'var(--backdrop)', zIndex: 130 }} onClick={onCancel} />
       <div
         role="dialog"
         aria-modal="true"
@@ -130,7 +130,7 @@ function PreferenceForm({
           position: 'fixed', zIndex: 131, top: '50%', left: '50%', transform: 'translate(-50%,-50%)',
           width: 640, maxWidth: 'calc(100vw - 32px)', maxHeight: 'calc(100vh - 48px)',
           display: 'flex', flexDirection: 'column',
-          background: color.bg, border: '2px solid #000', borderRadius: radius, boxShadow: 'var(--shadow-pop)',
+          background: color.bg, border: '2px solid var(--modal-border)', borderRadius: radius, boxShadow: 'var(--shadow-pop)',
           animation: 'menuPop .14s cubic-bezier(.4,0,.2,1)',
         }}
       >
@@ -274,7 +274,7 @@ export default function PreferenceManagementTab() {
   const setFilter = <K extends keyof Filters>(k: K, v: Filters[K]) => setFilters(f => ({ ...f, [k]: v }));
   const filtersActive = JSON.stringify(filters) !== JSON.stringify(EMPTY_FILTERS);
 
-  const th = { ...sBodyB, fontSize: 12.5, color: color.bg, background: 'var(--ink)', textAlign: 'left' as const, padding: '0 16px', height: 44 };
+  const th = { ...sBodyB, fontSize: 12.5, color: 'var(--on-ink)', background: 'var(--ink-fill)', textAlign: 'left' as const, padding: '0 16px', height: 44 };
   const td = { ...sBody, padding: '0 16px', height: size.rowH, borderBottom: '1px solid var(--line)', color: 'var(--ink)' };
 
   const yesNoFilter = (v: YesNoAll, onChange: (v: YesNoAll) => void) => (
@@ -368,9 +368,9 @@ export default function PreferenceManagementTab() {
       )}
 
       {toast && (
-        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink)', color: color.bg, padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', background: 'var(--ink-fill)', color: 'var(--on-ink)', padding: '12px 18px', borderRadius: radius, ...sBody, zIndex: 200 }}>
           <span>{toast}</span>
-          <button onClick={() => setToast(null)} aria-label="Dismiss" style={{ marginLeft: 10, border: 'none', background: 'transparent', color: color.bg, cursor: 'pointer' }}>
+          <button onClick={() => setToast(null)} aria-label="Dismiss" style={{ marginLeft: 10, border: 'none', background: 'transparent', color: 'var(--on-ink)', cursor: 'pointer' }}>
             <IconClose size={13} />
           </button>
         </div>
