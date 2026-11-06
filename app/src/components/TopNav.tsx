@@ -47,9 +47,9 @@ const DEALER_CUSTOMERS: CustomerRecord[] = [
   ...LONG_NAME_DEALERS,
 ].sort((a, b) => a.dealerName.localeCompare(b.dealerName));
 
-// New sessions start on a UK (GBP) account, so list prices open in GBP.
+// New sessions start on a Tsunami UK (GBP) account, so list prices open in GBP.
 const DEFAULT_DEALER: CustomerRecord =
-  DEALER_CUSTOMERS.find(c => c.currency === 'GBP' && !/do not use/i.test(c.dealerName)) ?? DEALER_CUSTOMERS[0];
+  DEALER_CUSTOMERS.find(c => c.currency === 'GBP' && c.country === 'GB' && /^tsunami/i.test(c.dealerName)) ?? DEALER_CUSTOMERS[0];
 
 function initialDealer(): CustomerRecord {
   const saved = getSelectedAccount();
