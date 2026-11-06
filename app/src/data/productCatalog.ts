@@ -1,13 +1,19 @@
+import { GBP_PER_EUR } from './currency';
+import type { PriceCurrency } from './currency';
+
 export interface CatalogItem {
   articleCode: string;
   productLine: string;
   productName: string;
   featureString: string;
-  price: number;
-  currency: string;
+  /** List price in each currency we hold a price list for */
+  prices: Record<PriceCurrency, number>;
 }
 
-export const PRODUCT_CATALOG: CatalogItem[] = [
+/** The base EUR list, as authored. The GBP list is derived below. */
+type EurCatalogRow = Omit<CatalogItem, 'prices'> & { price: number; currency: string };
+
+const EUR_CATALOG: EurCatalogRow[] = [
   { articleCode: 'AER1B23DW',        productLine: 'AERON',        productName: 'AERON',        featureString: 'ALP G1 G1 G1 BB BK 23103',     price: 2283,  currency: 'EUR' },
   { articleCode: 'AER713DW',         productLine: 'AERON',        productName: 'AERON',        featureString: 'ALP G1 G1 G1 BB BK 23103',     price: 2662,  currency: 'EUR' },
   { articleCode: 'AERE1B23HF',       productLine: 'AERON',        productName: 'AERON',        featureString: 'ALP G1 G1 CD ESD 23180 5R701', price: 3042,  currency: 'EUR' },
@@ -105,3 +111,8 @@ export const PRODUCT_CATALOG: CatalogItem[] = [
   { articleCode: 'CEL1B22DW',        productLine: 'CELLE',        productName: 'CELLE',        featureString: '',                             price: 890,   currency: 'EUR' },
   { articleCode: 'CEL1C33DW',        productLine: 'CELLE',        productName: 'CELLE',        featureString: 'ALP G1 BB',                    price: 965,   currency: 'EUR' },
 ];
+
+export const PRODUCT_CATALOG: CatalogItem[] = EUR_CATALOG.map(({ price, currency: _currency, ...item }) => ({
+  ...item,
+  prices: { EUR: price, GBP: Math.round(price * GBP_PER_EUR) },
+}));

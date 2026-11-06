@@ -1,6 +1,8 @@
 import { PRODUCT_CATALOG } from '../data/productCatalog';
 import { lookupSuper } from '../data/superProducts';
 import type { SuperChild } from '../data/superProducts';
+import type { PriceCurrency } from '../data/currency';
+import { getPricingCurrency } from './accountStore';
 
 export interface ValidationResult {
   valid: boolean;
@@ -14,11 +16,12 @@ export interface ValidationResult {
   error: string | null;
 }
 
-export function validateItem(articleCode: string, featureString: string): ValidationResult {
+/** `currency` is the list currency to price in; it defaults to the selected dealer account's. */
+export function validateItem(articleCode: string, featureString: string, currency: PriceCurrency = getPricingCurrency()): ValidationResult {
   const code    = String(articleCode    ?? '').trim();
   const feature = String(featureString  ?? '').trim();
 
-  const sup = lookupSuper(code);
+  const sup = lookupSuper(code, currency);
   if (sup) {
     return {
       valid: true,
@@ -48,8 +51,8 @@ export function validateItem(articleCode: string, featureString: string): Valida
       valid: true,
       productName: p.productName || p.productLine,
       productLine: p.productLine,
-      price: p.price,
-      currency: p.currency || 'EUR',
+      price: p.prices[currency],
+      currency,
       error: null,
     };
   }
@@ -60,8 +63,8 @@ export function validateItem(articleCode: string, featureString: string): Valida
       valid: true,
       productName: exact.productName || exact.productLine,
       productLine: exact.productLine,
-      price: exact.price,
-      currency: exact.currency || 'EUR',
+      price: exact.prices[currency],
+      currency,
       error: null,
     };
   }

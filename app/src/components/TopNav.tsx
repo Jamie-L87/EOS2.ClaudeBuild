@@ -10,6 +10,7 @@ import type { CustomerRecord } from '../data/catalogueAccess';
 import NotificationsModal from './NotificationsModal';
 import FeedbackModal from './FeedbackModal';
 import { NOTIFICATIONS_CHANGED_EVENT, countUnreadNotifications, setViewerSite } from '../services/notificationsStore';
+import { getSelectedAccount, setSelectedAccount } from '../services/accountStore';
 
 interface TopNavProps {
   onMenu: () => void;
@@ -46,6 +47,15 @@ const DEALER_CUSTOMERS: CustomerRecord[] = [
   ...LONG_NAME_DEALERS,
 ].sort((a, b) => a.dealerName.localeCompare(b.dealerName));
 
+// New sessions start on a Tsunami UK (GBP) account, so list prices open in GBP.
+const DEFAULT_DEALER: CustomerRecord =
+  DEALER_CUSTOMERS.find(c => c.currency === 'GBP' && c.country === 'GB' && /^tsunami/i.test(c.dealerName)) ?? DEALER_CUSTOMERS[0];
+
+function initialDealer(): CustomerRecord {
+  const saved = getSelectedAccount();
+  return DEALER_CUSTOMERS.find(c => c.id === saved?.id) ?? DEFAULT_DEALER;
+}
+
 function dealerLabel(c: CustomerRecord): string {
   return `${c.dealerName}: ${toDealerCode(c)}`;
 }
@@ -66,8 +76,8 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
   const { pathname } = useLocation();
   const basketCount = basketCountProp ?? readBasketCount();
 
-  const [selectedDealer, setSelectedDealer] = useState<CustomerRecord>(DEALER_CUSTOMERS[0]);
-  const [dealerInput, setDealerInput] = useState(dealerLabel(DEALER_CUSTOMERS[0]));
+  const [selectedDealer, setSelectedDealer] = useState<CustomerRecord>(initialDealer);
+  const [dealerInput, setDealerInput] = useState(() => dealerLabel(initialDealer()));
   const [dealerMenuOpen, setDealerMenuOpen] = useState(false);
   const [dealerEdited, setDealerEdited] = useState(false);
   const dealerMenuRef = useRef<HTMLDivElement>(null);
@@ -108,6 +118,7 @@ export default function TopNav({ onMenu, basketCount: basketCountProp }: TopNavP
 
   const closeDealerMenu = (pick: CustomerRecord | null) => {
     const next = pick ?? selectedDealer;
+    if (next.id !== selectedDealer.id) setSelectedAccount({ id: next.id, currency: next.currency });
     setSelectedDealer(next);
     setDealerInput(dealerLabel(next));
     setDealerMenuOpen(false);
