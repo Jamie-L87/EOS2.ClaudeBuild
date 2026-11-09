@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { AlphaBrand } from '../../components/AlphaBrand';
 import type { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
@@ -1631,7 +1632,7 @@ function BasketTable({ items, onRemove, onQtyChange, onCopy, onClear, onUpdateAr
 function Footer() {
   return (
     <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
-      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+      <AlphaBrand uppercase style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }} />
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
     </footer>

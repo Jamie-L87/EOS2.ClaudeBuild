@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { AlphaBrand } from '../../components/AlphaBrand';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -60,7 +61,7 @@ function Footer() {
         background: color.bg,
       }}
     >
-      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+      <AlphaBrand uppercase style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }} />
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
     </footer>

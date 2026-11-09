@@ -1,4 +1,5 @@
 import { Fragment, useEffect } from 'react';
+import { AlphaBrand } from './AlphaBrand';
 import { useNavigate } from 'react-router-dom';
 import { IconClose, IconChevronRight, IconUpload, IconMail } from './Icons';
 type NavId = 'import' | 'orders' | 'catalogueAccess' | 'notifications' | 'preferenceManagement' | 'scenario1' | 'scenario2' | 'scenario3';
@@ -101,9 +102,7 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           borderBottom: '1px solid var(--line)',
           flexShrink: 0,
         }}>
-          <span style={{ fontWeight: 700, letterSpacing: '0.05em', color: 'var(--brand-text)', fontSize: 18 }}>
-            EOS CLOUD
-          </span>
+          <AlphaBrand uppercase style={{ fontWeight: 700, letterSpacing: '0.05em', color: 'var(--brand-text)', fontSize: 18 }} />
           <button
             onClick={onClose}
             aria-label="Close menu"
@@ -187,10 +186,11 @@ export default function NavDrawer({ open, onClose, current }: NavDrawerProps) {
           flexShrink: 0,
           padding: '20px 24px',
           borderTop: '1px solid var(--line)',
+          display: 'flex', alignItems: 'center', gap: 8,
           fontSize: 12, fontWeight: 500, letterSpacing: '0.010em',
           color: 'var(--ink-2)',
         }}>
-          EOS Cloud · Tsunami Axis Ltd
+          <AlphaBrand /> <span>· Tsunami Axis Ltd</span>
         </div>
       </aside>
 

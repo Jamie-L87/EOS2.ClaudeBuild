@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { AlphaBrand } from '../../components/AlphaBrand';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
@@ -624,7 +625,7 @@ function OrdersTable({ rows, sort, setSort, selected, setSelected, query, onRowO
 function Footer({ resultsCount }: { resultsCount: number }) {
   return (
     <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', height: size.footerH, borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
-      <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+      <AlphaBrand uppercase style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }} />
       <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
       <span style={{ ...sBodyB, color: 'var(--ink)', textTransform: 'uppercase' }}>
         Results: <strong style={{ marginLeft: 4 }}>{resultsCount}</strong> {resultsCount === 1 ? 'entry' : 'entries'}
