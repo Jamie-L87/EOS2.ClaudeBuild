@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { AlphaBrand } from '../../components/AlphaBrand';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
 import NotificationCard, { CategoryTag, NotificationBodyStyles } from '../../components/NotificationCard';
@@ -467,7 +468,7 @@ export default function NotificationManagerPage() {
       </main>
 
       <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', height: 72, marginTop: 40, borderTop: '1px solid var(--line)', background: color.bg }}>
-        <span style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }}>EOS CLOUD</span>
+        <AlphaBrand uppercase style={{ ...sLargeB, color: 'var(--brand-text)', letterSpacing: '0.05em' }} />
         <span style={{ ...sBody, color: 'var(--ink-2)' }}>2026 - MillerKnoll</span>
         <span style={{ ...sBodyB, color: 'var(--ink-2)' }}>Tsunami Axis Ltd</span>
       </footer>
