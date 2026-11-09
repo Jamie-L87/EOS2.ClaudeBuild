@@ -919,7 +919,7 @@ export default function OrderDetailTabsPage() {
   const { id }    = useParams<{ id: string }>();
 
   const [order,   setOrder]   = useState<OrderData | null>(null);
-  const [tab,     setTab]     = useState<DetailTab>('details');
+  const [tab,     setTab]     = useState<DetailTab>('lines');
   const [query,   setQuery]   = useState('');
   const [navOpen, setNavOpen] = useState(false);
   const [toast,   setToast]   = useState<string | null>(null);
