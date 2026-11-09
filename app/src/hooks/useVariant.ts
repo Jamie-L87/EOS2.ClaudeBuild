@@ -36,6 +36,15 @@ export function captureVariantFromUrl(): void {
 }
 
 /**
+ * Set the remembered variant for a sticky experiment from inside the app (for example a
+ * scenario card's Start button), so the choice applies without a ?variant= URL.
+ */
+export function setVariant(key: VariantKey, value: Variant): void {
+  const def: VariantDef = VARIANTS[key];
+  if (def.sticky) writeSticky(def.id, value);
+}
+
+/**
  * Returns the active variant ('a', 'b' or 'c') for a given experiment key.
  *
  * Variant B is active when the URL contains ?variant=<id> matching the experiment,
