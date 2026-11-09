@@ -3,6 +3,8 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import TopNav from '../../components/TopNav';
 import NavDrawer from '../../components/NavDrawer';
 import { t, size } from '../../tokens';
+import { setVariant } from '../../hooks/useVariant';
+import type { Variant } from '../../variants';
 
 const sBody = { ...t.body };
 const sBodyB = { ...t.bodyB };
@@ -13,6 +15,8 @@ interface ScenarioItem { code: string; feature: string; product: string; qty: nu
 
 interface Scenario {
   title: string;
+  /** Order page layout this scenario runs on: a = original, b = side panel, c = tabbed */
+  variant: Variant;
   story: string;
   /** Tasks, in order. Shown as a numbered list. */
   tasks: string[];
@@ -24,6 +28,7 @@ interface Scenario {
 const SCENARIOS: Scenario[] = [
   {
     title: 'Office refresh',
+    variant: 'a',
     story: 'A dealer has sent you a basket from their design tool. Bring it into EOS and get the order submitted. Finish by checking your export brings the basket back.',
     items: null,
     file: { href: '/scenarios/scenario-1-basket.obx', label: 'Download the basket file (.obx)', note: 'Save it to your computer, then upload it on the import page.' },
@@ -39,6 +44,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     title: 'Something to fix',
+    variant: 'b',
     story: 'A colleague has prepared a spreadsheet for a customer. Import it and get the order submitted. Something may need fixing along the way.',
     items: null,
     file: { href: '/scenarios/scenario-2-order-sheet.xlsx', label: 'Download the spreadsheet (.xlsx)', note: 'Save it to your computer, then upload it on the import page.' },
@@ -52,6 +58,7 @@ const SCENARIOS: Scenario[] = [
   },
   {
     title: 'Staggered delivery',
+    variant: 'c',
     story: 'The customer wants the chairs first and the tables a few weeks later. Build the order and set the delivery dates to suit.',
     items: [
       { code: 'AS2EA33AA', feature: 'N2 BK BB BK BK 7O005', product: 'Sayl chair', qty: 4 },
@@ -174,7 +181,7 @@ export default function ScenarioCardPage() {
 
           <footer style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, borderTop: '1px solid var(--line)', paddingTop: 12 }}>
             <span style={{ ...sBody, color: 'var(--ink-2)' }}>Please think out loud as you go.</span>
-            <button onClick={() => navigate('/')} className="eos-scn-primary"
+            <button onClick={() => { setVariant('orderPage', scenario.variant); navigate('/'); }} className="eos-scn-primary"
               style={{ ...btn, height: 44, border: '2px solid var(--brand)', background: 'var(--brand)', color: '#fff' }}>
               Start scenario
             </button>
