@@ -18,6 +18,7 @@ import { missingDelivery } from '../../data/deliveryAddress';
 import { computeDeliveryCharges, formatDeliveryDate, mockLeadTime } from '../../data/delivery';
 import DeliveryModal from './DeliveryModal';
 import { t, size } from '../../tokens';
+import DeliveryAddressLookup from '../../components/DeliveryAddressLookup';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                               */
@@ -126,106 +127,6 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  GOOGLE MAPS LOADER                                                  */
-/* ------------------------------------------------------------------ */
-const GMAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string;
-let _mapsPromise: Promise<void> | null = null;
-
-function ensureMaps(): Promise<void> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((window as any).google?.maps?.places) return Promise.resolve();
-  if (_mapsPromise) return _mapsPromise;
-  _mapsPromise = new Promise<void>((resolve, reject) => {
-    const cb = '_gmInit';
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any)[cb] = () => { resolve(); delete (window as any)[cb]; };
-    const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${GMAPS_KEY}&libraries=places&callback=${cb}`;
-    s.async = true;
-    s.onerror = () => { _mapsPromise = null; reject(new Error('Google Maps script failed to load — check the API key and browser console.')); };
-    document.head.appendChild(s);
-  });
-  return _mapsPromise;
-}
-
-/* ------------------------------------------------------------------ */
-/*  DELIVERY ADDRESS LOOKUP                                             */
-/* ------------------------------------------------------------------ */
-interface DeliveryAddress { companyName: string; line1: string; line2: string; line3: string; line4: string; city: string; county: string; postcode: string; countryCode: string; }
-
-function DeliveryAddressLookup({ onFill }: { onFill: (addr: DeliveryAddress) => void }) {
-  const inputRef  = useRef<HTMLInputElement>(null);
-  const onFillRef = useRef(onFill);
-  useEffect(() => { onFillRef.current = onFill; }, [onFill]);
-  const [ready, setReady] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
-
-  useEffect(() => {
-    ensureMaps().then(() => setReady(true)).catch((e: Error) => {
-      console.error('[Maps]', e.message);
-      setLoadError(e.message);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!ready || !inputRef.current) return;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const g = (window as any).google;
-    const ac = new g.maps.places.Autocomplete(inputRef.current, {
-      fields: ['address_components', 'name'],
-    });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const listener = ac.addListener('place_changed', () => {
-      const place = ac.getPlace();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const get = (type: string): string => (place.address_components as any[])?.find((c) => c.types.includes(type))?.long_name ?? '';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const countryCode = (place.address_components as any[])?.find((c) => c.types.includes('country'))?.short_name ?? '';
-      const streetNum = get('street_number');
-      const route     = get('route');
-      onFillRef.current({
-        companyName: place.name || '',
-        line1:       [streetNum, route].filter(Boolean).join(' '),
-        line2:       get('subpremise') || get('premise'),
-        line3:       '',
-        line4:       '',
-        city:        get('postal_town') || get('locality') || get('administrative_area_level_2'),
-        county:      get('administrative_area_level_2') || get('administrative_area_level_1'),
-        postcode:    get('postal_code'),
-        countryCode,
-      });
-      if (inputRef.current) inputRef.current.value = '';
-    });
-    return () => { g?.maps?.event?.removeListener(listener); };
-  }, [ready]);
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase' as const, letterSpacing: 0.6 }}>Search Address</div>
-      <div className="om-search-wrap" style={{ display: 'flex', alignItems: 'center', height: 44, border: '2px solid var(--strong)', borderRadius: 'var(--radius)', background: 'var(--bg)' }}>
-        <span style={{ width: 44, height: 44, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: 'var(--ink-3)' }}>
-          <IconSearch size={16} stroke={1.7} />
-        </span>
-        <input
-          ref={inputRef}
-          id="delivery-address-search"
-          name="delivery-address-search"
-          type="text"
-          autoComplete="off"
-          placeholder={loadError ? 'Maps unavailable' : (ready ? 'Start typing an address…' : 'Loading…')}
-          disabled={!ready || !!loadError}
-          style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', ...sBody, color: loadError ? 'var(--red)' : 'var(--ink)', paddingRight: 12, fontFamily: 'inherit' }}
-        />
-      </div>
-      {loadError && (
-        <div style={{ ...sBody, fontSize: 12, color: 'var(--red)' }}>
-          Could not load Google Maps — check the API key is valid and the Maps JavaScript API + Places API are enabled in Google Cloud Console.
-        </div>
-      )}
-    </div>
-  );
-}
 
 /* ------------------------------------------------------------------ */
 /*  SUMMARY BAR                                                         */
