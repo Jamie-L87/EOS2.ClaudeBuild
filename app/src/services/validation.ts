@@ -41,7 +41,7 @@ export function validateItem(articleCode: string, featureString: string, currenc
   if (variants.length === 0) {
     return {
       valid: false, productName: null, productLine: null, price: null, currency: null,
-      error: `Article code "${code}" does not exist in the product catalog`,
+      error: "This product isn't available in your catalogues.",
     };
   }
 

@@ -1090,7 +1090,7 @@ export default function OrderDetailPage() {
     setOrder(o => o ? { ...o, lines: [...o.lines, {
       id: `l-${Math.random().toString(36).slice(2, 9)}`, articleCode: 'NEW-LINE', featureString: '',
       productName: null, productLine: null, qty: 1, listPrice: 0, discount: 0, currency: o.currency,
-      validationStatus: 'failed', validationError: 'Article code "NEW-LINE" does not exist in the product catalog',
+      validationStatus: 'failed', validationError: "This product isn't available in your catalogues.",
     }] } : o);
     setToast('Line added — click the code to edit');
   }, []);
