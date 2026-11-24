@@ -6,8 +6,14 @@ import { size, t } from '../../tokens';
 import { CATALOGUES, isCatalogueLive, uid, wildcardIncludes } from '../../data/catalogueAccess';
 import { loadCatalogueAccessState, saveCatalogueAccessState } from '../../services/catalogueAccessStore';
 import {
+  AddAllBar,
+  BulkRemoveBar,
+  Checkbox,
   Chip,
+  ConfirmDialog,
   DateInput,
+  FilterSlot,
+  FilterText,
   DetailBreadcrumb,
   formatDisplayDate,
   PrimaryButton,
@@ -36,20 +42,31 @@ function RowList({
   actionLabel,
   onAction,
   onSetGoLiveDate,
+  checked,
+  onToggle,
+  flatTop,
 }: {
   rows: Array<{ id: number; name: string; goLiveDate?: string }>;
   emptyLabel: string;
   actionLabel: string;
   onAction: (id: number) => void;
   onSetGoLiveDate: (id: number, date: string | null) => void;
+  /** When provided, each row shows a selection checkbox and the list sits flush under a bulk toolbar. */
+  checked?: Set<number>;
+  onToggle?: (id: number) => void;
+  /** List sits flush under a toolbar (no top radius). Implied when selectable. */
+  flatTop?: boolean;
 }) {
+  const selectable = !!checked && !!onToggle;
   return (
-    <div style={{ border: '1px solid var(--line)', borderRadius: 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
+    <div style={{ border: '1px solid var(--line)', borderRadius: selectable || flatTop ? '0 0 var(--radius) var(--radius)' : 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
       {rows.map(row => {
         const pending = !isCatalogueLive(row.goLiveDate);
+        const isChecked = !!checked?.has(row.id);
         return (
-          <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)' }}>
-            <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)', background: isChecked ? 'var(--brand-soft)' : undefined }}>
+            {selectable && <Checkbox checked={isChecked} onChange={() => onToggle!(row.id)} label={`Select ${row.id} - ${row.name}`} />}
+            <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
               {row.id} - {row.name}
               {pending && (
                 <span style={{ ...sBodyB, fontSize: 11, color: 'var(--amber)', background: 'var(--amber-soft)', border: '1px solid var(--amber)', borderRadius: 999, padding: '2px 8px', whiteSpace: 'nowrap' }}>
@@ -113,6 +130,12 @@ export default function CatalogueGroupDetailPage() {
   );
   const [error, setError] = useState<string | null>(null);
 
+  // Filters + multi-select for the "Current Catalogues In Group" list only
+  const [currentQuery, setCurrentQuery] = useState('');
+  const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
+
   const role = sessionStorage.getItem('eos-user-role') ?? 'Admin';
   const isAdmin = role === 'Admin';
 
@@ -120,6 +143,29 @@ export default function CatalogueGroupDetailPage() {
 
   const filtered = CATALOGUES.filter(c => wildcardIncludes(`${c.id} ${c.name}`, search));
   const selectedRows = CATALOGUES.filter(c => selected.has(c.id)).map(withGoLiveDate);
+  const currentRows = selectedRows.filter(c => wildcardIncludes(`${c.id} ${c.name}`, currentQuery));
+  // Only rows still visible under the current filter count as selected, so a bulk remove never hits hidden rows.
+  const visibleChecked = new Set(currentRows.filter(c => checked.has(c.id)).map(c => c.id));
+  const toggleChecked = (cid: number) => setChecked(prev => {
+    const next = new Set(prev);
+    if (next.has(cid)) next.delete(cid); else next.add(cid);
+    return next;
+  });
+  const toggleAllVisible = () => setChecked(
+    visibleChecked.size === currentRows.length ? new Set() : new Set(currentRows.map(c => c.id)),
+  );
+  const bulkRemove = () => {
+    const count = visibleChecked.size;
+    setSelected(prev => {
+      const next = new Set(prev);
+      visibleChecked.forEach(cid => next.delete(cid));
+      return next;
+    });
+    setChecked(new Set());
+    setConfirmOpen(false);
+    setNotice(`${count} catalogue${count === 1 ? '' : 's'} removed from this group.`);
+    window.setTimeout(() => setNotice(null), 4000);
+  };
   const availableRows = filtered.filter(c => !selected.has(c.id)).map(withGoLiveDate);
 
   const addCatalogue = (cid: number) => setSelected(prev => new Set(prev).add(cid));
@@ -214,53 +260,69 @@ export default function CatalogueGroupDetailPage() {
             </section>
 
             <section style={{ marginTop: 32 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-                <SearchInput value={search} onChange={setSearch} placeholder="Search catalogues... (* wildcard supported)" />
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <Chip label={`Selected: ${selected.size} catalogues`} />
-                  <Chip label={`Available: ${availableRows.length}`} />
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }}>
+                <Chip label={`Selected: ${selected.size} catalogues`} />
+                <Chip label={`Available: ${availableRows.length}`} />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                <div>
-                  <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
-                    Current Catalogues In Group
-                  </div>
-                  <RowList rows={selectedRows} emptyLabel="No catalogues currently in this group." actionLabel="Remove" onAction={removeCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
+              {notice && (
+                <div role="status" style={{ ...sBody, background: 'var(--blue-soft)', color: 'var(--ink)', borderRadius: 'var(--radius)', padding: '12px 14px', marginBottom: 12 }}>
+                  {notice}
                 </div>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 }}>
-                      Available Catalogues To Add
-                    </div>
-                    <button
-                      className="eos-stroke-btn"
-                      onClick={addAllFiltered}
-                      disabled={availableRows.length === 0}
-                      style={{
-                        ...sBodyB,
-                        height: 28,
-                        border: '1px solid var(--strong)',
-                        borderRadius: 'var(--radius)',
-                        background: 'var(--bg)',
-                        color: 'var(--ink)',
-                        padding: '0 10px',
-                        cursor: availableRows.length === 0 ? 'not-allowed' : 'pointer',
-                        opacity: availableRows.length === 0 ? 0.5 : 1,
-                        fontFamily: 'inherit',
-                      }}
-                    >
-                      Add All ({availableRows.length})
-                    </button>
-                  </div>
-                  <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} />
+              )}
+
+              {/* One shared grid so headers, filters, toolbars and lists line up row-for-row across both columns */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 24 }}>
+                <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                  Current Catalogues In Group
                 </div>
+                <div style={{ ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 6 }}>
+                  Available Catalogues To Add
+                </div>
+
+                <div style={{ marginBottom: 12 }}>
+                  <FilterText label="Search" value={currentQuery} onChange={setCurrentQuery} placeholder="Start typing to search..." />
+                </div>
+                <div style={{ marginBottom: 12 }}>
+                  <FilterSlot label="Search">
+                    <SearchInput value={search} onChange={setSearch} placeholder="Start typing to search..." />
+                  </FilterSlot>
+                </div>
+
+                <BulkRemoveBar
+                  visibleCount={currentRows.length}
+                  selectedCount={visibleChecked.size}
+                  onToggleAll={toggleAllVisible}
+                  onClear={() => setChecked(new Set())}
+                  removeLabel="Remove Selected Catalogues"
+                  onRemove={() => setConfirmOpen(true)}
+                />
+                <AddAllBar count={availableRows.length} noun="Catalogues" onAddAll={addAllFiltered} />
+
+                <RowList
+                  rows={currentRows}
+                  emptyLabel={selectedRows.length === 0 ? 'No catalogues currently in this group.' : 'No catalogues match your filters.'}
+                  actionLabel="Remove"
+                  onAction={removeCatalogue}
+                  onSetGoLiveDate={setCatalogueGoLive}
+                  checked={visibleChecked}
+                  onToggle={toggleChecked}
+                />
+                <RowList rows={availableRows} emptyLabel="No available catalogues match your search." actionLabel="Add" onAction={addCatalogue} onSetGoLiveDate={setCatalogueGoLive} flatTop />
               </div>
             </section>
           </>
         )}
       </main>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title="Remove Catalogues"
+        message="Are you sure you want to remove the selected catalogue(s) from this Catalogue Group?"
+        confirmLabel="Remove"
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={bulkRemove}
+      />
     </>
   );
 }
