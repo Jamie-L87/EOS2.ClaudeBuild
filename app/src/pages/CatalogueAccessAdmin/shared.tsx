@@ -163,12 +163,14 @@ export function ConfirmDialog({
   message,
   onCancel,
   onConfirm,
+  confirmLabel = 'Delete',
 }: {
   open: boolean;
   title: string;
   message: string;
   onCancel: () => void;
   onConfirm: () => void;
+  confirmLabel?: string;
 }) {
   if (!open) return null;
 
@@ -201,10 +203,193 @@ export function ConfirmDialog({
         </div>
         <div style={{ borderTop: '1px solid var(--line)', padding: 16, display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
           <StrokeButton onClick={onCancel}>Cancel</StrokeButton>
-          <PrimaryButton onClick={onConfirm}>Delete</PrimaryButton>
+          <PrimaryButton onClick={onConfirm}>{confirmLabel}</PrimaryButton>
         </div>
       </div>
     </>
+  );
+}
+
+/** 18px checkbox per the EOS component spec (brand fill when checked). `indeterminate` shows a dash. */
+export function Checkbox({
+  checked,
+  indeterminate,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  indeterminate?: boolean;
+  onChange: () => void;
+  label: string;
+}) {
+  const on = checked || !!indeterminate;
+  return (
+    <label style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, cursor: 'pointer', flexShrink: 0 }}>
+      <input type="checkbox" checked={checked} onChange={onChange} aria-label={label} style={{ position: 'absolute', opacity: 0, width: 0, height: 0 }} />
+      <span
+        className="eos-checkbox-box"
+        style={{
+          width: 18,
+          height: 18,
+          borderRadius: 2,
+          border: on ? '1px solid var(--brand)' : '1px solid var(--ink-2)',
+          background: on ? 'var(--brand)' : 'var(--bg)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxSizing: 'border-box',
+        }}
+      >
+        {checked && (
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2.5 6.5l2.5 2.5 4.5-5.5" />
+          </svg>
+        )}
+        {!checked && indeterminate && <span style={{ width: 8, height: 2, background: '#fff' }} />}
+      </span>
+    </label>
+  );
+}
+
+const filterFieldStyle: React.CSSProperties = {
+  ...sBody,
+  height: 44,
+  width: '100%',
+  boxSizing: 'border-box',
+  border: '2px solid var(--strong)',
+  borderRadius: radius,
+  padding: '0 12px',
+  background: color.bg,
+  color: 'var(--ink)',
+  fontFamily: 'inherit',
+  outlineOffset: 0,
+};
+
+const filterLabelStyle: React.CSSProperties = { ...sBodyB, color: 'var(--ink-2)', fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.6 };
+
+export function FilterText({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
+  return (
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <span style={filterLabelStyle}>{label}</span>
+      <input value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} style={filterFieldStyle} />
+    </label>
+  );
+}
+
+export function FilterSelect({ label, value, onChange, options, allLabel }: { label: string; value: string; onChange: (v: string) => void; options: string[]; allLabel: string }) {
+  return (
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <span style={filterLabelStyle}>{label}</span>
+      <select value={value} onChange={e => onChange(e.target.value)} style={filterFieldStyle}>
+        <option value="">{allLabel}</option>
+        {options.map(o => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </label>
+  );
+}
+
+/** Label + control slot so non-input controls (e.g. SearchInput) line up with FilterText / FilterSelect. */
+export function FilterSlot({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 0 }}>
+      <span style={filterLabelStyle}>{label}</span>
+      {children}
+    </div>
+  );
+}
+
+const listBarStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 10,
+  flexWrap: 'wrap',
+  boxSizing: 'border-box',
+  minHeight: 49,
+  padding: '6px 12px',
+  background: 'var(--bg-soft)',
+  border: '1px solid var(--line)',
+  borderBottom: 'none',
+  borderRadius: 'var(--radius) var(--radius) 0 0',
+};
+
+/** Toolbar above an "Available ... To Add" list, same height/look as BulkRemoveBar so the two columns align. */
+export function AddAllBar({ count, noun, onAddAll }: { count: number; noun: string; onAddAll: () => void }) {
+  const disabled = count === 0;
+  return (
+    <div style={listBarStyle}>
+      <span style={{ ...sBodyB, color: 'var(--ink)' }}>{count} available</span>
+      <button
+        className="eos-stroke-btn"
+        onClick={onAddAll}
+        disabled={disabled}
+        style={{
+          ...sBodyB,
+          height: 36,
+          padding: '0 14px',
+          border: '2px solid var(--strong)',
+          borderRadius: radius,
+          background: color.bg,
+          color: 'var(--ink)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled ? 0.5 : 1,
+          fontFamily: 'inherit',
+        }}
+      >
+        Add All {noun} ({count})
+      </button>
+    </div>
+  );
+}
+
+/** Select-all / count / clear / bulk-remove toolbar shown above a "Current ... In Group" list. */
+export function BulkRemoveBar({
+  visibleCount,
+  selectedCount,
+  onToggleAll,
+  onClear,
+  removeLabel,
+  onRemove,
+}: {
+  visibleCount: number;
+  selectedCount: number;
+  onToggleAll: () => void;
+  onClear: () => void;
+  removeLabel: string;
+  onRemove: () => void;
+}) {
+  const allChecked = visibleCount > 0 && selectedCount === visibleCount;
+  const disabled = selectedCount === 0;
+  return (
+    <div style={listBarStyle}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <Checkbox checked={allChecked} indeterminate={selectedCount > 0 && !allChecked} onChange={onToggleAll} label="Select all" />
+        <span style={{ ...sBodyB, color: 'var(--ink)' }}>{selectedCount > 0 ? `${selectedCount} selected` : 'Select All'}</span>
+        {selectedCount > 0 && (
+          <button onClick={onClear} style={{ ...sBody, color: 'var(--ink-2)', background: 'none', border: 'none', textDecoration: 'underline', cursor: 'pointer', fontFamily: 'inherit', padding: '0 4px' }}>
+            Clear selection
+          </button>
+        )}
+      </div>
+      <button
+        className="eos-primary-btn"
+        onClick={onRemove}
+        disabled={disabled}
+        style={{
+          ...sBodyB,
+          height: 36,
+          padding: '0 14px',
+          borderRadius: radius,
+          border: `2px solid ${disabled ? 'var(--line)' : 'var(--brand)'}`,
+          background: disabled ? 'var(--line)' : 'var(--brand)',
+          color: disabled ? 'var(--ink-3)' : '#fff',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          fontFamily: 'inherit',
+        }}
+      >
+        {removeLabel}
+      </button>
+    </div>
   );
 }
 
