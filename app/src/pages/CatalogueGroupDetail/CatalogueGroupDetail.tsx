@@ -64,7 +64,7 @@ function RowList({
         const pending = !isCatalogueLive(row.goLiveDate);
         const isChecked = !!checked?.has(row.id);
         return (
-          <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)', background: isChecked ? 'var(--brand-soft)' : undefined }}>
+          <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)', background: isChecked ? 'var(--pink-10)' : undefined, boxShadow: isChecked ? 'inset 3px 0 0 var(--brand)' : undefined }}>
             {selectable && <Checkbox checked={isChecked} onChange={() => onToggle!(row.id)} label={`Select ${row.id} - ${row.name}`} />}
             <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1 }}>
               {row.id} - {row.name}

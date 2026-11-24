@@ -62,7 +62,7 @@ function CustomerRowList({
   return (
     <div style={{ border: '1px solid var(--line)', borderRadius: selectable || flatTop ? '0 0 var(--radius) var(--radius)' : 'var(--radius)', maxHeight: 480, overflow: 'auto' }}>
       {rows.map(row => (
-        <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)', background: checked?.has(row.id) ? 'var(--brand-soft)' : undefined }}>
+        <div key={row.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, padding: '10px 12px', borderTop: '1px solid var(--line)', background: checked?.has(row.id) ? 'var(--pink-10)' : undefined, boxShadow: checked?.has(row.id) ? 'inset 3px 0 0 var(--brand)' : undefined }}>
           {selectable && <Checkbox checked={checked!.has(row.id)} onChange={() => onToggle!(row.id)} label={`Select ${row.code} ${row.dealerName}`} />}
           <span style={{ ...sBody, color: 'var(--ink)', display: 'inline-flex', alignItems: 'center', gap: 8, minWidth: 0, flex: 1, flexWrap: 'wrap' }}>
             {row.code} {'  '}
